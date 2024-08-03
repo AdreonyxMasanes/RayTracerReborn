@@ -129,9 +129,11 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Tuple.cpp" />
+    <ClCompile Include="TupleManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Tuple.hpp" />
+    <ClInclude Include="TupleManager.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
