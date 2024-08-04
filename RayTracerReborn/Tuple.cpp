@@ -69,11 +69,17 @@ std::unique_ptr<Tuple> Tuple::operator+(const Tuple& rhs) const {
   return std::make_unique<Tuple>(X() + rhs.X(), Y() + rhs.Y(), Z() + rhs.Z(), W() + rhs.W());
 }
 
+std::unique_ptr<Tuple> Tuple::operator-(const Tuple& rhs) const {
+  return std::make_unique<Tuple>(X() - rhs.X(), Y() - rhs.Y(), Z() - rhs.Z(), W() - rhs.W());
+}
+
 void Tuple::RunTest() {
   
   if (!(Tuple::IsPointTest())) {
     return;
   } else if (!(Tuple::AdditionTest())) {
+    return;
+  } else if (!(Tuple::SubtractionTest())) {
     return;
   } else {
     std::cout << "ALL TUPLE TEST PASSED " << std::endl;
@@ -88,6 +94,22 @@ bool Tuple::AdditionTest() {
   std::unique_ptr<Tuple> result = test_p + test_v;
   
   if (!(*result == test_success)) {
+    std::cout << "ADDITION TEST FAILED " << std::endl;
+    return false;
+  } else {
+    return true;
+  }
+}
+
+bool Tuple::SubtractionTest() {
+  // TWO POINTS SUBTRACTED FROM EACH OTHER CREATES A VECTOR FROM RHS POINTING TOWARDS LHS
+  Tuple test_a_p(3.0f, 2.0f, 1.0f, 1.0f);
+  Tuple test_b_p(5.0f, 6.0f, 7.0f, 1.0f);
+  Tuple test_success_v(-2.0f, -4.0f, -6.0f, 0.0f);
+
+  std::unique_ptr<Tuple> result = test_a_p - test_b_p;
+
+  if (!(*result == test_success_v)) {
     std::cout << "ADDITION TEST FAILED " << std::endl;
     return false;
   } else {

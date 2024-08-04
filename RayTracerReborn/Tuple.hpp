@@ -27,7 +27,7 @@ public:
   void operator=(const Tuple& rhs);
   // If need to modify but do not want to take ownership of objects lifetime take object pointer as a parameter and pass in the raw pointer contained within unique pointer using .get()
   std::unique_ptr<Tuple> operator+(const Tuple& rhs) const;
-  
+  std::unique_ptr<Tuple> operator-(const Tuple& rhs) const;
 
 // TESTS
 public:
@@ -39,6 +39,7 @@ private:
 // TEST FUNCTIONS
 private:
   static bool AdditionTest();
+  static bool SubtractionTest();
   static bool IsPointTest();
   static bool IsEqualTest();
 };
