@@ -65,12 +65,33 @@ void Tuple::operator=(const Tuple& rhs) {
   m_w = rhs.W();
 }
 
+std::unique_ptr<Tuple> Tuple::operator+(const Tuple& rhs) const {
+  return std::make_unique<Tuple>(X() + rhs.X(), Y() + rhs.Y(), Z() + rhs.Z(), W() + rhs.W());
+}
+
 void Tuple::RunTest() {
   
-  if (!Tuple::IsPointTest()) {
+  if (!(Tuple::IsPointTest())) {
+    return;
+  } else if (!(Tuple::AdditionTest())) {
     return;
   } else {
     std::cout << "ALL TUPLE TEST PASSED " << std::endl;
+  }
+}
+
+bool Tuple::AdditionTest() {
+  Tuple test_p(3.0f, -2.0f, 5.0f, 1.0f);
+  Tuple test_v(-2.0f, 3.0f, 1.0f, 0.0f);
+  Tuple test_success(1.0f, 1.0f, 6.0f, 1.0f);
+
+  std::unique_ptr<Tuple> result = test_p + test_v;
+  
+  if (!(*result == test_success)) {
+    std::cout << "ADDITION TEST FAILED " << std::endl;
+    return false;
+  } else {
+    return true;
   }
 }
 
