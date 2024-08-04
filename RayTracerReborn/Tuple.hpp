@@ -30,8 +30,10 @@ public:
 public:
   // COMPARE
   bool operator==(const Tuple& rhs) const;
+  
   // ASSIGNMENT
   void operator=(const Tuple& rhs);
+  
   // If need to modify but do not want to take ownership of objects lifetime take object pointer as a parameter and pass in the raw pointer contained within unique pointer using .get()
   // If need to read the value but do not want to take ownership of object lifetime take const object reference and pass in unique ptr dereferenced.
   std::unique_ptr<Tuple> operator+(const Tuple& rhs) const;
@@ -43,10 +45,13 @@ public:
 
   // NEW VECTOR THAT IS PERPENDICULAR TO BOTH ORIGINAL VECTORS
   std::unique_ptr<Tuple> Cross(const Tuple& rhs) const;
+  
   // MAGNITUDE == 1.0f
   std::unique_ptr<Tuple> Normalize() const;
+
   // LENGTH OF VECTOR
   float Magnitude() const;
+  
   // COSINE OF ANGLE BETWEEN TWO VECTORS, CLOSER TO 1 THE CLOSER THEY ARE TO BEING IDENTICAL, CLOSER TO -1 THE CLOSEST THEY ARE TO BEING OPPOSITES 
   float Dot(const Tuple& rhs) const;
 
