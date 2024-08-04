@@ -38,7 +38,9 @@ public:
   std::unique_ptr<Tuple> operator-(const Tuple& rhs) const;
   std::unique_ptr<Tuple> operator-() const;
   std::unique_ptr<Tuple> operator*(float scalar) const;
+  std::unique_ptr<Tuple> operator*(const Tuple& rhs) const;
   std::unique_ptr<Tuple> operator/(float scalar) const;
+
   // NEW VECTOR THAT IS PERPENDICULAR TO BOTH ORIGINAL VECTORS
   std::unique_ptr<Tuple> Cross(const Tuple& rhs) const;
   // MAGNITUDE == 1.0f
@@ -62,6 +64,7 @@ private:
   static bool SubtractionTest();
   static bool NegationTest();
   static bool MultiplyTest();
+  static bool MultipleTwoTuplesTest();
   static bool DivisonTest();
   static bool MagnitudeTest();
   static bool NormalizeTest();

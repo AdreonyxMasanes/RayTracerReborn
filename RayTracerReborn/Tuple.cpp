@@ -89,6 +89,10 @@ std::unique_ptr<Tuple> Tuple::operator*(float scalar) const {
   return std::make_unique<Tuple>(X() * scalar, Y() * scalar, Z() * scalar, W() * scalar);
 }
 
+std::unique_ptr<Tuple> Tuple::operator*(const Tuple& rhs) const {
+  return std::make_unique<Tuple>(X() * rhs.X(), Y() * rhs.Y(), Z() * rhs.Z(), W() * rhs.W());
+}
+
 std::unique_ptr<Tuple> Tuple::operator/(float scalar) const {
   return std::make_unique<Tuple>(X() / scalar, Y() / scalar, Z() / scalar, W() / scalar);
 }
@@ -134,6 +138,8 @@ void Tuple::RunTest() {
   } else if (!(Tuple::DotTest())) {
     return;
   } else if (!(Tuple::CrossTest())) {
+    return;
+  } else if (!(Tuple::MultipleTwoTuplesTest())) {
     return;
   } else {
     std::cout << "ALL TUPLE TEST PASSED " << std::endl;
@@ -217,6 +223,19 @@ bool Tuple::MultiplyTest() {
 
   if (!(*result == test_success_t)) {
     std::cout << "MULTIPLICATION TEST 2 FAILED " << std::endl;
+    return false;
+  }
+  return true;
+}
+
+bool Tuple::MultipleTwoTuplesTest() {
+  Tuple test_a_c(1.0f, 0.2f, 0.4f, 0.0f);
+  Tuple test_b_c(0.9f, 1.0f, 0.1f, 0.0f);
+  Tuple test_success_c(0.9f, 0.2f, 0.04f, 0.0f);
+  std::unique_ptr<Tuple> result = test_a_c * test_b_c;
+
+  if (!(*result == test_success_c)) {
+    std::cout << "MULTIPLY TUPLES TOGETHER TEST FAILED " << std::endl;
     return false;
   }
   return true;

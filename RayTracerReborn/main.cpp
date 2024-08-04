@@ -6,7 +6,7 @@ int main() {
   // SINGLETON TYPE IMPLEMENTATION
   TupleManager::Init();
   TupleManager::CreationTest();
-  BulletSim::Run();
+  // BulletSim::Run();
 
   TupleManager::Shutdown();
   return 0;
