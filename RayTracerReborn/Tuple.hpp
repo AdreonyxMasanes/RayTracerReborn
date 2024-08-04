@@ -37,6 +37,7 @@ public:
   std::unique_ptr<Tuple> Normalize() const;
   
   float Magnitude() const;
+  float Dot(const Tuple& rhs) const;
 
 
 // TESTS
@@ -55,6 +56,7 @@ private:
   static bool DivisonTest();
   static bool MagnitudeTest();
   static bool NormalizeTest();
+  static bool DotTest();
   static bool IsPointTest();
   static bool IsEqualTest();
 };

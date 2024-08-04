@@ -96,6 +96,10 @@ float Tuple::Magnitude() const {
   return sqrtf(powf(X(), 2) + powf(Y(), 2) + powf(Z(), 2) + powf(W(), 2));
 }
 
+float Tuple::Dot(const Tuple& rhs) const {
+  return (X() * rhs.X()) + (Y() * rhs.Y()) + (Z() *  rhs.Z()) + (W() * rhs.W());
+}
+
 void Tuple::RunTest() {
   
   if (!(Tuple::IsPointTest())) {
@@ -113,6 +117,8 @@ void Tuple::RunTest() {
   } else if (!(Tuple::MagnitudeTest())) {
     return;
   } else if (!(Tuple::NormalizeTest())) {
+    return;
+  } else if (!(Tuple::DotTest())) {
     return;
   } else {
     std::cout << "ALL TUPLE TEST PASSED " << std::endl;
@@ -278,6 +284,21 @@ bool Tuple::NormalizeTest() {
   } else {
     return true;
   }
+}
+
+
+bool Tuple::DotTest() {
+  Tuple test_a_v(1.0f, 2.0f, 3.0f, 0.0f);
+  Tuple test_b_v(2.0f, 3.0f, 4.0f, 0.0f);
+  float result = test_a_v.Dot(test_b_v);
+
+  if (!(Utility::FloatsAreEqual(result , 20.0f))) {
+    std::cout << "DOT TEST FAILED" << std::endl;
+    return false;
+  } else {
+    return true;
+  }
+
 }
 
 bool Tuple::IsPointTest() {
