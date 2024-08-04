@@ -1,5 +1,8 @@
 #ifndef TUPLE_H
 #include <iostream>
+
+#include "Utility.hpp"
+
 class Tuple {
 public:
   Tuple();

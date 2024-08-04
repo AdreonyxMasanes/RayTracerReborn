@@ -45,13 +45,13 @@ float Tuple::W() const {
 }
 
 bool Tuple::operator==(const Tuple& rhs) const {
-    if (!(m_x == rhs.X())) {
+    if (!(Utility::FloatsAreEqual(m_x, rhs.X()))) {
         return false;
-    } else if (!(m_y == rhs.Y())) {
+    } else if (!(Utility::FloatsAreEqual(m_y, rhs.Y()))) {
         return false;
-    } else if (!(m_z == rhs.Z())) {
+    } else if (!(Utility::FloatsAreEqual(m_z, rhs.Z()))) {
         return false;
-    } else if (!(m_w == rhs.W())) {
+    } else if (!(Utility::FloatsAreEqual(m_w, rhs.W()))) {
         return false;
     } else {
         return true;
