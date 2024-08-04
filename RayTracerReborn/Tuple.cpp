@@ -132,7 +132,7 @@ bool Tuple::SubtractionTest() {
 
 
   if (!(*result == test_success_v)) {
-    std::cout << "SUBTRACTION TEST 2 FAILED " << std::endl;
+    std::cout << "SUBTRACTION TEST 3 FAILED " << std::endl;
     return false;
   }
 }
