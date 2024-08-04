@@ -1,5 +1,6 @@
 #ifndef UTILITY_H
-class {
-
+#include <cmath>
+class Utility {
+  static bool FloatsAreEqual(float a, float b);
 };
 #endif // !UTILITY_H
