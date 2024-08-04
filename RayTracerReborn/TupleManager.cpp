@@ -13,7 +13,7 @@ void TupleManager::Vector(Tuple& tuple) const {
 }
 
 void TupleManager::Color(Tuple& tuple) const {
-	tuple.SetW(1.0f);
+	tuple.SetW(0.0f);
 }
 
 void TupleManager::Point(Tuple& tuple, float x, float y, float z) const {
@@ -34,7 +34,7 @@ void TupleManager::Color(Tuple& tuple, float r, float g, float b) const {
 	tuple.SetX(r);
 	tuple.SetY(g);
 	tuple.SetZ(b);
-	tuple.SetW(1.0f);
+	tuple.SetW(0.0f);
 }
 
 // ONLY USING ONE INSTANCE OF TUPLE MANAGER THAT WAY IF IT IS INCLUDED ANY CLASS CAN ACCESS IT
