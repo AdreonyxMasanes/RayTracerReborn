@@ -77,6 +77,10 @@ std::unique_ptr<Tuple> Tuple::operator-() const {
   return std::make_unique<Tuple>(-X(), -Y(), -Z(), -W());
 }
 
+std::unique_ptr<Tuple> Tuple::operator*(float scalar) const {
+  return std::make_unique<Tuple>(X() * scalar, Y() * scalar, Z() * scalar, W() * scalar);
+}
+
 void Tuple::RunTest() {
   
   if (!(Tuple::IsPointTest())) {
@@ -86,6 +90,8 @@ void Tuple::RunTest() {
   } else if (!(Tuple::SubtractionTest())) {
     return;
   } else if (!(Tuple::NegationTest())) {
+    return;
+  } else if (!(Tuple::MultiplyTest())) {
     return;
   } else {
     std::cout << "ALL TUPLE TEST PASSED " << std::endl;
@@ -152,6 +158,26 @@ bool Tuple::NegationTest() {
     std::cout << "NEGATION TEST FAILED " << std::endl;
     return false;
   }
+}
+
+bool Tuple::MultiplyTest() {
+  Tuple test_t(1.0f, -2.0f, 3.0f, -4.0f);
+  Tuple test_success_t(3.5f, -7.0f, 10.5f, -14.0f);
+  std::unique_ptr<Tuple> result = test_t * 3.5f;
+
+  if (!(*result == test_success_t)) {
+    std::cout << "MULTIPLICATION TEST FAILED " << std::endl;
+    return false;
+  }
+
+  test_success_t = Tuple(0.5f, -1.0f, 1.5f, -2.0f);
+  result = test_t * 0.5f;
+
+  if (!(*result == test_success_t)) {
+    std::cout << "MULTIPLICATION TEST 2 FAILED " << std::endl;
+    return false;
+  }
+  return true;
 }
 
 bool Tuple::IsPointTest() {

@@ -29,6 +29,7 @@ public:
   std::unique_ptr<Tuple> operator+(const Tuple& rhs) const;
   std::unique_ptr<Tuple> operator-(const Tuple& rhs) const;
   std::unique_ptr<Tuple> operator-() const;
+  std::unique_ptr<Tuple> operator*(float scalar) const;
 
 // TESTS
 public:
@@ -42,6 +43,7 @@ private:
   static bool AdditionTest();
   static bool SubtractionTest();
   static bool NegationTest();
+  static bool MultiplyTest();
   static bool IsPointTest();
   static bool IsEqualTest();
 };
