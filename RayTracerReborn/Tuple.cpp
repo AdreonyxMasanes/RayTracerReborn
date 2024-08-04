@@ -73,6 +73,10 @@ std::unique_ptr<Tuple> Tuple::operator-(const Tuple& rhs) const {
   return std::make_unique<Tuple>(X() - rhs.X(), Y() - rhs.Y(), Z() - rhs.Z(), W() - rhs.W());
 }
 
+std::unique_ptr<Tuple> Tuple::operator-() const {
+  return std::make_unique<Tuple>(-X(), -Y(), -Z(), -W());
+}
+
 void Tuple::RunTest() {
   
   if (!(Tuple::IsPointTest())) {
@@ -80,6 +84,8 @@ void Tuple::RunTest() {
   } else if (!(Tuple::AdditionTest())) {
     return;
   } else if (!(Tuple::SubtractionTest())) {
+    return;
+  } else if (!(Tuple::NegationTest())) {
     return;
   } else {
     std::cout << "ALL TUPLE TEST PASSED " << std::endl;
@@ -133,6 +139,17 @@ bool Tuple::SubtractionTest() {
 
   if (!(*result == test_success_v)) {
     std::cout << "SUBTRACTION TEST 3 FAILED " << std::endl;
+    return false;
+  }
+}
+
+bool Tuple::NegationTest() {
+  Tuple test_p(1.0f, -2.0f, 3.0f, -4.0f);
+  Tuple test_success_t(-1.0f, 2.0f, -3.0f, 4.0f);
+  std::unique_ptr<Tuple> result = -test_p;
+
+  if (!(*result == test_success_t)) {
+    std::cout << "NEGATION TEST FAILED " << std::endl;
     return false;
   }
 }
