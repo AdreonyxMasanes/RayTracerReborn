@@ -1,7 +1,9 @@
 #include "Tuple.hpp"
 // _t is generic Tuple, _p is Point, _v is Vector
 
-Tuple::Tuple() {
+Tuple::Tuple() 
+  : m_x(0), m_y(0), m_z(0), m_w(0) {
+
 }
 
 // DOING IT IN THE INITALIZER LIST PREVENTS REDEFINITION

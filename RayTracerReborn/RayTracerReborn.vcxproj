@@ -127,12 +127,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BulletSim.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Tuple.cpp" />
     <ClCompile Include="TupleManager.cpp" />
     <ClCompile Include="Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BulletSim.hpp" />
     <ClInclude Include="Tuple.hpp" />
     <ClInclude Include="TupleManager.hpp" />
     <ClInclude Include="Utility.hpp" />
