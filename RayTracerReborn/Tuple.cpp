@@ -87,7 +87,12 @@ std::unique_ptr<Tuple> Tuple::operator/(float scalar) const {
   return std::make_unique<Tuple>(X() / scalar, Y() / scalar, Z() / scalar, W() / scalar);
 }
 
-float Tuple::Magitude() const {
+std::unique_ptr<Tuple> Tuple::Normalize() const {
+  float magnitude = Magnitude();
+  return std::make_unique<Tuple>(X() / magnitude, Y() / magnitude, Z() / magnitude, W() / magnitude);
+}
+
+float Tuple::Magnitude() const {
   return sqrtf(powf(X(), 2) + powf(Y(), 2) + powf(Z(), 2) + powf(W(), 2));
 }
 
@@ -106,6 +111,8 @@ void Tuple::RunTest() {
   } else if (!(Tuple::DivisonTest())) {
     return;
   } else if (!(Tuple::MagnitudeTest())) {
+    return;
+  } else if (!(Tuple::NormalizeTest())) {
     return;
   } else {
     std::cout << "ALL TUPLE TEST PASSED " << std::endl;
@@ -210,21 +217,21 @@ bool Tuple::DivisonTest() {
 bool Tuple::MagnitudeTest() {
   Tuple test_v(1.0f, 0.0f, 0.0f, 0.0f);
   float succes = 1.0f;
-  if (!(Utility::FloatsAreEqual(test_v.Magitude(), succes))) {
+  if (!(Utility::FloatsAreEqual(test_v.Magnitude(), succes))) {
     std::cout << "FAILED MAGNITUDE TEST" << std::endl;
     return false;
   }
 
   // SAME SUCCESS CASE AS FIRST TEST
   test_v = Tuple(0.0f, 1.0f, 0.0f, 0.0f);
-  if (!(Utility::FloatsAreEqual(test_v.Magitude(), succes))) {
+  if (!(Utility::FloatsAreEqual(test_v.Magnitude(), succes))) {
     std::cout << "FAILED MAGNITUDE TEST 2" << std::endl;
     return false;
   }
 
   // SAME SUCCESS CASE AS FIRST TEST
   test_v = Tuple(0.0f, 0.0f, 1.0f, 0.0f);
-  if (!(Utility::FloatsAreEqual(test_v.Magitude(), succes))) {
+  if (!(Utility::FloatsAreEqual(test_v.Magnitude(), succes))) {
     std::cout << "FAILED MAGNITUDE TEST 3" << std::endl;
     return false;
   }
@@ -232,15 +239,41 @@ bool Tuple::MagnitudeTest() {
 
   test_v = Tuple(1.0f, 2.0f, 3.0f, 0.0f);
   succes = sqrtf(14);
-  if (!(Utility::FloatsAreEqual(test_v.Magitude(), succes))) {
+  if (!(Utility::FloatsAreEqual(test_v.Magnitude(), succes))) {
     std::cout << "FAILED MAGNITUDE TEST 4" << std::endl;
     return false;
   }
 
   // SAME SUCCESS CASE AS 4 TEST
   test_v = Tuple(-1.0f, -2.0f, -3.0f, 0.0f);
-  if (!(Utility::FloatsAreEqual(test_v.Magitude(), succes))) {
+  if (!(Utility::FloatsAreEqual(test_v.Magnitude(), succes))) {
     std::cout << "FAILED MAGNITUDE TEST 5" << std::endl;
+    return false;
+  } else {
+    return true;
+  }
+}
+
+bool Tuple::NormalizeTest() {
+  Tuple test_v(4.0f, 0.0f, 0.0f, 0.0f);
+  Tuple test_success_v(1.0f, 0.0f, 0.0f, 0.0f);
+
+  std::unique_ptr<Tuple> result = test_v.Normalize();
+  if (!(*result == test_success_v)) {
+    std::cout << "NORMALIZE TEST FAILED" << std::endl;
+    return false;
+  }
+
+  test_v = Tuple(1.0f, 2.0f, 3.0f, 0.0f);
+  test_success_v = Tuple(1.0f / sqrtf(14), 2.0f / sqrtf(14), 3.0f / sqrtf(14), 0.0f);
+  result = test_v.Normalize();
+  if (!(*result == test_success_v)) {
+    std::cout << "NORMALIZE TEST 2 FAILED" << std::endl;
+    return false;
+  }
+
+  if (!(Utility::FloatsAreEqual(result->Magnitude(), 1.0f))) {
+    std::cout << "NORMALIZED TEST 3 FAILED" << std::endl;
     return false;
   } else {
     return true;

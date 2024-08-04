@@ -34,8 +34,9 @@ public:
   std::unique_ptr<Tuple> operator-() const;
   std::unique_ptr<Tuple> operator*(float scalar) const;
   std::unique_ptr<Tuple> operator/(float scalar) const;
+  std::unique_ptr<Tuple> Normalize() const;
   
-  float Magitude() const;
+  float Magnitude() const;
 
 
 // TESTS
@@ -53,6 +54,7 @@ private:
   static bool MultiplyTest();
   static bool DivisonTest();
   static bool MagnitudeTest();
+  static bool NormalizeTest();
   static bool IsPointTest();
   static bool IsEqualTest();
 };
