@@ -30,6 +30,10 @@ void Tuple::SetW(float w) {
     m_w = w;
 }
 
+void Tuple::Print() {
+  std::cout << "X: " << X() << " Y: " << Y() << " Z: " << Z() << " W: " << W() << std::endl;
+}
+
 float Tuple::X() const {
     return m_x;
 }
