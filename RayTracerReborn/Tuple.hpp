@@ -19,6 +19,8 @@ public:
   float W() const;
 
   bool operator==(const Tuple& rhs) const;
+  void operator=(const Tuple& rhs);
+  
 
 // TESTS
 public:

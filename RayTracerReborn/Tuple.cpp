@@ -58,6 +58,15 @@ bool Tuple::operator==(const Tuple& rhs) const {
     }
 }
 
+void Tuple::operator=(const Tuple& rhs) {
+  m_x = rhs.X();
+  m_y = rhs.Y();
+  m_z = rhs.Z();
+  m_w = rhs.W();
+
+  return *this;
+}
+
 void Tuple::RunTest() {
   
   if (!Tuple::IsPointTest()) {
