@@ -9,15 +9,17 @@ public:
 
 public:
 	// DEFAULT CONSTRUCTOS
-	static void Point(Tuple& tuple);
-	static void Vector(Tuple& tuple);
+	void Point(Tuple& tuple) const;
+	void Vector(Tuple& tuple) const;
 	// SPECIFIC CONSTRUCTORS
-	static void Point(Tuple& tuple, float x, float y, float z);
-	static void Vector(Tuple& tuple, float x, float y, float z);
+	void Point(Tuple& tuple, float x, float y, float z) const;
+	void Vector(Tuple& tuple, float x, float y, float z) const;
 public:
 	static void Init();
 	static void Shutdown();
 	static TupleManager* Instance();
+
+	static void CreationTest();
 
 };
 
