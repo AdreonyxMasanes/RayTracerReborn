@@ -73,7 +73,7 @@ void Tuple::RunTest() {
   if (!Tuple::IsPointTest()) {
     return;
   } else {
-    std::cout << "ALL TEST PASSED " << std::endl;
+    std::cout << "ALL TUPLE TEST PASSED " << std::endl;
   }
 }
 
