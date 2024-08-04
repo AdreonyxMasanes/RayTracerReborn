@@ -1,4 +1,6 @@
 #include "Tuple.hpp"
+// _t is generic Tuple, _p is Point, _v is Vector
+
 Tuple::Tuple() {
 }
 
@@ -107,11 +109,11 @@ void Tuple::RunTest() {
 bool Tuple::AdditionTest() {
   Tuple test_p(3.0f, -2.0f, 5.0f, 1.0f);
   Tuple test_v(-2.0f, 3.0f, 1.0f, 0.0f);
-  Tuple test_success(1.0f, 1.0f, 6.0f, 1.0f);
+  Tuple test_success_p(1.0f, 1.0f, 6.0f, 1.0f);
 
   std::unique_ptr<Tuple> result = test_p + test_v;
   
-  if (!(*result == test_success)) {
+  if (!(*result == test_success_p)) {
     std::cout << "ADDITION TEST FAILED " << std::endl;
     return false;
   } else {
