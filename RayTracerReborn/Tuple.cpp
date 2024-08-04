@@ -87,6 +87,13 @@ std::unique_ptr<Tuple> Tuple::operator/(float scalar) const {
   return std::make_unique<Tuple>(X() / scalar, Y() / scalar, Z() / scalar, W() / scalar);
 }
 
+std::unique_ptr<Tuple> Tuple::Cross(const Tuple& rhs) const {
+  return std::make_unique<Tuple>(Y() * rhs.Z() - Z() * rhs.Y(),
+    Z() * rhs.X() - X() * rhs.Z(),
+    X() * rhs.Y() - Y() * rhs.X(), 
+    0.0f);
+}
+
 std::unique_ptr<Tuple> Tuple::Normalize() const {
   float magnitude = Magnitude();
   return std::make_unique<Tuple>(X() / magnitude, Y() / magnitude, Z() / magnitude, W() / magnitude);
@@ -119,6 +126,8 @@ void Tuple::RunTest() {
   } else if (!(Tuple::NormalizeTest())) {
     return;
   } else if (!(Tuple::DotTest())) {
+    return;
+  } else if (!(Tuple::CrossTest())) {
     return;
   } else {
     std::cout << "ALL TUPLE TEST PASSED " << std::endl;
@@ -299,6 +308,27 @@ bool Tuple::DotTest() {
     return true;
   }
 
+}
+
+bool Tuple::CrossTest() {
+  Tuple test_a_v(1.0f, 2.0f, 3.0f, 0.0f);
+  Tuple test_b_v(2.0f, 3.0f, 4.0f, 0.0f);
+  Tuple test_success_v(-1.0f, 2.0f, -1.0f, 0.0f);
+
+  std::unique_ptr<Tuple> result = test_a_v.Cross(test_b_v);
+  if (!(*result == test_success_v)) {
+    std::cout << "CROSS TEST FAILED" << std::endl;
+    return false;
+  }
+
+  test_success_v = Tuple(1.0f, -2.0f, 1.0f, 0.0f);
+  result = test_b_v.Cross(test_a_v);
+  if (!(*result == test_success_v)) {
+    std::cout << "CROSS TEST 2 FAILED" << std::endl;
+    return false;
+  } else {
+    return true;
+  }
 }
 
 bool Tuple::IsPointTest() {

@@ -36,6 +36,8 @@ public:
   std::unique_ptr<Tuple> operator-() const;
   std::unique_ptr<Tuple> operator*(float scalar) const;
   std::unique_ptr<Tuple> operator/(float scalar) const;
+  // NEW VECTOR THAT IS PERPENDICULAR TO BOTH ORIGINAL VECTORS
+  std::unique_ptr<Tuple> Cross(const Tuple& rhs) const;
   // MAGNITUDE == 1.0f
   std::unique_ptr<Tuple> Normalize() const;
   // LENGTH OF VECTOR
@@ -61,6 +63,7 @@ private:
   static bool MagnitudeTest();
   static bool NormalizeTest();
   static bool DotTest();
+  static bool CrossTest();
   static bool IsPointTest();
   static bool IsEqualTest();
 };
