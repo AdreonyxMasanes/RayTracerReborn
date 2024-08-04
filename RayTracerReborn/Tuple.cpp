@@ -63,8 +63,6 @@ void Tuple::operator=(const Tuple& rhs) {
   m_y = rhs.Y();
   m_z = rhs.Z();
   m_w = rhs.W();
-
-  return *this;
 }
 
 void Tuple::RunTest() {
