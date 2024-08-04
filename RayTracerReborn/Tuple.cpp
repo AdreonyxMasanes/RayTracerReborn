@@ -102,18 +102,38 @@ bool Tuple::AdditionTest() {
 }
 
 bool Tuple::SubtractionTest() {
-  // TWO POINTS SUBTRACTED FROM EACH OTHER CREATES A VECTOR FROM RHS POINTING TOWARDS LHS
+
   Tuple test_a_p(3.0f, 2.0f, 1.0f, 1.0f);
   Tuple test_b_p(5.0f, 6.0f, 7.0f, 1.0f);
   Tuple test_success_v(-2.0f, -4.0f, -6.0f, 0.0f);
+  Tuple test_success_p(-2.0f, -4.0f, -6.0f, 1.0f);
 
+  // TWO POINTS SUBTRACTED FROM EACH OTHER RETURNS A VECTOR FROM RHS POINTING TOWARDS LHS
   std::unique_ptr<Tuple> result = test_a_p - test_b_p;
 
   if (!(*result == test_success_v)) {
-    std::cout << "ADDITION TEST FAILED " << std::endl;
+    std::cout << "SUBTRACTION TEST 1 FAILED " << std::endl;
     return false;
-  } else {
-    return true;
+  }
+
+  Tuple test_a_v(5.0f, 6.0f, 7.0f, 0.0f);
+  // SUBTRACTING A VECTOR FROM A POINT RETURNS THE POINT THE VECTOR IS POINTING TOWARDS IF THE ORIGINAL POINT WAS THE ORIGIN
+  result = test_a_p - test_a_v;
+
+  if (!(*result == test_success_p)) {
+    std::cout << "SUBTRACTION TEST 2 FAILED " << std::endl;
+    return false;
+  }
+
+
+  Tuple test_b_v(3.0f, 2.0f, 1.0f, 0.0f);
+  // SUBTRACING A VECTOR FROM A VECTOR GIVES ANOTHER VECTOR DEMONSTRATING THE CHANGE IN VECTORS
+  result = test_b_v - test_a_v;
+
+
+  if (!(*result == test_success_v)) {
+    std::cout << "SUBTRACTION TEST 2 FAILED " << std::endl;
+    return false;
   }
 }
 
