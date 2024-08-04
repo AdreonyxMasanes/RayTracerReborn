@@ -81,6 +81,10 @@ std::unique_ptr<Tuple> Tuple::operator*(float scalar) const {
   return std::make_unique<Tuple>(X() * scalar, Y() * scalar, Z() * scalar, W() * scalar);
 }
 
+std::unique_ptr<Tuple> Tuple::operator/(float scalar) const {
+  return std::make_unique<Tuple>(X() / scalar, Y() / scalar, Z() / scalar, W() / scalar);
+}
+
 void Tuple::RunTest() {
   
   if (!(Tuple::IsPointTest())) {
@@ -92,6 +96,8 @@ void Tuple::RunTest() {
   } else if (!(Tuple::NegationTest())) {
     return;
   } else if (!(Tuple::MultiplyTest())) {
+    return;
+  } else if (!(Tuple::DivisonTest())) {
     return;
   } else {
     std::cout << "ALL TUPLE TEST PASSED " << std::endl;
@@ -178,6 +184,19 @@ bool Tuple::MultiplyTest() {
     return false;
   }
   return true;
+}
+
+bool Tuple::DivisonTest() {
+  Tuple test_t(1.0f, -2.0f, 3.0f, -4.0f);
+  Tuple test_success_t(0.5f, -1.0f, 1.5f, -2.0f);
+  std::unique_ptr<Tuple> result = test_t / 2.0f;
+
+  if (!(*result == test_success_t)) {
+    std::cout << "DIVISON TEST FAILED " << std::endl;
+    return false;
+  } else {
+    return true;
+  }
 }
 
 bool Tuple::IsPointTest() {
