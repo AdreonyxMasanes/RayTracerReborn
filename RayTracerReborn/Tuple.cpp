@@ -4,8 +4,7 @@ Tuple::Tuple() {
 
 // DOING IT IN THE INITALIZER LIST PREVENTS REDEFINITION
 Tuple::Tuple(float x, float y, float z, float w)
-  : m_x(x), m_y(y), m_z(z), m_w(w)
-{
+  : m_x(x), m_y(y), m_z(z), m_w(w) {
 }
 
 bool Tuple::IsPoint() {
@@ -13,48 +12,39 @@ bool Tuple::IsPoint() {
   return m_w == 1.0f;
 }
 
-void Tuple::SetX(float x)
-{
+void Tuple::SetX(float x) {
     m_x = x;
 }
 
-void Tuple::SetY(float y)
-{
+void Tuple::SetY(float y) {
     m_y = y;
 }
 
-void Tuple::SetZ(float z)
-{
+void Tuple::SetZ(float z) {
     m_z = z;
 }
 
-void Tuple::SetW(float w)
-{
+void Tuple::SetW(float w) {
     m_w = w;
 }
 
-float Tuple::X() const
-{
+float Tuple::X() const {
     return m_x;
 }
 
-float Tuple::Y() const
-{
+float Tuple::Y() const {
     return m_y;
 }
 
-float Tuple::Z() const
-{
+float Tuple::Z() const {
     return m_z;
 }
 
-float Tuple::W() const
-{
+float Tuple::W() const {
     return m_w;
 }
 
-bool Tuple::operator==(const Tuple& rhs) const
-{
+bool Tuple::operator==(const Tuple& rhs) const {
     if (!(m_x == rhs.X())) {
         return false;
     } else if (!(m_y == rhs.Y())) {
@@ -95,28 +85,26 @@ bool Tuple::IsPointTest() {
     std::cout << "POINT TEST FAILED AT TEST 2" << std::endl;
     return false;
   }
-  
   return true;
 }
 
 bool Tuple::IsEqualTest() {
+  Tuple test_a_p(0.0f, 0.0f, 0.0f, 1.0f);
+  Tuple test_b_p(0.0f, 0.0f, 0.0f, 1.0f);
 
-    Tuple test_a_p(0.0f, 0.0f, 0.0f, 1.0f);
-    Tuple test_b_p(0.0f, 0.0f, 0.0f, 1.0f);
+  Tuple test_a_v(0.0f, 0.0f, 0.0f, 0.0f);
+  Tuple test_b_v(0.0f, 0.0f, 0.0f, 0.0f);
 
-    Tuple test_a_v(0.0f, 0.0f, 0.0f, 0.0f);
-    Tuple test_b_v(0.0f, 0.0f, 0.0f, 0.0f);
-
-    if (!(test_a_p == test_b_p)) {
-        std::cout << "POINT EQUIVALENCE FAILED" << std::endl;
-        return false;
-    } else if (!(test_a_v == test_b_v)) {
-        std::cout << "VECTOR EQUIVALENCE FAILED" << std::endl;
-        return false;
-    } else if (!(test_a_p == test_b_v)) {
-        std::cout << "POINT VECTOR EQUIVALENCE FAILED" << std::endl;
-        return false;
-    } else {
-        return true;
-    }
+  if (!(test_a_p == test_b_p)) {
+      std::cout << "POINT EQUIVALENCE FAILED" << std::endl;
+      return false;
+  } else if (!(test_a_v == test_b_v)) {
+      std::cout << "VECTOR EQUIVALENCE FAILED" << std::endl;
+      return false;
+  } else if (!(test_a_p == test_b_v)) {
+      std::cout << "POINT VECTOR EQUIVALENCE FAILED" << std::endl;
+      return false;
+  } else {
+      return true;
+  }
 }

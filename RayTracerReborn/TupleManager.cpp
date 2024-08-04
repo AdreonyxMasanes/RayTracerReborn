@@ -1,30 +1,25 @@
 #include "TupleManager.hpp"
 
 
-TupleManager::TupleManager()
-{
+TupleManager::TupleManager() {
 }
 // CHOSE TO PASS IN REFERENCES INSTEAD OF RETURNING POINTERS
-void TupleManager::Point(Tuple& tuple) const
-{
+void TupleManager::Point(Tuple& tuple) const {
 	tuple.SetW(1.0f);
 }
 
-void TupleManager::Vector(Tuple& tuple) const
-{
+void TupleManager::Vector(Tuple& tuple) const {
 	tuple.SetW(0.0f);
 }
 
-void TupleManager::Point(Tuple& tuple, float x, float y, float z) const
-{
+void TupleManager::Point(Tuple& tuple, float x, float y, float z) const {
 	tuple.SetX(x);
 	tuple.SetY(y);
 	tuple.SetZ(z);
 	tuple.SetW(1.0f);
 }
 
-void TupleManager::Vector(Tuple& tuple, float x, float y, float z) const
-{
+void TupleManager::Vector(Tuple& tuple, float x, float y, float z) const {
 	tuple.SetX(x);
 	tuple.SetY(y);
 	tuple.SetZ(z);
@@ -32,24 +27,20 @@ void TupleManager::Vector(Tuple& tuple, float x, float y, float z) const
 }
 
 // ONLY USING ONE INSTANCE OF TUPLE MANAGER THAT WAY IF IT IS INCLUDED ANY CLASS CAN ACCESS IT
-void TupleManager::Init()
-{
+void TupleManager::Init() {
 	g_tuple_manger = new TupleManager();
 }
 
-void TupleManager::Shutdown()
-{
+void TupleManager::Shutdown() {
 	delete g_tuple_manger;
 	g_tuple_manger = nullptr;
 }
 
-TupleManager* TupleManager::Instance()
-{
+TupleManager* TupleManager::Instance() {
 	return g_tuple_manger;
 }
 
-void TupleManager::CreationTest()
-{
+void TupleManager::CreationTest() {
 	Tuple default_test_p, default_test_v, param_test_p, param_test_v;
 	TupleManager::Instance()->Point(default_test_p);
 	TupleManager::Instance()->Vector(default_test_v);
