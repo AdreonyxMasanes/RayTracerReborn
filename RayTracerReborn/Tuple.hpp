@@ -23,14 +23,20 @@ public:
   float Z() const;
   float W() const;
 
+// MATH FUNCTIONS
+public:
   bool operator==(const Tuple& rhs) const;
   void operator=(const Tuple& rhs);
   // If need to modify but do not want to take ownership of objects lifetime take object pointer as a parameter and pass in the raw pointer contained within unique pointer using .get()
+  // If need to read the value but do not want to take ownership of object lifetime take const object reference and pass in unique ptr dereferenced.
   std::unique_ptr<Tuple> operator+(const Tuple& rhs) const;
   std::unique_ptr<Tuple> operator-(const Tuple& rhs) const;
   std::unique_ptr<Tuple> operator-() const;
   std::unique_ptr<Tuple> operator*(float scalar) const;
   std::unique_ptr<Tuple> operator/(float scalar) const;
+  
+  float Magitude() const;
+
 
 // TESTS
 public:
@@ -46,6 +52,7 @@ private:
   static bool NegationTest();
   static bool MultiplyTest();
   static bool DivisonTest();
+  static bool MagnitudeTest();
   static bool IsPointTest();
   static bool IsEqualTest();
 };
