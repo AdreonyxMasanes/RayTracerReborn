@@ -1,4 +1,5 @@
 #ifndef TUPLE_MANAGER_H
+#define TUPLE_MANAGER_H
 #include "Tuple.hpp"
 
 
