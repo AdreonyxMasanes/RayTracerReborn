@@ -33,24 +33,39 @@ void Tuple::SetW(float w)
     m_w = w;
 }
 
-float Tuple::X()
+float Tuple::X() const
 {
     return m_x;
 }
 
-float Tuple::Y()
+float Tuple::Y() const
 {
     return m_y;
 }
 
-float Tuple::Z()
+float Tuple::Z() const
 {
     return m_z;
 }
 
-float Tuple::W()
+float Tuple::W() const
 {
     return m_w;
+}
+
+bool Tuple::operator==(const Tuple& rhs) const
+{
+    if (!(m_x == rhs.X())) {
+        return false;
+    } else if (!(m_y == rhs.Y())) {
+        return false;
+    } else if (!(m_z == rhs.Z())) {
+        return false;
+    } else if (!(m_w == rhs.W())) {
+        return false;
+    } else {
+        return true;
+    }
 }
 
 void Tuple::RunTest() {
@@ -82,4 +97,26 @@ bool Tuple::IsPointTest() {
   }
   
   return true;
+}
+
+bool Tuple::IsEqualTest() {
+
+    Tuple test_a_p(0.0f, 0.0f, 0.0f, 1.0f);
+    Tuple test_b_p(0.0f, 0.0f, 0.0f, 1.0f);
+
+    Tuple test_a_v(0.0f, 0.0f, 0.0f, 0.0f);
+    Tuple test_b_v(0.0f, 0.0f, 0.0f, 0.0f);
+
+    if (!(test_a_p == test_b_p)) {
+        std::cout << "POINT EQUIVALENCE FAILED" << std::endl;
+        return false;
+    } else if (!(test_a_v == test_b_v)) {
+        std::cout << "VECTOR EQUIVALENCE FAILED" << std::endl;
+        return false;
+    } else if (!(test_a_p == test_b_v)) {
+        std::cout << "POINT VECTOR EQUIVALENCE FAILED" << std::endl;
+        return false;
+    } else {
+        return true;
+    }
 }

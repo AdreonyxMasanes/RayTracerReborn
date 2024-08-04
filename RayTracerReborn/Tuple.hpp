@@ -13,10 +13,12 @@ public:
   void SetZ(float z);
   void SetW(float w);
 
-  float X();
-  float Y();
-  float Z();
-  float W();
+  float X() const;
+  float Y() const;
+  float Z() const;
+  float W() const;
+
+  bool operator==(const Tuple& rhs) const;
 
 // TESTS
 public:
@@ -28,6 +30,7 @@ private:
 // TEST FUNCTIONS
 private:
   static bool IsPointTest();
+  static bool IsEqualTest();
 };
 
 #endif // !TUPLE_H
