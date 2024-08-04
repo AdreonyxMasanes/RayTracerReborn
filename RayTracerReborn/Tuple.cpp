@@ -13,6 +13,46 @@ bool Tuple::IsPoint() {
   return m_w == 1.0f;
 }
 
+void Tuple::SetX(float x)
+{
+    m_x = x;
+}
+
+void Tuple::SetY(float y)
+{
+    m_y = y;
+}
+
+void Tuple::SetZ(float z)
+{
+    m_z = z;
+}
+
+void Tuple::SetW(float w)
+{
+    m_w = w;
+}
+
+float Tuple::X()
+{
+    return m_x;
+}
+
+float Tuple::Y()
+{
+    return m_y;
+}
+
+float Tuple::Z()
+{
+    return m_z;
+}
+
+float Tuple::W()
+{
+    return m_w;
+}
+
 void Tuple::RunTest() {
   
   if (!Tuple::IsPointTest()) {
