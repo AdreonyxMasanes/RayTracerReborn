@@ -2,13 +2,13 @@
 #include "BulletSim.hpp"
 #include "Canvas.hpp"
 int main() {
-  Tuple::RunTest();
+  //Tuple::RunTest();
   // SINGLETON TYPE IMPLEMENTATION
   TupleManager::Init();
   TupleManager::CreationTest();
   // BulletSim::Run();
 
-  Canvas::CanvasTest();
+  //Canvas::CanvasTest();
 
   TupleManager::Shutdown();
   return 0;
