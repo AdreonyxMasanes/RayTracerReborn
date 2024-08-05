@@ -2,9 +2,10 @@
 #include "BulletSim.hpp"
 #include "Canvas.hpp"
 int main() {
+  TupleManager::Init();
   //Tuple::RunTest();
   // SINGLETON TYPE IMPLEMENTATION
-  TupleManager::Init();
+
   //TupleManager::CreationTest();
   //BulletSim::Run(false);
   //BulletSim::Run(true);
