@@ -128,6 +128,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BulletSim.cpp" />
+    <ClCompile Include="Canvas.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Tuple.cpp" />
     <ClCompile Include="TupleManager.cpp" />
@@ -135,6 +136,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BulletSim.hpp" />
+    <ClInclude Include="Canvas.hpp" />
     <ClInclude Include="Tuple.hpp" />
     <ClInclude Include="TupleManager.hpp" />
     <ClInclude Include="Utility.hpp" />
