@@ -1,8 +1,10 @@
 #ifndef BULLET_SIM_H
 #include "TupleManager.hpp"
+#include "Canvas.hpp"
+#include "PPM.hpp"
 class BulletSim {
 public:
-  static void Run();
+  static void Run(bool printToPPM);
 private:
   struct Projectile {
     std::unique_ptr<Tuple> position_p = std::make_unique<Tuple>();

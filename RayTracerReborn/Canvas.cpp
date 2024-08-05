@@ -6,9 +6,9 @@ Canvas::Canvas() {
 //READ UP ON VECTORS
 Canvas::Canvas(float width, float height) 
   : m_width(width), m_height(height) {
-  for (int row = 0; row < Height(); row++ ) {
+  for (int row = 0; row < height; row++ ) {
     std::vector<Tuple> temp;
-    for (int col = 0; col < Width(); col++) {
+    for (int col = 0; col < width; col++) {
       temp.push_back(Tuple(0.0f, 0.0f, 0.0f, 0.0f));
     }
     GetCanvas().push_back(temp);
@@ -54,5 +54,5 @@ void Canvas::CanvasTest() {
 }
 
 Tuple& Canvas::GetPixel(float row, float col) {
-  return GetCanvas().at(row).at(col);
+  return GetCanvas().at(col).at(row);
 }
