@@ -4,21 +4,20 @@ void BulletSim::Run(bool print_to_ppm ) {
   Enviroment enviroment;
   Projectile projectile;
 
-  TupleManager::Instance()->Vector(*enviroment.gravity_v,0.0f, -0.01f, 0.0f);
-  TupleManager::Instance()->Vector(*enviroment.wind_v, 0.0f, 0.0f, 0.0f);
+  enviroment.gravity_v =TupleManager::Instance()->Vector(0.0f, -0.01f, 0.0f);
+  enviroment.wind_v = TupleManager::Instance()->Vector(0.0f, 0.0f, 0.0f);
 
-  TupleManager::Instance()->Point(*projectile.position_p, 0.0f, 1.0f, 0.0f);
-  TupleManager::Instance()->Vector(*projectile.velocity_v, 1.0f, 1.0f, 0.0f);
+  projectile.position_p = TupleManager::Instance()->Point(0.0f, 1.0f, 0.0f);
+  projectile.velocity_v = TupleManager::Instance()->Vector(1.0f, 1.0f, 0.0f);
   projectile.velocity_v  =  projectile.velocity_v->Normalize();
-  projectile.velocity_v = *projectile.velocity_v * 3.25f;
+  projectile.velocity_v = *projectile.velocity_v * 3.0f;
 
   int max_iterations = 60000;
   int current_iteration = 0;
 
   Canvas canvas(900.0f, 500.0f);
 
-  std::unique_ptr<Tuple> red = std::make_unique<Tuple>();
-  TupleManager::Instance()->Color(*red, 1.0f, 0.0f, .0f);
+  std::unique_ptr<Tuple> red = TupleManager::Instance()->Color(1.0f, 0.0f, .0f);
   
   while (projectile.position_p->Y() >= 0 && current_iteration < max_iterations) {
     if (print_to_ppm) {

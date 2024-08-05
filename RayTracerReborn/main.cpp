@@ -5,14 +5,14 @@ int main() {
   //SINGLETON TYPE IMPLEMENTATION
   TupleManager::Init();
 
-  //Tuple::RunTest();
+  Tuple::RunTest();
 
-  //TupleManager::CreationTest();
+  TupleManager::CreationTest();
 
   //BulletSim::Run(false);
   //BulletSim::Run(true);
 
-  //Canvas::CanvasTest();
+  Canvas::CanvasTest();
 
   TupleManager::Shutdown();
   return 0;
