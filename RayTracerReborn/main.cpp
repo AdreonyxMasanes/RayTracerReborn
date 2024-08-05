@@ -1,6 +1,7 @@
 #include "TupleManager.hpp"
 #include "BulletSim.hpp"
 #include "Canvas.hpp"
+#include "Matrix.hpp"
 int main() {
   //SINGLETON TYPE IMPLEMENTATION
   TupleManager::Init();
@@ -13,6 +14,8 @@ int main() {
   //BulletSim::Run(true);
 
   Canvas::CanvasTest();
+
+  Matrix::RunTest();
 
   TupleManager::Shutdown();
   return 0;
