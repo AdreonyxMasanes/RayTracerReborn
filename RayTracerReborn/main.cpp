@@ -5,7 +5,7 @@ int main() {
   //Tuple::RunTest();
   // SINGLETON TYPE IMPLEMENTATION
   TupleManager::Init();
-  TupleManager::CreationTest();
+  //TupleManager::CreationTest();
   //BulletSim::Run(false);
   //BulletSim::Run(true);
 
