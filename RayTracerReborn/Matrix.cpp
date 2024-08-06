@@ -111,20 +111,6 @@ std::unique_ptr<Matrix> Matrix::Transpose() {
   );
 }
 
-std::unique_ptr<Matrix> Matrix::Submatrix(float row, float col) {
-  // DONT WANT TO MODIFY ORIGINAL MATRIX SO CREATE A COPY
-  Matrix temp = *this;
-  // Erase rows and colums from matrix.
-  temp.GetMatrix().erase(temp.GetMatrix().begin() + row);
-  for (auto& row : temp.GetMatrix()) {
-    row.erase(row.begin() + col);
-  }
-  // Change the Size variables. COULD ALSO MAKE THE PRINT FUNCTION JUST USE .SIZE BUT THIS FUNCTIONS THE SAME o.O
-  temp.SetHeight(temp.Height() - 1);
-  temp.SetWidth(temp.Width() - 1);
-  std::unique_ptr<Matrix> result = std::make_unique<Matrix>(temp);
-  return result;
-}
 
 bool Matrix::operator==(Matrix& rhs)  {
   if (Height() == rhs.Height() && Width() == rhs.Width()) {
@@ -202,6 +188,21 @@ float Matrix::Determinant() {
       result += GetMatrix()[0][col] * Cofactor(0, col);
     }
   }
+  return result;
+}
+
+std::unique_ptr<Matrix> Matrix::Submatrix(float row, float col) {
+  // DONT WANT TO MODIFY ORIGINAL MATRIX SO CREATE A COPY
+  Matrix temp = *this;
+  // Erase rows and colums from matrix.
+  temp.GetMatrix().erase(temp.GetMatrix().begin() + row);
+  for (auto& row : temp.GetMatrix()) {
+    row.erase(row.begin() + col);
+  }
+  // Change the Size variables. COULD ALSO MAKE THE PRINT FUNCTION JUST USE .SIZE BUT THIS FUNCTIONS THE SAME o.O
+  temp.SetHeight(temp.Height() - 1);
+  temp.SetWidth(temp.Width() - 1);
+  std::unique_ptr<Matrix> result = std::make_unique<Matrix>(temp);
   return result;
 }
 

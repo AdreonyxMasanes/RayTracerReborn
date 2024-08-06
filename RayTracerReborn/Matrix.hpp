@@ -39,7 +39,7 @@ public:
   // UTILTIY FUNCTIONS
 public:
   std::unique_ptr<Matrix> Transpose();
-  std::unique_ptr<Matrix> Submatrix(float row, float col);
+
   // MATH FUNCS
 public:
   bool operator==(Matrix& rhs);
@@ -48,6 +48,7 @@ public:
   Matrix& operator=(Matrix& rhs);
 
   float Determinant();
+  std::unique_ptr<Matrix> Submatrix(float row, float col);
   float Minor(float row, float col);
   float Cofactor(float row, float col);
   std::unique_ptr<Matrix> Invert();
