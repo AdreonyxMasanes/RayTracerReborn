@@ -49,6 +49,8 @@ public:
   // MAGNITUDE == 1.0f
   std::unique_ptr<Tuple> Normalize() const;
 
+  std::unique_ptr<Tuple> Reflect(const Tuple& normal) const;
+
   // LENGTH OF VECTOR
   float Magnitude() const;
   
@@ -73,6 +75,7 @@ private:
   static bool DivisonTest();
   static bool MagnitudeTest();
   static bool NormalizeTest();
+  static bool ReflectTest();
   static bool DotTest();
   static bool CrossTest();
   static bool IsPointTest();

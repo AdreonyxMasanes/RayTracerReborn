@@ -109,6 +109,10 @@ std::unique_ptr<Tuple> Tuple::Normalize() const {
   return std::make_unique<Tuple>(X() / magnitude, Y() / magnitude, Z() / magnitude, W() / magnitude);
 }
 
+std::unique_ptr<Tuple> Tuple::Reflect(const Tuple& normal) const {
+  return *this - (*(normal * (2 * Dot(normal))));
+}
+
 float Tuple::Magnitude() const {
   return sqrtf(powf(X(), 2) + powf(Y(), 2) + powf(Z(), 2) + powf(W(), 2));
 }
@@ -134,6 +138,8 @@ void Tuple::RunTest() {
   } else if (!(Tuple::MagnitudeTest())) {
     return;
   } else if (!(Tuple::NormalizeTest())) {
+    return;
+  } else if (!(Tuple::ReflectTest())) {
     return;
   } else if (!(Tuple::DotTest())) {
     return;
@@ -317,6 +323,26 @@ bool Tuple::NormalizeTest() {
     return false;
   } else {
     return true;
+  }
+}
+
+bool Tuple::ReflectTest() {
+  Tuple test_a_v(1.0f, -1.0f, 0.0f, 0.0f);
+  Tuple test_a_normal_v(0.0f, 1.0f, 0.0f, 0.0f);
+  Tuple test_a_success_v(1.0f, 1.0f, 0.0f, 0.0f);
+  std::unique_ptr<Tuple> result = test_a_v.Reflect(test_a_normal_v);
+  if (!(*result == test_a_success_v)) {
+    std::cout << "REFELCT TEST FAILED" << std::endl;
+    return false;
+  }
+
+  test_a_v = Tuple(0.0f, -1.0f, 0.0f, 0.0f);
+  test_a_normal_v = Tuple(sqrtf(2) / 2.0f, sqrtf(2) / 2.0f, 0.0f, 0.0f);
+  test_a_success_v = Tuple(1.0f, 0.0f, 0.0f, 0.0f);
+  result = test_a_v.Reflect(test_a_normal_v);
+  if (!(*result == test_a_success_v)) {
+    std::cout << "REFELCT TEST FAILED" << std::endl;
+    return false;
   }
 }
 

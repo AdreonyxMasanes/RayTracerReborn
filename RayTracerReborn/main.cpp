@@ -10,7 +10,7 @@ int main() {
   //SINGLETON TYPE IMPLEMENTATION
   TupleManager::Init();
   SphereManager::Init();
-  //Tuple::RunTest();
+  Tuple::RunTest();
 
   //TupleManager::CreationTest();
 
@@ -24,7 +24,7 @@ int main() {
 
   //Matrix::RunTest();
   //Ray::RunTest();
-  Sphere::RunTest();
+  //Sphere::RunTest();
   SphereManager::Shutdown();
   TupleManager::Shutdown();
   return 0;
