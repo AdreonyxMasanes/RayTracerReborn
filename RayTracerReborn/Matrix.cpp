@@ -165,6 +165,14 @@ std::unique_ptr<Matrix> Matrix::ShearingMatrix(float xy, float xz, float yx, flo
   );
 }
 
+std::unique_ptr<Matrix> Matrix::TranformationMatrix(Matrix& first, Matrix& second) {
+  return second * first;
+}
+
+std::unique_ptr<Matrix> Matrix::TranformationMatrix(Matrix& first, Matrix& second, Matrix& third) {
+  return *(third * second) * first;
+}
+
 
 bool Matrix::operator==(Matrix& rhs)  {
   if (Height() == rhs.Height() && Width() == rhs.Width()) {
@@ -322,6 +330,8 @@ void Matrix::RunTest() {
   } else if (!(TransformTest())) {
     return;
   } else if (!(ShearingTest())) {
+    return;
+  } else if (!(TranformChainingTest())) {
     return;
   } else {
     std::cout << "MATRICIES TEST PASSED" << std::endl;
@@ -679,4 +689,24 @@ bool Matrix::ShearingTest() {
   } else {
     return true;
   }
+}
+
+bool Matrix::TranformChainingTest() {
+  float pi_4 = 0.78539816339;
+  float pi_2 = 1.57079632679;
+  
+  std::unique_ptr<Tuple> test_p = TupleManager::Instance()->Point(1.0f, 0.0f, 1.0f);
+  std::unique_ptr<Matrix> rotation_x = Matrix::RotationXMatrix(pi_2);
+  std::unique_ptr<Matrix> scale = Matrix::ScalingMatrix(5.0f, 5.0f, 5.0f);
+  std::unique_ptr<Matrix> translate = Matrix::TranslationMatrix(10.0f, 5.0f, 7.0f);
+  std::unique_ptr<Matrix> transform = Matrix::TranformationMatrix(*rotation_x, *scale, *translate);
+  Tuple test_success_p(15.0f, 0.0f, 7.0f, 1.0f);
+  std::unique_ptr<Tuple> result = *transform * (*test_p);
+  if (!(*result == test_success_p)) {
+    std::cout << "TRANSFORM CHAINGING TEST FAILED" << std::endl;
+    return false;
+  } else {
+    return true;
+  }
+
 }

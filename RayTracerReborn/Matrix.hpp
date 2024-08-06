@@ -46,6 +46,8 @@ public:
   static std::unique_ptr<Matrix> RotationYMatrix(float radians);
   static std::unique_ptr<Matrix> RotationZMatrix(float radians);
   static std::unique_ptr<Matrix> ShearingMatrix(float xy, float xz, float yx, float yz, float zx, float zy);
+  static std::unique_ptr<Matrix> TranformationMatrix(Matrix& first, Matrix& second);
+  static std::unique_ptr<Matrix> TranformationMatrix(Matrix& first, Matrix& second, Matrix& third);
 
   // MATH FUNCS
 public:
@@ -78,5 +80,6 @@ private:
   static bool InversionTest();
   static bool TransformTest();
   static bool ShearingTest();
+  static bool TranformChainingTest();
 };
 #endif // !MATRIX_H
