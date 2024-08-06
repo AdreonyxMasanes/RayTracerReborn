@@ -45,6 +45,7 @@ public:
   static std::unique_ptr<Matrix> RotationXMatrix(float radians);
   static std::unique_ptr<Matrix> RotationYMatrix(float radians);
   static std::unique_ptr<Matrix> RotationZMatrix(float radians);
+  static std::unique_ptr<Matrix> ShearingMatrix(float xy, float xz, float yx, float yz, float zx, float zy);
 
   // MATH FUNCS
 public:
@@ -76,5 +77,6 @@ private:
   static bool DeterimantTest();
   static bool InversionTest();
   static bool TransformTest();
+  static bool ShearingTest();
 };
 #endif // !MATRIX_H

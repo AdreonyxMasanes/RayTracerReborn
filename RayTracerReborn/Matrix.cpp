@@ -156,6 +156,15 @@ std::unique_ptr<Matrix> Matrix::RotationZMatrix(float radians) {
   );
 }
 
+std::unique_ptr<Matrix> Matrix::ShearingMatrix(float xy, float xz, float yx, float yz, float zx, float zy) {
+  return std::make_unique<Matrix>(
+    1.0f,   xy,   xz, 0.0f,
+      yx, 1.0f,   yz, 0.0f,
+      zx,   zy, 1.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 1.0f
+  );
+}
+
 
 bool Matrix::operator==(Matrix& rhs)  {
   if (Height() == rhs.Height() && Width() == rhs.Width()) {
@@ -311,6 +320,8 @@ void Matrix::RunTest() {
   } else if (!(InversionTest())) {
     return;
   } else if (!(TransformTest())) {
+    return;
+  } else if (!(ShearingTest())) {
     return;
   } else {
     std::cout << "MATRICIES TEST PASSED" << std::endl;
@@ -610,4 +621,16 @@ bool Matrix::TransformTest() {
     std::cout << "ROTATION Z HALF TEST FAILED" << std::endl;
     return false;
   }
+}
+
+bool Matrix::ShearingTest() {
+  std::unique_ptr<Matrix> shearing = Matrix::ShearingMatrix(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+  std::unique_ptr<Tuple> test_p = TupleManager::Instance()->Point(2.0f, 3.0f, 4.0f);
+  std::unique_ptr<Tuple> result = *shearing * (*test_p);
+  Tuple shearing_success(5.0f, 3.0f, 4.0f, 1.0f);
+  if (!(*result == shearing_success)) {
+    std::cout << "SHEARING TEST 1 FAILED" << std::endl;
+    return false;
+  }
+  return true;
 }
