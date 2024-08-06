@@ -85,6 +85,14 @@ std::vector<std::vector<float>>& Matrix::GetMatrix() {
   return m_matrix;
 }
 
+void Matrix::SetHeight(float height) {
+  m_height = height;
+}
+
+void Matrix::SetWidth(float width) {
+  m_width = width;
+}
+
 std::unique_ptr<Matrix> Matrix::GetIdentityMatrix() {
   return std::make_unique<Matrix>(
     1.0f, 0.0f, 0.0f, 0.0f,
@@ -101,6 +109,21 @@ std::unique_ptr<Matrix> Matrix::Transpose() {
     GetMatrix()[0][2], GetMatrix()[1][2], GetMatrix()[2][2], GetMatrix()[3][2],
     GetMatrix()[0][3], GetMatrix()[1][3], GetMatrix()[2][3], GetMatrix()[3][3]
   );
+}
+
+std::unique_ptr<Matrix> Matrix::Submatrix(float row, float col) {
+  // DONT WANT TO MODIFY ORIGINAL MATRIX SO CREATE A COPY
+  Matrix temp = *this;
+  // Erase rows and colums from matrix.
+  temp.GetMatrix().erase(temp.GetMatrix().begin() + row);
+  for (auto& row : temp.GetMatrix()) {
+    row.erase(row.begin() + col);
+  }
+  // Change the Size variables. COULD ALSO MAKE THE PRINT FUNCTION JUST USE .SIZE BUT THIS FUNCTIONS THE SAME o.O
+  temp.SetHeight(temp.Height() - 1);
+  temp.SetWidth(temp.Width() - 1);
+  std::unique_ptr<Matrix> result = std::make_unique<Matrix>(temp);
+  return result;
 }
 
 bool Matrix::operator==(Matrix& rhs)  {
@@ -160,6 +183,61 @@ std::unique_ptr<Tuple> Matrix::operator*(Tuple& rhs) {
   }
 }
 
+Matrix& Matrix::operator=(Matrix& rhs) {
+  for (int row = 0; row < Height(); row++) {
+    for (int col = 0; col < Width(); col++) {
+      GetMatrix()[row][col] = rhs.GetMatrix()[row][col];
+    }
+  }
+  return *this;
+}
+
+float Matrix::Determinant() {
+  float result = 0;
+
+  if (Width() == 2) {
+    return GetMatrix()[0][0] * GetMatrix()[1][1] - GetMatrix()[0][1] * GetMatrix()[1][0];
+  } else {
+    for (int col = 0; col < Width(); col++) {
+      result += GetMatrix()[0][col] * Cofactor(0, col);
+    }
+  }
+  return result;
+}
+
+float Matrix::Minor(float row, float col) {
+  std::unique_ptr<Matrix> sub = Submatrix(row, col);
+  return sub->Determinant();
+}
+
+float Matrix::Cofactor(float row, float col) {
+  float result;
+  if ((static_cast<int>(row) + static_cast<int>(col)) % 2 == 0) {
+    result = Minor(row, col);
+    return result;
+  } else {
+    result = -(Minor(row, col));
+    return result;
+  }
+}
+
+std::unique_ptr<Matrix> Matrix::Invert() {
+  std::unique_ptr<Matrix> result = std::make_unique<Matrix>(Height(), Width());
+
+  if (!(Determinant() == 0)) {
+    for (int row = 0; row < Height(); row++) {
+      for (int col = 0; col < Width(); col++) {
+        float c = Cofactor(row, col);
+        result->GetMatrix()[col][row] = c / Determinant();
+      }
+    }
+  } else {
+    std::cout << "Matrix is invertible " << std::endl;
+    return nullptr;
+  }
+  return result;
+}
+
 void Matrix::Print() {
   for (int row = 0; row < Height(); row++) {
     for (int col = 0; col < Width(); col++) {
@@ -181,6 +259,10 @@ void Matrix::RunTest() {
   } else if (!(MatrixMultiplyByTupleTest())) {
     return;
   } else if (!(TransposeTest())) {
+    return;
+  } else if (!(DeterimantTest())) {
+    return;
+  } else if (!(InversionTest())) {
     return;
   } else {
     std::cout << "MATRICIES TEST PASSED" << std::endl;
@@ -284,7 +366,7 @@ bool Matrix::MatrixMultiplyByTupleTest() {
   std::unique_ptr<Tuple> result = mat_4_a * test_t;
 
   if (!(*result == test_solution_t)) {
-    std::cout << "MULTIPLY MATRICIES TEST  FAILED" << std::endl;
+    std::cout << "MULTIPLY MATRICIES BY TUPLE TEST  FAILED" << std::endl;
     return false;
   } else {
     return true;
@@ -307,6 +389,96 @@ bool Matrix::TransposeTest() {
 
   if (!(*result == mat_4_solution)) {
     std::cout << "TRANSPOSE MATRICIES TEST  FAILED" << std::endl;
+    return false;
+  } else {
+    return true;
+  }
+}
+
+bool Matrix::DeterimantTest() {
+  Matrix mat_3(
+     1.0f,  2.0f,  6.0f,
+    -5.0f,  8.0f, -4.0f,
+     2.0f,  6.0f,  4.0f);
+  float success = -196.0f;
+  float mat_3_determinant = mat_3.Determinant();
+  if (!(Utility::FloatsAreEqual(mat_3_determinant, success))) {
+    std::cout << "DETERMINANT MAT 3 FAILED" << std::endl;
+    return false;
+  }
+
+  Matrix mat_4(
+    -2.0f, -8.0f,  3.0f,  5.0f,
+    -3.0f,  1.0f,  7.0f,  3.0f,
+     1.0f,  2.0f, -9.0f,  6.0f,
+    -6.0f,  7.0f,  7.0f, -9.0f);
+  success = -4071.0f;
+  float mat_4_determinant = mat_4.Determinant();
+  if (!(Utility::FloatsAreEqual(mat_4_determinant, success))) {
+    std::cout << "DETERMINANT MAT 4 FAILED" << std::endl;
+    return false;
+  } else {
+    return true;
+  }
+}
+
+bool Matrix::InversionTest() {
+  Matrix mat_4_a(
+    -4.0f,  2.0f, -2.0f, -3.0f,
+     9.0f,  6.0f,  2.0f,  6.0f,
+     0.0f, -5.0f,  1.0f, -5.0f,
+     0.0f,  0.0f,  0.0f,  0.0f);
+  std::unique_ptr<Matrix> mat_4_a_inversion = mat_4_a.Invert();
+  if (!(mat_4_a_inversion == nullptr)) {
+    std::cout << "INVERSION TEST 1 FAILED" << std::endl;
+    return false;
+  }
+
+  Matrix mat_4_b(
+   -5.0f,  2.0f,  6.0f, -8.0f,
+    1.0f, -5.0f,  1.0f,  8.0f,
+    7.0f,  7.0f, -6.0f, -7.0f,
+    1.0f, -3.0f,  7.0f,  4.0f);
+  Matrix mat_4_b_invert_success(
+     0.21805f,  0.45113f,  0.24060f, -0.04511f,
+    -0.80825f, -1.45677f, -0.44361f,  0.52068f,
+    -0.07895f, -0.22368f, -0.05263f,  0.19737f,
+    -0.52256f, -0.81391f, -0.30075f,  0.30639f);
+  std::unique_ptr<Matrix> mat_4_b_inversion = mat_4_b.Invert();
+  if (!(mat_4_b_invert_success == *mat_4_b_inversion)) {
+    std::cout << "INVERSION TEST 2 FAILED" << std::endl;
+    return false;
+  }
+
+  Matrix mat_4_c(
+     8.0f,-5.0f, 9.0f, 2.0f,
+     7.0f, 5.0f, 6.0f, 1.0f,
+    -6.0f, 0.0f, 9.0f, 6.0f,
+    -3.0f, 0.0f,-9.0f,-4.0f);
+  Matrix mat_4_c_invert_success(
+    -0.15385f,-0.15385f,-0.28205f,-0.53846f,
+    -0.07692f, 0.12308f, 0.02564f, 0.03077f,
+     0.35897f, 0.35897f, 0.43590f, 0.92308f,
+    -0.69231f,-0.69231f,-0.76923f,-1.92308f);
+  std::unique_ptr<Matrix> mat_4_c_inversion = mat_4_c.Invert();
+  if (!(mat_4_c_invert_success == *mat_4_c_inversion)) {
+    std::cout << "INVERSION TEST 3 FAILED" << std::endl;
+    return false;
+  }
+
+  Matrix mat_4_d(
+    9.0f, 3.0f, 0.0f, 9.0f,
+   -5.0f,-2.0f,-6.0f,-3.0f,
+   -4.0f, 9.0f, 6.0f, 4.0f,
+   -7.0f, 6.0f, 6.0f, 2.0f);
+  Matrix mat_4_d_invert_success(
+    -0.04074f,-0.07778f, 0.14444f,-0.22222f,
+    -0.07778f, 0.03333f, 0.36667f,-0.33333f,
+    -0.02901f,-0.14630f,-0.10926f, 0.12963f,
+     0.17778f, 0.06667f,-0.26667f, 0.33333f);
+  std::unique_ptr<Matrix> mat_4_d_inversion = mat_4_d.Invert();
+  if (!(mat_4_d_invert_success == *mat_4_d_inversion)) {
+    std::cout << "INVERSION TEST 4 FAILED" << std::endl;
     return false;
   } else {
     return true;
