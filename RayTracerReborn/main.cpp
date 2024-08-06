@@ -2,6 +2,7 @@
 #include "BulletSim.hpp"
 #include "ClockSim.hpp"
 #include "Ray.hpp"
+#include "Sphere.hpp"
 int main() {
   //SINGLETON TYPE IMPLEMENTATION
   TupleManager::Init();
@@ -17,7 +18,8 @@ int main() {
   //Canvas::CanvasTest();
 
   //Matrix::RunTest();
-  Ray::RunTest();
+  //Ray::RunTest();
+  Sphere::RunTest();
   TupleManager::Shutdown();
   return 0;
 }
