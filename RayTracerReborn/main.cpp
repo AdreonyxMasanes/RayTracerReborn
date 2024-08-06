@@ -1,21 +1,21 @@
 #include "TupleManager.hpp"
 #include "BulletSim.hpp"
-#include "Canvas.hpp"
-#include "Matrix.hpp"
+#include "ClockSim.hpp"
 int main() {
   //SINGLETON TYPE IMPLEMENTATION
   TupleManager::Init();
 
-  Tuple::RunTest();
+  //Tuple::RunTest();
 
-  TupleManager::CreationTest();
+  //TupleManager::CreationTest();
 
   //BulletSim::Run(false);
   //BulletSim::Run(true);
+  //ClockSim::Run();
 
-  Canvas::CanvasTest();
+  //Canvas::CanvasTest();
 
-  Matrix::RunTest();
+  //Matrix::RunTest();
 
   TupleManager::Shutdown();
   return 0;
