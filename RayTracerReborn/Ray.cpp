@@ -16,6 +16,7 @@ Tuple& Ray::Direction() {
   return m_direction_v;
 }
 
+
 std::vector<Intersection>& Ray::Intersections() {
   return m_intersections;
 }
@@ -42,10 +43,9 @@ void Ray::Cast(Sphere& sphere) {
   }
 }
 
-std::unique_ptr<Intersection> Ray::Hit() {
-  // SORT LOW TO HIGH
+void Ray::SortIntersections() {
   bool isSorted = false;
-  while (!isSorted) {
+  while (!isSorted && Intersections().size() > 0) {
     for (int i = 0; i < Intersections().size(); i++) {
       if (!(i == Intersections().size() - 1)) {
         if (Intersections().at(i).Time() > Intersections().at(i + 1).Time()) {
@@ -59,15 +59,17 @@ std::unique_ptr<Intersection> Ray::Hit() {
       }
     }
   }
+}
+
+Intersection* Ray::Hit() {
 
   // WHILE SORTING JUST POP A VALUE IF IT IS NEGATIVE THEN CAN JUST RETURN INTERSECTIONS[0]
   // since it is sorted, returns the first non negative value.
   for (auto& intersection : Intersections()) {
     if (intersection.Time() >= 0) {
-      return std::make_unique<Intersection>(intersection);
+      return &intersection;
     }
   }
-  return nullptr;
 }
 
 std::unique_ptr<Ray> Ray::Transform(Matrix& transform) {
@@ -97,6 +99,8 @@ void Ray::RunTest() {
     std::cout << "RAY TESTS PASSED" << std::endl;
   }
 }
+
+
 
 bool Ray::PositionTest() {
   std::unique_ptr<Tuple> ray_origin = TupleManager::Instance()->Point(2.0f, 3.0f, 4.0f);
@@ -214,7 +218,7 @@ bool Ray::HitTest() {
   Intersection test_b_intersection(2.0f, test_sphere);
   test_ray.Intersections().push_back(test_b_intersection);
   test_ray.Intersections().push_back(test_a_intersection);
-  std::unique_ptr<Intersection> hit = test_ray.Hit();
+  Intersection* hit = test_ray.Hit();
   if (!(*hit == test_a_intersection)) {
     std::cout << "HIT TEST 1 FAILED" << std::endl;
     return false;

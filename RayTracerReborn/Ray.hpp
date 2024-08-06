@@ -19,9 +19,11 @@ public:
 public:
   std::unique_ptr<Tuple> Position(float time);
   void Cast(Sphere& sphere);
-  std::unique_ptr<Intersection> Hit();
+  void SortIntersections();
+  Intersection* Hit();
   std::unique_ptr<Ray> Transform(Matrix& transform);
   bool operator==(Ray& rhs);
+
 public:
   static void RunTest();
 private:
@@ -29,6 +31,8 @@ private:
   Tuple m_direction_v;
   std::vector<Intersection> m_intersections;
 private:
+
+
   static bool PositionTest();
   static bool CastTest();
   static bool HitTest();
