@@ -1,7 +1,7 @@
 #include "Sphere.hpp"
 
 Sphere::Sphere() 
-  : m_id(0), m_transform(*Matrix::GetIdentityMatrix()){
+  : m_id(0), m_transform(*Matrix::GetIdentityMatrix()) {
 }
 
 Sphere::Sphere(int id)
@@ -15,6 +15,10 @@ int Sphere::ID() {
 
 Matrix& Sphere::Transform() {
   return m_transform;
+}
+
+Material& Sphere::GetMaterial() {
+  return m_material;
 }
 
 bool Sphere::operator==(Sphere& rhs) {
@@ -45,6 +49,10 @@ void Sphere::SetTransform(Matrix& transform) {
 
 void Sphere::SetID(int id) {
   m_id = id;
+}
+
+void Sphere::SetMaterial(Material& material) {
+  m_material = material;
 }
 
 void Sphere::RunTest() {

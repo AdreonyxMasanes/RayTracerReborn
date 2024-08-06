@@ -1,6 +1,7 @@
 #ifndef SPHERE_H
 #define SPHERE_H
 #include "Matrix.hpp"
+#include "Material.hpp"
 class Sphere {
 public:
   Sphere();
@@ -10,6 +11,7 @@ public:
 public:
   int ID();
   Matrix& Transform();
+  Material& GetMaterial();
   
   // UTILTIY
 public:
@@ -21,6 +23,7 @@ public:
 public:
   void SetTransform(Matrix& transform);
   void SetID(int ID);
+  void SetMaterial(Material& material);
 
 public:
   //float* Intersect(Ray& ray);
@@ -30,6 +33,7 @@ public:
 private:
   int m_id;
   Matrix m_transform;
+  Material m_material;
 private:
   static bool NormalAtTest();
   //static bool IntersectTest();
