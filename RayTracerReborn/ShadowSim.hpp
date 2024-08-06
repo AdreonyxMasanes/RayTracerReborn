@@ -1,5 +1,6 @@
 #ifndef SHADOW_SIM_H
 #define SHADOW_SIM_H
+#include <chrono>
 #include "SphereManager.hpp"
 #include "TupleManager.hpp"
 #include "Ray.hpp"

@@ -1,6 +1,7 @@
 #include "ShadowSim.hpp"
 
 void ShadowSim::Run(bool shading) {
+  auto start = std::chrono::system_clock::now();
   float canvas_pixels = 128.0f;
   Canvas canvas(canvas_pixels, canvas_pixels);
   std::unique_ptr<Tuple> ray_origin = TupleManager::Instance()->Point(0.0f, 0.0f, -5.0f);
@@ -30,4 +31,9 @@ void ShadowSim::Run(bool shading) {
   }
 
   PPM ppm(canvas);
+  auto end = std::chrono::system_clock::now();
+  auto elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+  auto elapsed_s = std::chrono::duration_cast<std::chrono::seconds>(end - start);
+  std::cout << "TIME: " << elapsed_ms.count() << " miliseconds" << std::endl;
+  std::cout << "TIME: " << elapsed_s.count() << " seconds" <<std::endl;
 }
