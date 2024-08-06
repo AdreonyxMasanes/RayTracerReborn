@@ -16,11 +16,15 @@ Tuple& Ray::Direction() {
   return m_direction_v;
 }
 
+std::vector<Intersection>& Ray::Intersections() {
+  return m_intersections;
+}
+
 std::unique_ptr<Tuple> Ray::Position(float time) {
   return Origin() + *(Direction() * time);
 }
 
-Intersection* Ray::Cast(Sphere& sphere) {
+void Ray::Cast(Sphere& sphere) {
   // SEMANTICS?!
   std::unique_ptr<Tuple> world_origin = TupleManager::Instance()->Point(0.0f, 0.0f, 0.0f);
 
@@ -31,16 +35,9 @@ Intersection* Ray::Cast(Sphere& sphere) {
   float c = sphere_to_ray->Dot(*sphere_to_ray) - 1;
   float discriminant = powf(b, 2) - 4 * a * c;
 
-  if (discriminant < 0) {
-    return nullptr;
-  } else {
-    Intersection hits[2]{
-      //(-b - sqrtf(discriminant)) / (2 * a),
-      //(-b + sqrtf(discriminant)) / (2 * a)
-      Intersection((-b - sqrtf(discriminant)) / (2 * a), sphere),
-      Intersection((-b + sqrtf(discriminant)) / (2 * a), sphere)
-    };
-    return hits;
+  if (!(discriminant < 0)) {
+    m_intersections.push_back(Intersection((-b - sqrtf(discriminant)) / (2 * a), sphere));
+    m_intersections.push_back(Intersection((-b + sqrtf(discriminant)) / (2 * a), sphere));
   }
 }
 
@@ -95,40 +92,40 @@ bool Ray::CastTest() {
   std::unique_ptr<Tuple> ray_direction = TupleManager::Instance()->Vector(0.0f, 0.0f, 1.0f);
   Ray test_ray(*ray_origin, *ray_direction);
   Sphere test_sphere(1);
-  Intersection* hits = test_ray.Cast(test_sphere);
-  if (!(Utility::FloatsAreEqual(hits[0].Time(), 4.0f) && Utility::FloatsAreEqual(hits[1].Time(), 6.0f))) {
+  test_ray.Cast(test_sphere);
+  if (!(Utility::FloatsAreEqual(test_ray.Intersections()[0].Time(), 4.0f) && Utility::FloatsAreEqual(test_ray.Intersections()[1].Time(), 6.0f))) {
     std::cout << "INTERSECTION TEST 1 FAILED" << std::endl;
     return false;
   }
 
   ray_origin = TupleManager::Instance()->Point(0.0f, 1.0f, -5.0f);
   test_ray = Ray(*ray_origin, *ray_direction);
-  hits = test_ray.Cast(test_sphere);
-  if (!(Utility::FloatsAreEqual(hits[0].Time(), 5.0f) && Utility::FloatsAreEqual(hits[1].Time(), 5.0f))) {
+  test_ray.Cast(test_sphere);
+  if (!(Utility::FloatsAreEqual(test_ray.Intersections()[0].Time(), 5.0f) && Utility::FloatsAreEqual(test_ray.Intersections()[1].Time(), 5.0f))) {
     std::cout << "INTERSECTION TEST 2 FAILED" << std::endl;
     return false;
   }
 
   ray_origin = TupleManager::Instance()->Point(0.0f, 2.0f, -5.0f);
   test_ray = Ray(*ray_origin, *ray_direction);
-  hits = test_ray.Cast(test_sphere);
-  if (!(hits == nullptr)) {
+  test_ray.Cast(test_sphere);
+  if (!(test_ray.Intersections().size() == 0)) {
     std::cout << "INTERSECTION TEST 3 FAILED" << std::endl;
     return false;
   }
 
   ray_origin = TupleManager::Instance()->Point(0.0f, 0.0f, 0.0f);
   test_ray = Ray(*ray_origin, *ray_direction);
-  hits = test_ray.Cast(test_sphere);
-  if (!(Utility::FloatsAreEqual(hits[0].Time(), -1.0f) && Utility::FloatsAreEqual(hits[1].Time(), 1.0f))) {
+  test_ray.Cast(test_sphere);
+  if (!(Utility::FloatsAreEqual(test_ray.Intersections()[0].Time(), -1.0f) && Utility::FloatsAreEqual(test_ray.Intersections()[1].Time(), 1.0f))) {
     std::cout << "INTERSECTION TEST 4 FAILED" << std::endl;
     return false;
   }
 
   ray_origin = TupleManager::Instance()->Point(0.0f, 0.0f, 5.0f);
   test_ray = Ray(*ray_origin, *ray_direction);
-  hits = test_ray.Cast(test_sphere);
-  if (!(Utility::FloatsAreEqual(hits[0].Time(), -6.0f) && Utility::FloatsAreEqual(hits[1].Time(), -4.0f))) {
+  test_ray.Cast(test_sphere);
+  if (!(Utility::FloatsAreEqual(test_ray.Intersections()[0].Time(), -6.0f) && Utility::FloatsAreEqual(test_ray.Intersections()[1].Time(), -4.0f))) {
     std::cout << "INTERSECTION TEST 5 FAILED" << std::endl;
     return false;
   }
