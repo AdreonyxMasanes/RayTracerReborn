@@ -5,7 +5,7 @@
 #include <memory>
 #include <iostream>
 #include "Utility.hpp"
-#include "Tuple.hpp"
+#include "TupleManager.hpp"
 class Matrix {
 public:
   Matrix();
@@ -40,6 +40,12 @@ public:
 public:
   std::unique_ptr<Matrix> Transpose();
 
+  static std::unique_ptr<Matrix> TranslationMatrix(float x, float y, float z);
+  static std::unique_ptr<Matrix> ScalingMatrix(float x, float y, float z);
+  static std::unique_ptr<Matrix> RotationXMatrix(float radians);
+  static std::unique_ptr<Matrix> RotationYMatrix(float radians);
+  static std::unique_ptr<Matrix> RotationZMatrix(float radians);
+
   // MATH FUNCS
 public:
   bool operator==(Matrix& rhs);
@@ -69,5 +75,6 @@ private:
   static bool TransposeTest();
   static bool DeterimantTest();
   static bool InversionTest();
+  static bool TransformTest();
 };
 #endif // !MATRIX_H

@@ -111,6 +111,51 @@ std::unique_ptr<Matrix> Matrix::Transpose() {
   );
 }
 
+std::unique_ptr<Matrix> Matrix::TranslationMatrix(float x, float y, float z) {
+  return std::make_unique<Matrix>(
+    1.0f, 0.0f, 0.0f, x,
+    0.0f, 1.0f, 0.0f, y,
+    0.0f, 0.0f, 1.0f, z,
+    0.0f, 0.0f, 0.0f, 1.0f
+  );
+}
+
+std::unique_ptr<Matrix> Matrix::ScalingMatrix(float x, float y, float z) {
+  return std::make_unique<Matrix>(
+    x, 0.0f, 0.0f, 0.0f,
+    0.0f, y, 0.0f, 0.0f,
+    0.0f, 0.0f, z, 0.0f,
+    0.0f, 0.0f, 0.0f, 1.0f
+  );
+}
+
+std::unique_ptr<Matrix> Matrix::RotationXMatrix(float radians) {
+  return std::make_unique<Matrix>(
+    1.0f, 0.0f, 0.0f, 0.0f,
+    0.0f, cosf(radians), -sinf(radians), 0.0f,
+    0.0f, sinf(radians), cosf(radians), 0.0f,
+    0.0f, 0.0f, 0.0f, 1.0f
+  );
+}
+
+std::unique_ptr<Matrix> Matrix::RotationYMatrix(float radians) {
+  return std::make_unique<Matrix>(
+    cosf(radians), 0.0f, sinf(radians), 0.0f,
+    0.0f, 1.0f, 0.0f, 0.0f,
+    -sinf(radians), 0.0f, cosf(radians), 0.0f,
+    0.0f, 0.0f, 0.0f, 1.0f
+  );
+}
+
+std::unique_ptr<Matrix> Matrix::RotationZMatrix(float radians) {
+  return std::make_unique<Matrix>(
+    cosf(radians), -sinf(radians), 0.0f, 0.0f,
+    sinf(radians), cosf(radians), 0.0f, 0.0f,
+    0.0f, 0.0f, 1.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 1.0f
+  );
+}
+
 
 bool Matrix::operator==(Matrix& rhs)  {
   if (Height() == rhs.Height() && Width() == rhs.Width()) {
@@ -264,6 +309,8 @@ void Matrix::RunTest() {
   } else if (!(DeterimantTest())) {
     return;
   } else if (!(InversionTest())) {
+    return;
+  } else if (!(TransformTest())) {
     return;
   } else {
     std::cout << "MATRICIES TEST PASSED" << std::endl;
@@ -483,5 +530,84 @@ bool Matrix::InversionTest() {
     return false;
   } else {
     return true;
+  }
+}
+
+bool Matrix::TransformTest() {
+  float pi_4 = 0.78539816339;
+  float pi_2 = 1.57079632679;
+
+
+  // TRANSLATION
+  std::unique_ptr<Tuple> test_a_p = TupleManager::Instance()->Point(-3.0f, 4.0f, 5.0f);
+  std::unique_ptr<Matrix> translation = Matrix::TranslationMatrix(5.0f, -3.0f, 2.0f);
+  std::unique_ptr<Tuple> result = *translation * (*test_a_p);
+  Tuple translation_success_p(2.0f, 1.0f, 7.0f, 1.0f);
+  if (!(*result == translation_success_p)) {
+    std::cout << "TRANSLATION TEST FAILED" << std::endl;
+    return false;
+  }
+
+  // SCALING
+  test_a_p = TupleManager::Instance()->Point(-4.0f, 6.0f, 8.0f);
+  std::unique_ptr<Matrix> scaling = Matrix::ScalingMatrix(2.0f, 3.0f, 4.0f);
+  result = *scaling * (*test_a_p);
+  Tuple scaling_success_p(-8.0f, 18.0f, 32.0f, 1.0f);
+  if (!(*result == scaling_success_p)) {
+    std::cout << "SCALING TEST FAILED" << std::endl;
+    return false;
+  }
+
+  // ROTATION X
+  test_a_p = TupleManager::Instance()->Point(0.0f, 1.0f, 0.0f);
+  std::unique_ptr<Matrix> half_quarer_rotation = Matrix::RotationXMatrix(pi_4);
+  std::unique_ptr<Matrix> full_quarter_rotation = Matrix::RotationXMatrix(pi_2);
+  Tuple rotation_x_half_success(0.0f, sqrtf(2.0f) / 2.0f, sqrtf(2.0f) / 2.0f, 1.0f);
+  Tuple rotation_x_full_success(0.0f, 0.0f, 1.0f, 1.0f);
+  result = *half_quarer_rotation * (*test_a_p);
+  if (!(*result == rotation_x_half_success)) {
+    std::cout << "ROTATION X HALF TEST FAILED" << std::endl;
+    return false;
+  }
+  result = *full_quarter_rotation * (*test_a_p);
+  if (!(*result == rotation_x_full_success)) {
+    std::cout << "ROTATION X HALF TEST FAILED" << std::endl;
+    return false;
+  }
+
+  // ROTATION Y
+  test_a_p = TupleManager::Instance()->Point(0.0f, 0.0f, 1.0f);
+  half_quarer_rotation = Matrix::RotationYMatrix(pi_4);
+  full_quarter_rotation = Matrix::RotationYMatrix(pi_2);
+  Tuple rotation_y_half_success(sqrtf(2.0f) / 2.0f, 0.0f, sqrtf(2.0f) / 2.0f, 1.0f);
+  Tuple rotation_y_full_success(1.0f, 0.0f, 0.0f, 1.0f);
+  result = *half_quarer_rotation * (*test_a_p);
+  if (!(*result == rotation_y_half_success)) {
+    std::cout << "ROTATION Y HALF TEST FAILED" << std::endl;
+    return false;
+  }
+  result = *full_quarter_rotation * (*test_a_p);
+  if (!(*result == rotation_y_full_success)) {
+    std::cout << "ROTATION Y HALF TEST FAILED" << std::endl;
+    return false;
+  }
+
+  // ROTATION Z
+  test_a_p = TupleManager::Instance()->Point(0.0f, 1.0f, 0.0f);
+  // PI / 4
+  half_quarer_rotation = Matrix::RotationZMatrix(pi_4);
+  // PI / 2
+  full_quarter_rotation = Matrix::RotationZMatrix(pi_2);
+  Tuple rotation_z_half_success(-sqrtf(2.0f) / 2.0f, sqrtf(2.0f) / 2.0f, 0.0f, 1.0f);
+  Tuple rotation_z_full_success(-1.0f, 0.0f, 0.0f, 1.0f);
+  result = *half_quarer_rotation * (*test_a_p);
+  if (!(*result == rotation_z_half_success)) {
+    std::cout << "ROTATION Z HALF TEST FAILED" << std::endl;
+    return false;
+  }
+  result = *full_quarter_rotation * (*test_a_p);
+  if (!(*result == rotation_z_full_success)) {
+    std::cout << "ROTATION Z HALF TEST FAILED" << std::endl;
+    return false;
   }
 }
