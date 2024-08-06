@@ -94,6 +94,15 @@ std::unique_ptr<Matrix> Matrix::GetIdentityMatrix() {
   );
 }
 
+std::unique_ptr<Matrix> Matrix::Transpose() {
+  return std::make_unique<Matrix>(
+    GetMatrix()[0][0], GetMatrix()[1][0], GetMatrix()[2][0], GetMatrix()[3][0],
+    GetMatrix()[0][1], GetMatrix()[1][1], GetMatrix()[2][1], GetMatrix()[3][1],
+    GetMatrix()[0][2], GetMatrix()[1][2], GetMatrix()[2][2], GetMatrix()[3][2],
+    GetMatrix()[0][3], GetMatrix()[1][3], GetMatrix()[2][3], GetMatrix()[3][3]
+  );
+}
+
 bool Matrix::operator==(Matrix& rhs)  {
   if (Height() == rhs.Height() && Width() == rhs.Width()) {
     for (int row = 0; row < Height(); row++) {
@@ -170,6 +179,8 @@ void Matrix::RunTest() {
   } else if (!(MatrixMultiplyTest())) {
     return;
   } else if (!(MatrixMultiplyByTupleTest())) {
+    return;
+  } else if (!(TransposeTest())) {
     return;
   } else {
     std::cout << "MATRICIES TEST PASSED" << std::endl;
@@ -274,6 +285,28 @@ bool Matrix::MatrixMultiplyByTupleTest() {
 
   if (!(*result == test_solution_t)) {
     std::cout << "MULTIPLY MATRICIES TEST  FAILED" << std::endl;
+    return false;
+  } else {
+    return true;
+  }
+}
+
+bool Matrix::TransposeTest() {
+  Matrix mat_4_a(
+    0.0f, 9.0f, 3.0f, 0.0f,
+    9.0f, 8.0f, 0.0f, 8.0f,
+    1.0f, 8.0f, 5.0f, 3.0f,
+    0.0f, 0.0f, 5.0f, 8.0f);
+  Matrix mat_4_solution(
+    0.0f, 9.0f, 1.0f, 0.0f,
+    9.0f, 8.0f, 8.0f, 0.0f,
+    3.0f, 0.0f, 5.0f, 5.0f,
+    0.0f, 8.0f, 3.0f, 8.0f);
+
+  std::unique_ptr<Matrix> result = mat_4_a.Transpose();
+
+  if (!(*result == mat_4_solution)) {
+    std::cout << "TRANSPOSE MATRICIES TEST  FAILED" << std::endl;
     return false;
   } else {
     return true;

@@ -30,13 +30,18 @@ public:
   float Width();
   float Height();
   std::vector<std::vector<float>>& GetMatrix();
+  
   static std::unique_ptr<Matrix> GetIdentityMatrix();
+  // UTILTIY FUNCTIONS
+public:
+  std::unique_ptr<Matrix> Transpose();
 
   // MATH FUNCS
 public:
   bool operator==(Matrix& rhs);
   std::unique_ptr<Matrix> operator*(Matrix& rhs);
   std::unique_ptr<Tuple> operator*(Tuple& rhs);
+  // DEBUG
 public:
   void Print();
   static void RunTest();
@@ -49,5 +54,6 @@ private:
   static bool EqualityTest();
   static bool MatrixMultiplyTest();
   static bool MatrixMultiplyByTupleTest();
+  static bool TransposeTest();
 };
 #endif // !MATRIX_H
