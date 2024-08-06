@@ -1,12 +1,15 @@
 #include "TupleManager.hpp"
+#include "SphereManager.hpp"
+#include "Ray.hpp"
+
 #include "BulletSim.hpp"
 #include "ClockSim.hpp"
-#include "Ray.hpp"
-#include "Sphere.hpp"
+#include "ShadowSim.hpp"
+
 int main() {
   //SINGLETON TYPE IMPLEMENTATION
   TupleManager::Init();
-
+  SphereManager::Init();
   //Tuple::RunTest();
 
   //TupleManager::CreationTest();
@@ -14,11 +17,14 @@ int main() {
   //BulletSim::Run(false);
   //BulletSim::Run(true);
   //ClockSim::Run();
+  ShadowSim::Run(false);
+
 
   //Canvas::CanvasTest();
 
   //Matrix::RunTest();
-  Ray::RunTest();
+  //Ray::RunTest();
+  SphereManager::Shutdown();
   TupleManager::Shutdown();
   return 0;
 }

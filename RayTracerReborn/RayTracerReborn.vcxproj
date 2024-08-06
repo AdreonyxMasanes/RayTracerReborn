@@ -135,7 +135,9 @@
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="PPM.cpp" />
     <ClCompile Include="Ray.cpp" />
+    <ClCompile Include="ShadowSim.cpp" />
     <ClCompile Include="Sphere.cpp" />
+    <ClCompile Include="SphereManager.cpp" />
     <ClCompile Include="Tuple.cpp" />
     <ClCompile Include="TupleManager.cpp" />
     <ClCompile Include="Utility.cpp" />
@@ -148,7 +150,9 @@
     <ClInclude Include="Matrix.hpp" />
     <ClInclude Include="PPM.hpp" />
     <ClInclude Include="Ray.hpp" />
+    <ClInclude Include="ShadowSim.hpp" />
     <ClInclude Include="Sphere.hpp" />
+    <ClInclude Include="SphereManager.hpp" />
     <ClInclude Include="Tuple.hpp" />
     <ClInclude Include="TupleManager.hpp" />
     <ClInclude Include="Utility.hpp" />
