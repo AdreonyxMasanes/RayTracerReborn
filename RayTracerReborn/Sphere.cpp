@@ -1,16 +1,20 @@
 #include "Sphere.hpp"
 
 Sphere::Sphere() 
-  : m_id(0) {
+  : m_id(0), m_transform(*Matrix::GetIdentityMatrix()){
 }
 
 Sphere::Sphere(int id)
-  :m_id(id) {
+  :m_id(id), m_transform(*Matrix::GetIdentityMatrix()) {
 
 }
 
 int Sphere::ID() {
   return m_id;
+}
+
+Matrix& Sphere::Transform() {
+  return m_transform;
 }
 
 bool Sphere::operator==(Sphere& rhs) {
@@ -19,6 +23,19 @@ bool Sphere::operator==(Sphere& rhs) {
   } else {
     return true;
   }
+}
+
+void Sphere::operator=(Sphere& rhs) {
+  SetID(rhs.ID());
+  SetTransform(rhs.m_transform);
+}
+
+void Sphere::SetTransform(Matrix& transform) {
+  m_transform = transform;
+}
+
+void Sphere::SetID(int id) {
+  m_id = id;
 }
 
 //float* Sphere::Intersect(Ray& ray) {
