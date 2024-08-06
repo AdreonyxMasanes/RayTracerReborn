@@ -41,10 +41,56 @@ void Ray::Cast(Sphere& sphere) {
   }
 }
 
+std::unique_ptr<Intersection> Ray::Hit() {
+  // SORT LOW TO HIGH
+  bool isSorted = false;
+  while (!isSorted) {
+    for (int i = 0; i < Intersections().size(); i++) {
+      if (!(i == Intersections().size() - 1)) {
+        if (Intersections().at(i).Time() > Intersections().at(i + 1).Time()) {
+          Intersection temp = Intersections().at(i);
+          Intersections().at(i) = Intersections().at(i + 1);
+          Intersections().at(i + 1) = temp;
+          break;
+        }
+      } else {
+        isSorted = true;
+      }
+    }
+  }
+
+  // WHILE SORTING JUST POP A VALUE IF IT IS NEGATIVE THEN CAN JUST RETURN INTERSECTIONS[0]
+  // since it is sorted, returns the first non negative value.
+  for (auto& intersection : Intersections()) {
+    if (intersection.Time() >= 0) {
+      return std::make_unique<Intersection>(intersection);
+    }
+  }
+  return nullptr;
+}
+
+std::unique_ptr<Ray> Ray::Transform(Matrix& transform) {
+  return std::make_unique<Ray>(*(transform * Origin()), *(transform * Direction()));
+}
+
+bool Ray::operator==(Ray& rhs) {
+  if (!(Origin() == rhs.Origin())) {
+    return false;
+  } else if (!(Direction() == rhs.Direction())) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
 void Ray::RunTest() {
   if (!(PositionTest())) {
     return;
   } else if (!(CastTest())) {
+    return;
+  } else if (!(HitTest())) {
+    return;
+  } else if (!(TransformTest())) {
     return;
   } else {
     std::cout << "RAY TESTS PASSED" << std::endl;
@@ -128,5 +174,87 @@ bool Ray::CastTest() {
   if (!(Utility::FloatsAreEqual(test_ray.Intersections()[0].Time(), -6.0f) && Utility::FloatsAreEqual(test_ray.Intersections()[1].Time(), -4.0f))) {
     std::cout << "INTERSECTION TEST 5 FAILED" << std::endl;
     return false;
+  }
+}
+
+bool Ray::HitTest() {
+  std::unique_ptr<Tuple> ray_origin = TupleManager::Instance()->Point(0.0f, 0.0f, 0.0f);
+  std::unique_ptr<Tuple> ray_direction = TupleManager::Instance()->Vector(0.0f, 0.0f, 1.0f);
+  Ray test_ray(*ray_origin, *ray_direction);
+  Sphere test_sphere(1);
+  Intersection test_a_intersection(1.0f, test_sphere);
+  Intersection test_b_intersection(2.0f, test_sphere);
+  test_ray.Intersections().push_back(test_b_intersection);
+  test_ray.Intersections().push_back(test_a_intersection);
+  std::unique_ptr<Intersection> hit = test_ray.Hit();
+  if (!(*hit == test_a_intersection)) {
+    std::cout << "HIT TEST 1 FAILED" << std::endl;
+    return false;
+  }
+  test_ray.Intersections().clear();
+
+  test_a_intersection = Intersection(-1.0f, test_sphere);
+  test_b_intersection = Intersection(1.0f, test_sphere);
+  test_ray.Intersections().push_back(test_b_intersection);
+  test_ray.Intersections().push_back(test_a_intersection);
+  hit = test_ray.Hit();
+  if (!(*hit == test_b_intersection)) {
+    std::cout << "HIT TEST 2 FAILED" << std::endl;
+    return false;
+  }
+  test_ray.Intersections().clear();
+
+  test_a_intersection = Intersection(-2.0f, test_sphere);
+  test_b_intersection = Intersection(-1.0f, test_sphere);
+  test_ray.Intersections().push_back(test_b_intersection);
+  test_ray.Intersections().push_back(test_a_intersection);
+  hit = test_ray.Hit();
+  if (!(hit == nullptr)) {
+    std::cout << "HIT TEST 3 FAILED" << std::endl;
+    return false;
+  }
+  test_ray.Intersections().clear();
+
+
+  test_a_intersection = Intersection(5.0f, test_sphere);
+  test_b_intersection = Intersection(7.0f, test_sphere);
+  Intersection test_c_intersection(-3.0f, test_sphere);
+  Intersection test_d_intersection(2.0f, test_sphere);
+  test_ray.Intersections().push_back(test_a_intersection);
+  test_ray.Intersections().push_back(test_b_intersection);
+  test_ray.Intersections().push_back(test_c_intersection);
+  test_ray.Intersections().push_back(test_d_intersection);
+  hit = test_ray.Hit();
+  if (!(*hit == test_d_intersection)) {
+    std::cout << "HIT TEST 4 FAILED" << std::endl;
+    return false;
+  }
+  test_ray.Intersections().clear();
+}
+
+bool Ray::TransformTest() {
+  std::unique_ptr<Tuple> ray_origin = TupleManager::Instance()->Point(1.0f, 2.0f, 3.0f);
+  std::unique_ptr<Tuple> ray_direction = TupleManager::Instance()->Vector(0.0f, 1.0f, 0.0f);
+  std::unique_ptr<Tuple> ray_origin_success = TupleManager::Instance()->Point(4.0f, 6.0f, 8.0f);
+  std::unique_ptr<Tuple> ray_direction_success = TupleManager::Instance()->Vector(0.0f, 1.0f, 0.0f);
+  std::unique_ptr<Matrix> translate = Matrix::TranslationMatrix(3.0f, 4.0f, 5.0f);
+  Ray test_ray(*ray_origin, *ray_direction);
+  Ray test_ray_success(*ray_origin_success, *ray_direction_success);
+  std::unique_ptr<Ray> result = test_ray.Transform(*translate);
+  if (!(*result == test_ray_success)) {
+    std::cout << "RAY TRANSFORM TEST FAILED" << std::endl;
+    return false;
+  }
+
+  std::unique_ptr<Matrix> scaling = Matrix::ScalingMatrix(2.0f, 3.0f, 4.0f);
+  ray_origin_success = TupleManager::Instance()->Point(2.0f, 6.0f, 12.0f);
+  ray_direction_success = TupleManager::Instance()->Vector(0.0f, 3.0f, 0.0f);
+  test_ray_success = Ray(*ray_origin_success, *ray_direction_success);
+  result = test_ray.Transform(*scaling);
+  if (!(*result == test_ray_success)) {
+    std::cout << "RAY TRANSFORM TEST 2 FAILED" << std::endl;
+    return false;
+  } else {
+    return true;
   }
 }

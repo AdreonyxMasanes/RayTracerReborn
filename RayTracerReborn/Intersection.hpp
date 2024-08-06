@@ -9,7 +9,7 @@ public:
 public:
   float Time();
   Sphere& GetSphere();
-  
+  bool operator==(Intersection& rhs);
 private:
   float m_time = 0;
   Sphere m_sphere;

@@ -7,7 +7,7 @@ public:
 
 public:
   int ID();
-
+  bool operator==(Sphere& rhs);
 public:
   //float* Intersect(Ray& ray);
 

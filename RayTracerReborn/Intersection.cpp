@@ -16,3 +16,13 @@ Sphere& Intersection::GetSphere() {
   return m_sphere;
 }
 
+bool Intersection::operator==(Intersection& rhs) {
+  if(!(Time() == rhs.Time())) {
+    return false;
+  } else if (!(GetSphere() == rhs.GetSphere())) {
+    return false;
+  } else {
+    return true;
+  }
+}
+

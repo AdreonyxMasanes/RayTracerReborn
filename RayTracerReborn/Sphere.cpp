@@ -13,6 +13,14 @@ int Sphere::ID() {
   return m_id;
 }
 
+bool Sphere::operator==(Sphere& rhs) {
+  if (!(ID() == rhs.ID())) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
 //float* Sphere::Intersect(Ray& ray) {
 //  // SEMANTICS?!
 //  std::unique_ptr<Tuple> world_origin = TupleManager::Instance()->Point(0.0f, 0.0f, 0.0f);

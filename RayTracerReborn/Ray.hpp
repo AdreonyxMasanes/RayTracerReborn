@@ -3,6 +3,7 @@
 #include "TupleManager.hpp"
 #include "Sphere.hpp"
 #include "Intersection.hpp"
+#include "Matrix.hpp"
 #include <vector>
 
 class Ray {
@@ -14,9 +15,13 @@ public:
   Tuple& Origin();
   Tuple& Direction();
   std::vector<Intersection>& Intersections();
+  // UTILITY
 public:
   std::unique_ptr<Tuple> Position(float time);
   void Cast(Sphere& sphere);
+  std::unique_ptr<Intersection> Hit();
+  std::unique_ptr<Ray> Transform(Matrix& transform);
+  bool operator==(Ray& rhs);
 public:
   static void RunTest();
 private:
@@ -26,6 +31,8 @@ private:
 private:
   static bool PositionTest();
   static bool CastTest();
+  static bool HitTest();
+  static bool TransformTest();
 };
 
 #endif // !RAY_H
