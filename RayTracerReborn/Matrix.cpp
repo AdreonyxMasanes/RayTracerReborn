@@ -11,7 +11,7 @@ Matrix::Matrix()
   }
 }
 
-Matrix::Matrix(float width, float height) 
+Matrix::Matrix(float height, float width) 
   : m_height(height), m_width(width) {
   for (int row = 0; row < Height(); row++) {
     std::vector<float> temp;
@@ -101,6 +101,46 @@ bool Matrix::operator==(Matrix& rhs)  {
   }
   
 }
+// MAYBE MAKE SO IT WORKS WITH MORE THAN ONE SIZE OF MATRIX
+// USED FOR MAT4 MATRICIES ONLY
+// CHECK FOR NULLPTR UPON RETURN
+std::unique_ptr<Matrix> Matrix::operator*(Matrix& rhs) {
+  if (!(Height() == rhs.Height())) {
+    std::cout << "MATRICIES ARE NOT THE SAME SIZE" << std::endl;
+    return nullptr;
+  } else {
+    std::unique_ptr<Matrix> result = std::make_unique<Matrix>();
+    for (int row = 0; row < Height(); row++) {
+      for (int col = 0; col < Width(); col++) {
+        result->GetMatrix()[row][col] =
+          (GetMatrix()[row][0] * rhs.GetMatrix()[0][col]) +
+          (GetMatrix()[row][1] * rhs.GetMatrix()[1][col]) +
+          (GetMatrix()[row][2] * rhs.GetMatrix()[2][col]) +
+          (GetMatrix()[row][3] * rhs.GetMatrix()[3][col]);
+      }
+    }
+    return result;
+  }
+}
+// ONLY FOR MAT4 
+std::unique_ptr<Tuple> Matrix::operator*(Tuple& rhs) {
+  if (!(Height() == 4.0f)) {
+    std::cout << "MATRICIES MULTIPLICATION ONLY AVAILABLE FOR MAT4" << std::endl;
+    return nullptr;
+  } else {
+    Matrix result(4.0, 1.0f);
+    for (int row = 0; row < result.Height(); row++) {
+      for (int col = 0; col < result.Width(); col++) {
+        result.GetMatrix()[row][col] =
+          GetMatrix()[row][0] * rhs.X() +
+          GetMatrix()[row][1] * rhs.Y() +
+          GetMatrix()[row][2] * rhs.Z() +
+          GetMatrix()[row][3] * rhs.W();
+      }
+    }
+    return std::make_unique<Tuple>(result.GetMatrix()[0][0], result.GetMatrix()[1][0], result.GetMatrix()[2][0], result.GetMatrix()[3][0]);
+  }
+}
 
 void Matrix::Print() {
   for (int row = 0; row < Height(); row++) {
@@ -117,6 +157,10 @@ void Matrix::Print() {
 void Matrix::RunTest() {
   CreationTest();
   if (!(EqualityTest())) {
+    return;
+  } else if (!(MatrixMultiplyTest())) {
+    return;
+  } else if (!(MatrixMultiplyByTupleTest())) {
     return;
   } else {
     std::cout << "MATRICIES TEST PASSED" << std::endl;
@@ -176,6 +220,51 @@ bool Matrix::EqualityTest() {
     0.0f, 1.0f, 1.0f);
   if ((mat_3 == mat_4_a)) {
     std::cout << "MAT EQUALITY TEST 3 FAILED" << std::endl;
+    return false;
+  } else {
+    return true;
+  }
+}
+
+bool Matrix::MatrixMultiplyTest() {
+  Matrix mat_4_a(
+     1.0f, 2.0f, 3.0f, 4.0f,
+     5.0f, 6.0f, 7.0f, 8.0f,
+     9.0f, 8.0f, 7.0f, 6.0f,
+     5.0f, 4.0f, 3.0f, 2.0f);
+  Matrix mat_4_b(
+    -2.0f, 1.0f, 2.0f,  3.0f,
+     3.0f, 2.0f, 1.0f, -1.0f,
+     4.0f, 3.0f, 6.0f,  5.0f,
+     1.0f, 2.0f, 7.0f,  8.0f);
+
+  Matrix mat_4_solution(
+     20.0f, 22.0f, 50.0f , 48.0f ,
+     44.0f, 54.0f, 114.0f, 108.0f,
+     40.0f, 58.0f, 110.0f, 102.0f,
+     16.0f, 26.0f, 46.0f , 42.0f);
+
+  std::unique_ptr<Matrix> result = mat_4_a * mat_4_b;
+  if (!(*result == mat_4_solution)) {
+    std::cout << "MULTIPLY MATRICIES TEST  FAILED" << std::endl;
+    return false;
+  } else {
+    return true;
+  }
+}
+
+bool Matrix::MatrixMultiplyByTupleTest() {
+  Matrix mat_4_a(
+    1.0f, 2.0f, 3.0f, 4.0f,
+    2.0f, 4.0f, 4.0f, 2.0f,
+    8.0f, 6.0f, 4.0f, 1.0f,
+    0.0f, 0.0f, 0.0f, 1.0f);
+  Tuple test_t(1.0f, 2.0f, 3.0f, 1.0f);
+  Tuple test_solution_t(18.0f, 24.0f, 33.0f, 1.0f);
+  std::unique_ptr<Tuple> result = mat_4_a * test_t;
+
+  if (!(*result == test_solution_t)) {
+    std::cout << "MULTIPLY MATRICIES TEST  FAILED" << std::endl;
     return false;
   } else {
     return true;

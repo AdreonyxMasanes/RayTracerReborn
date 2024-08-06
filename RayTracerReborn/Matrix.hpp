@@ -5,10 +5,11 @@
 #include <memory>
 #include <iostream>
 #include "Utility.hpp"
+#include "Tuple.hpp"
 class Matrix {
 public:
   Matrix();
-  Matrix(float width, float height);
+  Matrix(float height, float width);
   
   // MAT4
   Matrix(float zero_zero, float zero_one, float zero_two, float zero_three,
@@ -33,6 +34,8 @@ public:
   // MATH FUNCS
 public:
   bool operator==(Matrix& rhs);
+  std::unique_ptr<Matrix> operator*(Matrix& rhs);
+  std::unique_ptr<Tuple> operator*(Tuple& rhs);
 public:
   void Print();
   static void RunTest();
@@ -43,5 +46,7 @@ private:
 
   static void CreationTest();
   static bool EqualityTest();
+  static bool MatrixMultiplyTest();
+  static bool MatrixMultiplyByTupleTest();
 };
 #endif // !MATRIX_H
