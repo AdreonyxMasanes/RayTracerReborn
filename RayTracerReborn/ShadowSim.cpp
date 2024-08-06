@@ -12,6 +12,13 @@ void ShadowSim::Run(bool shading) {
   std::unique_ptr<Tuple> red = TupleManager::Instance()->Color(1.0f, 0.0f, 0.0f);
   std::unique_ptr<Sphere> sphere = SphereManager::Instance()->NewSphere();
 
+  std::unique_ptr<Tuple> material_color = TupleManager::Instance()->Color(1.0f, 0.2f, 1.0f);
+  sphere->GetMaterial().SetColor(*material_color);
+
+  std::unique_ptr<Tuple> light_pos = TupleManager::Instance()->Point(-10.0f, 10.0f, -10.0f);
+  std::unique_ptr<Tuple> light_color = TupleManager::Instance()->Color(1.0f, 1.0f, 1.0f);
+  Light light(*light_pos, *light_color);
+
   for (int row = 0; row < canvas_pixels; row++) {
     std::cout << "ROW: " << row << std::endl;
     float world_y = half - pixel_size * row;
@@ -22,7 +29,12 @@ void ShadowSim::Run(bool shading) {
       ray.Cast(*sphere);
       if (!(ray.Intersections().size() == 0)) {
         if (shading) {
-
+          std::unique_ptr<Intersection> hit = ray.Hit();
+          std::unique_ptr<Tuple> point_p = ray.Position(hit->Time());
+          std::unique_ptr<Tuple> normal_v = hit->GetSphere().NormalAt(*point_p);
+          std::unique_ptr<Tuple> eye_v = -ray.Direction();
+          std::unique_ptr<Tuple> color = sphere->GetMaterial().Lighting(light, *point_p, *eye_v, *normal_v);
+          canvas.WritePixel(row, col, *color);
         } else {
           canvas.WritePixel(row, col, *red);
         }

@@ -19,6 +19,7 @@ int main() {
   //BulletSim::Run(true);
   //ClockSim::Run();
   //ShadowSim::Run(false);
+  ShadowSim::Run(true);
 
   //Tuple::RunTest();
   //TupleManager::CreationTest();
@@ -26,7 +27,7 @@ int main() {
   //Matrix::RunTest();
   //Ray::RunTest();
   //Sphere::RunTest();
-  Material::RunTest();
+  //Material::RunTest();
   SphereManager::Shutdown();
   TupleManager::Shutdown();
   return 0;
