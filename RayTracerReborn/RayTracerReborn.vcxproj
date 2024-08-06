@@ -130,6 +130,8 @@
     <ClCompile Include="BulletSim.cpp" />
     <ClCompile Include="Canvas.cpp" />
     <ClCompile Include="ClockSim.cpp" />
+    <ClCompile Include="Intersection.cpp" />
+    <ClCompile Include="Intersections.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="PPM.cpp" />
@@ -143,6 +145,8 @@
     <ClInclude Include="BulletSim.hpp" />
     <ClInclude Include="Canvas.hpp" />
     <ClInclude Include="ClockSim.hpp" />
+    <ClInclude Include="Intersections.hpp" />
+    <ClInclude Include="Intersection.hpp" />
     <ClInclude Include="Matrix.hpp" />
     <ClInclude Include="PPM.hpp" />
     <ClInclude Include="Ray.hpp" />

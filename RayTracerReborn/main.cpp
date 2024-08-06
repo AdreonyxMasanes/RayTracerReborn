@@ -18,8 +18,7 @@ int main() {
   //Canvas::CanvasTest();
 
   //Matrix::RunTest();
-  //Ray::RunTest();
-  Sphere::RunTest();
+  Ray::RunTest();
   TupleManager::Shutdown();
   return 0;
 }

@@ -1,6 +1,8 @@
 #ifndef RAY_H
 #define RAY_H
 #include "TupleManager.hpp"
+#include "Sphere.hpp"
+#include "Intersection.hpp"
 
 class Ray {
 public:
@@ -12,6 +14,7 @@ public:
   Tuple& Direction();
 public:
   std::unique_ptr<Tuple> Position(float time);
+  Intersection* Cast(Sphere& sphere);
 public:
   static void RunTest();
 private:
@@ -19,6 +22,7 @@ private:
   Tuple m_direction_v;
 private:
   static bool PositionTest();
+  static bool CastTest();
 };
 
 #endif // !RAY_H
