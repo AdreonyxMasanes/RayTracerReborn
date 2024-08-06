@@ -30,12 +30,86 @@ void Sphere::operator=(Sphere& rhs) {
   SetTransform(rhs.m_transform);
 }
 
+std::unique_ptr<Tuple> Sphere::NormalAt(Tuple& world_point) {
+  std::unique_ptr<Tuple> object_point = *(Transform().Invert()) * world_point;
+  std::unique_ptr<Tuple> object_normal = *object_point - *TupleManager::Instance()->Point(0.0f, 0.0f, 0.0f);
+
+  std::unique_ptr<Tuple> world_normal = *(Transform().Invert())->Transpose() * (*object_normal);
+  world_normal->SetW(0.0f);
+  return world_normal->Normalize();
+}
+
 void Sphere::SetTransform(Matrix& transform) {
   m_transform = transform;
 }
 
 void Sphere::SetID(int id) {
   m_id = id;
+}
+
+void Sphere::RunTest() {
+  if (!(NormalAtTest())) {
+    return;
+  } else {
+    std::cout << "SPHERE TEST PASSED" << std::endl;
+  }
+}
+bool Sphere::NormalAtTest() {
+  Sphere test_sphere(1.0f);
+  std::unique_ptr<Tuple> point = TupleManager::Instance()->Point(1.0f, 0.0f, 0.0f);
+  std::unique_ptr<Tuple> result = test_sphere.NormalAt(*point);
+  std::unique_ptr<Tuple> success_v = TupleManager::Instance()->Vector(1.0f, 0.0f, 0.0f);
+  if (!(*result == *success_v)) {
+    std::cout << "NORMAL TEST 1 FAILED" << std::endl;
+    return false;
+  }
+
+  point = TupleManager::Instance()->Point(0.0f, 1.0f, 0.0f);
+  result = test_sphere.NormalAt(*point);
+  success_v = TupleManager::Instance()->Vector(0.0f, 1.0f, 0.0f);
+  if (!(*result == *success_v)) {
+    std::cout << "NORMAL TEST 2 FAILED" << std::endl;
+    return false;
+  }
+
+  point = TupleManager::Instance()->Point(0.0f, 1.0f, 0.0f);
+  result = test_sphere.NormalAt(*point);
+  success_v = TupleManager::Instance()->Vector(0.0f, 1.0f, 0.0f);
+  if (!(*result == *success_v)) {
+    std::cout << "NORMAL TEST 3 FAILED" << std::endl;
+    return false;
+  }
+
+  point = TupleManager::Instance()->Point(sqrtf(3.0f) / 3.0f, sqrtf(3.0f) / 3.0f, sqrtf(3.0f) / 3.0f);
+  result = test_sphere.NormalAt(*point);
+  success_v = TupleManager::Instance()->Vector(sqrtf(3.0f) / 3.0f, sqrtf(3.0f) / 3.0f, sqrtf(3.0f) / 3.0f);
+  if (!(*result == *success_v)) {
+    std::cout << "NORMAL TEST 4 FAILED" << std::endl;
+    return false;
+  }
+
+  std::unique_ptr<Matrix> translation = Matrix::TranslationMatrix(0.0f, 1.0f, 0.0f);
+  test_sphere.SetTransform(*translation);
+  point = TupleManager::Instance()->Point(0.0f, 1.70711f, -0.70711f);
+  result = test_sphere.NormalAt(*point);
+  success_v = TupleManager::Instance()->Vector(0.0f, 0.70711f, -0.70711f);
+  if (!(*result == *success_v)) {
+    std::cout << "NORMAL TEST 5 FAILED" << std::endl;
+    return false;
+  }
+  
+  float pi_5 = 0.62831853071;
+  std::unique_ptr<Matrix> scaling = Matrix::ScalingMatrix(1.0f, 0.50f, 1.0f);
+  std::unique_ptr<Matrix> rotation_z = Matrix::RotationZMatrix(pi_5);
+  std::unique_ptr<Matrix> transform = Matrix::TranformationMatrix(*rotation_z, *scaling);
+  test_sphere.SetTransform(*transform);
+  point = TupleManager::Instance()->Point(0.0f, sqrtf(2) / 2.0f, -sqrtf(2) / 2.0f);
+  result = test_sphere.NormalAt(*point);
+  success_v = TupleManager::Instance()->Vector(0.0f, 0.97014f, -0.24254f);
+  if (!(*result == *success_v)) {
+    std::cout << "NORMAL TEST 6 FAILED" << std::endl;
+    return false;
+  }
 }
 
 //float* Sphere::Intersect(Ray& ray) {
@@ -62,13 +136,7 @@ void Sphere::SetID(int id) {
 //  }
 //}
 
-//void Sphere::RunTest() {
-//  if (!(IntersectTest())) {
-//    return;
-//  } else {
-//    std::cout << "SPHERE TEST PASSED" << std::endl;
-//  }
-//}
+
 
 //bool Sphere::IntersectTest() {
 //  std::unique_ptr<Tuple> ray_origin = TupleManager::Instance()->Point(0.0f, 0.0f, -5.0f);

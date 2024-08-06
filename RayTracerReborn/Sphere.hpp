@@ -15,6 +15,7 @@ public:
 public:
   bool operator==(Sphere& rhs);
   void operator=(Sphere& rhs);
+  std::unique_ptr<Tuple> NormalAt(Tuple& world_point);
   
   // SETS
 public:
@@ -25,11 +26,12 @@ public:
   //float* Intersect(Ray& ray);
 
 public:
-  //static void RunTest();
+  static void RunTest();
 private:
   int m_id;
   Matrix m_transform;
 private:
+  static bool NormalAtTest();
   //static bool IntersectTest();
 };
 #endif // !SPHERE_H

@@ -17,13 +17,14 @@ int main() {
   //BulletSim::Run(false);
   //BulletSim::Run(true);
   //ClockSim::Run();
-  ShadowSim::Run(false);
+  //ShadowSim::Run(false);
 
 
   //Canvas::CanvasTest();
 
   //Matrix::RunTest();
   //Ray::RunTest();
+  Sphere::RunTest();
   SphereManager::Shutdown();
   TupleManager::Shutdown();
   return 0;
