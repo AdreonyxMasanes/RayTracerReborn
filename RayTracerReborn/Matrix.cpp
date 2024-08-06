@@ -632,5 +632,51 @@ bool Matrix::ShearingTest() {
     std::cout << "SHEARING TEST 1 FAILED" << std::endl;
     return false;
   }
-  return true;
+
+  shearing = Matrix::ShearingMatrix(0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+  test_p = TupleManager::Instance()->Point(2.0f, 3.0f, 4.0f);
+  result = *shearing * (*test_p);
+  shearing_success = Tuple(6.0f, 3.0f, 4.0f, 1.0f);
+  if (!(*result == shearing_success)) {
+    std::cout << "SHEARING TEST 2 FAILED" << std::endl;
+    return false;
+  }
+
+  shearing = Matrix::ShearingMatrix(0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f);
+  test_p = TupleManager::Instance()->Point(2.0f, 3.0f, 4.0f);
+  result = *shearing * (*test_p);
+  shearing_success = Tuple(2.0f, 5.0f, 4.0f, 1.0f);
+  if (!(*result == shearing_success)) {
+    std::cout << "SHEARING TEST 3 FAILED" << std::endl;
+    return false;
+  }
+
+  shearing = Matrix::ShearingMatrix(0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f);
+  test_p = TupleManager::Instance()->Point(2.0f, 3.0f, 4.0f);
+  result = *shearing * (*test_p);
+  shearing_success = Tuple(2.0f, 7.0f, 4.0f, 1.0f);
+  if (!(*result == shearing_success)) {
+    std::cout << "SHEARING TEST 4 FAILED" << std::endl;
+    return false;
+  }
+
+  shearing = Matrix::ShearingMatrix(0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+  test_p = TupleManager::Instance()->Point(2.0f, 3.0f, 4.0f);
+  result = *shearing * (*test_p);
+  shearing_success = Tuple(2.0f, 3.0f, 6.0f, 1.0f);
+  if (!(*result == shearing_success)) {
+    std::cout << "SHEARING TEST 5 FAILED" << std::endl;
+    return false;
+  }
+
+  shearing = Matrix::ShearingMatrix(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+  test_p = TupleManager::Instance()->Point(2.0f, 3.0f, 4.0f);
+  result = *shearing * (*test_p);
+  shearing_success = Tuple(2.0f, 3.0f, 7.0f, 1.0f);
+  if (!(*result == shearing_success)) {
+    std::cout << "SHEARING TEST 5 FAILED" << std::endl;
+    return false;
+  } else {
+    return true;
+  }
 }
