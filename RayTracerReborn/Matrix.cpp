@@ -85,6 +85,15 @@ std::vector<std::vector<float>>& Matrix::GetMatrix() {
   return m_matrix;
 }
 
+std::unique_ptr<Matrix> Matrix::GetIdentityMatrix() {
+  return std::make_unique<Matrix>(
+    1.0f, 0.0f, 0.0f, 0.0f,
+    0.0f, 1.0f, 0.0f, 0.0f,
+    0.0f, 0.0f, 1.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 1.0f
+  );
+}
+
 bool Matrix::operator==(Matrix& rhs)  {
   if (Height() == rhs.Height() && Width() == rhs.Width()) {
     for (int row = 0; row < Height(); row++) {

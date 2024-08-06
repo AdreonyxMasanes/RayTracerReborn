@@ -30,6 +30,7 @@ public:
   float Width();
   float Height();
   std::vector<std::vector<float>>& GetMatrix();
+  static std::unique_ptr<Matrix> GetIdentityMatrix();
 
   // MATH FUNCS
 public:
