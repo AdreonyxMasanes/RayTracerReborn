@@ -35,12 +35,13 @@ void Sphere::operator=(Sphere& rhs) {
 }
 
 std::unique_ptr<Tuple> Sphere::NormalAt(Tuple& world_point) {
-  std::unique_ptr<Tuple> object_point = *(Transform().Invert()) * world_point;
-  std::unique_ptr<Tuple> object_normal = *object_point - *TupleManager::Instance()->Point(0.0f, 0.0f, 0.0f);
+  Matrix inverted_transform = *(Transform().Invert());
+  Tuple object_point = *(inverted_transform * world_point);
+  Tuple object_normal = *(object_point - *TupleManager::Instance()->Point(0.0f, 0.0f, 0.0f));
 
-  std::unique_ptr<Tuple> world_normal = *(Transform().Invert())->Transpose() * (*object_normal);
-  world_normal->SetW(0.0f);
-  return world_normal->Normalize();
+  Tuple world_normal = *(*(inverted_transform).Transpose() * (object_normal));
+  world_normal.SetW(0.0f);
+  return world_normal.Normalize();
 }
 
 void Sphere::SetTransform(Matrix& transform) {
