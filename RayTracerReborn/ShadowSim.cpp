@@ -15,7 +15,7 @@ void ShadowSim::Run(bool shading) {
   std::unique_ptr<Tuple> material_color = TupleManager::Instance()->Color(1.0f, 0.2f, 1.0f);
   sphere->GetMaterial().SetColor(*material_color);
 
-  std::unique_ptr<Tuple> light_pos = TupleManager::Instance()->Point(-10.0f, 10.0f, -10.0f);
+  std::unique_ptr<Tuple> light_pos = TupleManager::Instance()->Point(-10.0f, 10.0f, 10.0f);
   std::unique_ptr<Tuple> light_color = TupleManager::Instance()->Color(1.0f, 1.0f, 1.0f);
   Light light(*light_pos, *light_color);
 
@@ -27,9 +27,11 @@ void ShadowSim::Run(bool shading) {
       std::unique_ptr<Tuple> position = TupleManager::Instance()->Point(world_x, world_y, wall_z);
       Ray ray(*ray_origin, *(*position - *ray_origin)->Normalize());
       ray.Cast(*sphere);
+      ray.SortIntersections();
       if (!(ray.Intersections().size() == 0)) {
         if (shading) {
-          std::unique_ptr<Intersection> hit = ray.Hit();
+          Intersection* hit = nullptr;
+          hit = ray.Hit();
           std::unique_ptr<Tuple> point_p = ray.Position(hit->Time());
           std::unique_ptr<Tuple> normal_v = hit->GetSphere().NormalAt(*point_p);
           std::unique_ptr<Tuple> eye_v = -ray.Direction();

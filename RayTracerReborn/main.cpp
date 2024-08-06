@@ -2,6 +2,7 @@
 #include "SphereManager.hpp"
 #include "Ray.hpp"
 #include "Material.hpp"
+#include "World.hpp"
 
 #include "BulletSim.hpp"
 #include "ClockSim.hpp"
@@ -19,7 +20,7 @@ int main() {
   //BulletSim::Run(true);
   //ClockSim::Run();
   //ShadowSim::Run(false);
-  ShadowSim::Run(true);
+  //ShadowSim::Run(true);
 
   //Tuple::RunTest();
   //TupleManager::CreationTest();
@@ -28,6 +29,7 @@ int main() {
   //Ray::RunTest();
   //Sphere::RunTest();
   //Material::RunTest();
+  World::RunTest();
   SphereManager::Shutdown();
   TupleManager::Shutdown();
   return 0;

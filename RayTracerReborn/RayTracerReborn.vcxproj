@@ -146,6 +146,7 @@
     <ClCompile Include="Tuple.cpp" />
     <ClCompile Include="TupleManager.cpp" />
     <ClCompile Include="Utility.cpp" />
+    <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BulletSim.hpp" />
@@ -163,6 +164,7 @@
     <ClInclude Include="Tuple.hpp" />
     <ClInclude Include="TupleManager.hpp" />
     <ClInclude Include="Utility.hpp" />
+    <ClInclude Include="World.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
