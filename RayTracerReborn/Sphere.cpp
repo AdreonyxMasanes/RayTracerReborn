@@ -32,6 +32,7 @@ bool Sphere::operator==(Sphere& rhs) {
 void Sphere::operator=(Sphere& rhs) {
   SetID(rhs.ID());
   SetTransform(rhs.m_transform);
+  SetMaterial(rhs.GetMaterial());
 }
 
 std::unique_ptr<Tuple> Sphere::NormalAt(Tuple& world_point) {

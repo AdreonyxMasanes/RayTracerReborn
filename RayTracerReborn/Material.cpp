@@ -71,7 +71,8 @@ std::unique_ptr<Tuple> Material::Lighting(Light& light, Tuple& position_p, Tuple
     specular = TupleManager::Instance()->Color(0.0f, 0.0f, 0.0f);
   } else {
     diffuse = *(*effective_color * Diffuse()) * light_dot_normal;
-    std::unique_ptr<Tuple> reflect_v = -*light_v->Reflect(normal_v);
+    std::unique_ptr<Tuple> negated_light_v = -*light_v;
+    std::unique_ptr<Tuple> reflect_v = negated_light_v->Reflect(normal_v);
     float reflect_dot_eye = reflect_v->Dot(eye_v);
     if (reflect_dot_eye <= 0) {
       specular = TupleManager::Instance()->Color(0.0f, 0.0f, 0.0f);
@@ -80,7 +81,8 @@ std::unique_ptr<Tuple> Material::Lighting(Light& light, Tuple& position_p, Tuple
       specular = *(light.Intensity() * Specular()) * factor;
     }
   }
-  return *(*ambient + *diffuse) + *specular;
+  std::unique_ptr<Tuple> result = *(*ambient + *diffuse) + *specular;
+  return result;
 }
 
 bool Material::LightingTest() {
