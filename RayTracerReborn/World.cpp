@@ -25,6 +25,10 @@ World::World() {
   AddSphere(*temp_sphere);
 }
 
+World::World(std::vector<Sphere>& spheres, Light& light) 
+  :m_light(light), m_spheres(spheres) {
+}
+
 const Light& World::Lights() const {
   return m_light;
 }

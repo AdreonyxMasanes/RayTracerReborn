@@ -8,6 +8,7 @@
 #include "BulletSim.hpp"
 #include "ClockSim.hpp"
 #include "ShadowSim.hpp"
+#include "SceneSim.hpp"
 
 int main() {
   //SINGLETON TYPE IMPLEMENTATION
@@ -22,6 +23,7 @@ int main() {
   //ClockSim::Run();
   //ShadowSim::Run(false);
   //ShadowSim::Run(true);
+  SceneSim::Run();
 
   //Tuple::RunTest();
   //TupleManager::CreationTest();
@@ -31,7 +33,9 @@ int main() {
   //Sphere::RunTest();
   //Material::RunTest();
   //World::RunTest();
-  Camera::RunTest();
+  //Camera::RunTest();
+  
+  
   SphereManager::Shutdown();
   TupleManager::Shutdown();
   return 0;

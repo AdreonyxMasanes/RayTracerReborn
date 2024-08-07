@@ -49,13 +49,15 @@ std::unique_ptr<Ray> Camera::RayForPixel(float px, float py) {
 }
 
 void Camera::GenerateCanvas(World& world) {
-  for (int row = 0; row < m_vsize_pixels - 1; row ++) {
-    for (int col = 0; col < m_hsize_pixels - 1; col++) {
-      std::unique_ptr<Ray> ray = RayForPixel(row, col);
+  for (int y = 0; y < m_vsize_pixels - 1; y ++) {
+    std::cout << "ROW: " << y << std::endl;
+    for (int x = 0; x < m_hsize_pixels - 1; x++) {
+      std::unique_ptr<Ray> ray = RayForPixel(x, y);
       std::unique_ptr<Tuple> color = world.ColorAt(*ray);
-      m_canvas.WritePixel(col, row, *color);
+      m_canvas.WritePixel(x, y, *color);
     }
   }
+  std::cout << "CANVAS GENERATED" << std::endl;
 }
 
 

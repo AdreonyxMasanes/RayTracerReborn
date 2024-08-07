@@ -18,6 +18,7 @@ struct CompiledData {
 class World {
 public:
   World();
+  World(std::vector<Sphere>& spheres, Light& light);
 
   // GET
 public:
