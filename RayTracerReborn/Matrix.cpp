@@ -737,7 +737,37 @@ bool Matrix::ViewTransformTest() {
   // SO THIS STATIC FUNCTION WOULD BE IN THE UTITLITY NAMESPACE?!
   std::unique_ptr<Matrix> view = GetViewTransform(*from, *to, *up);
   if (!(*view == *Matrix::GetIdentityMatrix())) {
-    std::cout << "VIEW TRANSFORM FAILED" << std::endl;
+    std::cout << "VIEW TRANSFORM TEST FAILED" << std::endl;
+    return false;
+  }
+
+  to = TupleManager::Instance()->Point(0.0f, 0.0f, 1.0f);
+  view = GetViewTransform(*from, *to, *up);
+  if (!(*view == *Matrix::ScalingMatrix(-1.0f, 1.0f, -1.0f))) {
+    std::cout << "VIEW TRANSFORM TEST 2 FAILED" << std::endl;
+    return false;
+  }
+
+  from = TupleManager::Instance()->Point(0.0f, 0.0f, 8.0f);
+  to = TupleManager::Instance()->Point(0.0f, 0.0f, 0.0f);
+  view = GetViewTransform(*from, *to, *up);
+  if (!(*view == *Matrix::TranslationMatrix(0.0f, 0.0f, -8.0f))) {
+    std::cout << "VIEW TRANSFORM TEST 3 FAILED" << std::endl;
+    return false;
+  }
+
+  from = TupleManager::Instance()->Point(1.0f, 3.0f, 2.0f);
+  to = TupleManager::Instance()->Point(4.0f, -2.0f, 8.0f);
+  up = TupleManager::Instance()->Vector(1.0f, 1.0f, 0.0f);
+  view = GetViewTransform(*from, *to, *up);
+  Matrix success(
+    -0.50709f, 0.50709f, 0.67612f,-2.36643f,
+     0.76772f, 0.60609f, 0.12122f,-2.82843f,
+    -0.35857f, 0.59761f,-0.71714f, 0.00000f,
+     0.00000f, 0.00000f, 0.00000f, 1.00000f
+  );
+  if (!(*view == success)) {
+    std::cout << "VIEW TRANSFORM TEST 4 FAILED" << std::endl;
     return false;
   }
 }
