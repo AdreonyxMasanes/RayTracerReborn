@@ -30,12 +30,12 @@ public:
   float Width();
   float Height();
   std::vector<std::vector<float>>& GetMatrix();
+
   // SETS
 public:
   void SetHeight(float height);
   void SetWidth(float width);
-  
-  static std::unique_ptr<Matrix> GetIdentityMatrix();
+ 
   // UTILTIY FUNCTIONS
 public:
   std::unique_ptr<Matrix> Transpose();
@@ -48,6 +48,8 @@ public:
   static std::unique_ptr<Matrix> ShearingMatrix(float xy, float xz, float yx, float yz, float zx, float zy);
   static std::unique_ptr<Matrix> TranformationMatrix(Matrix& first, Matrix& second);
   static std::unique_ptr<Matrix> TranformationMatrix(Matrix& first, Matrix& second, Matrix& third);
+  static std::unique_ptr<Matrix> GetIdentityMatrix();
+  static std::unique_ptr<Matrix> GetViewTransform(Tuple& from, Tuple& to, Tuple& up);
 
   // MATH FUNCS
 public:
@@ -81,5 +83,6 @@ private:
   static bool TransformTest();
   static bool ShearingTest();
   static bool TranformChainingTest();
+  static bool ViewTransformTest();
 };
 #endif // !MATRIX_H

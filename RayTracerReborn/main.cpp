@@ -25,11 +25,11 @@ int main() {
   //Tuple::RunTest();
   //TupleManager::CreationTest();
   //Canvas::CanvasTest();
-  //Matrix::RunTest();
+  Matrix::RunTest();
   //Ray::RunTest();
   //Sphere::RunTest();
   //Material::RunTest();
-  World::RunTest();
+  //World::RunTest();
   SphereManager::Shutdown();
   TupleManager::Shutdown();
   return 0;

@@ -85,6 +85,7 @@ std::vector<std::vector<float>>& Matrix::GetMatrix() {
   return m_matrix;
 }
 
+
 void Matrix::SetHeight(float height) {
   m_height = height;
 }
@@ -93,14 +94,6 @@ void Matrix::SetWidth(float width) {
   m_width = width;
 }
 
-std::unique_ptr<Matrix> Matrix::GetIdentityMatrix() {
-  return std::make_unique<Matrix>(
-    1.0f, 0.0f, 0.0f, 0.0f,
-    0.0f, 1.0f, 0.0f, 0.0f,
-    0.0f, 0.0f, 1.0f, 0.0f,
-    0.0f, 0.0f, 0.0f, 1.0f
-  );
-}
 
 std::unique_ptr<Matrix> Matrix::Transpose() {
   return std::make_unique<Matrix>(
@@ -171,6 +164,30 @@ std::unique_ptr<Matrix> Matrix::TranformationMatrix(Matrix& first, Matrix& secon
 
 std::unique_ptr<Matrix> Matrix::TranformationMatrix(Matrix& first, Matrix& second, Matrix& third) {
   return *(third * second) * first;
+}
+
+std::unique_ptr<Matrix> Matrix::GetIdentityMatrix() {
+  return std::make_unique<Matrix>(
+    1.0f, 0.0f, 0.0f, 0.0f,
+    0.0f, 1.0f, 0.0f, 0.0f,
+    0.0f, 0.0f, 1.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 1.0f
+  );
+}
+
+std::unique_ptr<Matrix> Matrix::GetViewTransform(Tuple& from, Tuple& to, Tuple& up) {
+  std::unique_ptr<Tuple> forward = (to - from)->Normalize();
+  std::unique_ptr<Tuple> up_normal = up.Normalize();
+  std::unique_ptr<Tuple> left = forward->Cross(*up_normal);
+  std::unique_ptr<Tuple> true_up = left->Cross(*forward);
+
+  Matrix orientation(
+    left->X(), left->Y(), left->Z(), 0.0f,
+    true_up->X(), true_up->Y(), true_up->Z(), 0.0f,
+    -forward->X(), -forward->Y(), -forward->Z(), 0.0f,
+    0.0f, 0.0f, 0.0f, 1.0f
+  );
+  return orientation * *Matrix::TranslationMatrix(-from.X(), -from.Y(), -from.Z());
 }
 
 
@@ -332,6 +349,8 @@ void Matrix::RunTest() {
   } else if (!(ShearingTest())) {
     return;
   } else if (!(TranformChainingTest())) {
+    return;
+  } else if (!(ViewTransformTest())) {
     return;
   } else {
     std::cout << "MATRICIES TEST PASSED" << std::endl;
@@ -709,4 +728,16 @@ bool Matrix::TranformChainingTest() {
     return true;
   }
 
+}
+
+bool Matrix::ViewTransformTest() {
+  std::unique_ptr<Tuple> from = TupleManager::Instance()->Point(0.0f, 0.0f, 0.0f);
+  std::unique_ptr<Tuple> to = TupleManager::Instance()->Point(0.0f, 0.0f, -1.0f);
+  std::unique_ptr<Tuple> up = TupleManager::Instance()->Vector(0.0f, 1.0f, 0.0f);
+  // SO THIS STATIC FUNCTION WOULD BE IN THE UTITLITY NAMESPACE?!
+  std::unique_ptr<Matrix> view = GetViewTransform(*from, *to, *up);
+  if (!(*view == *Matrix::GetIdentityMatrix())) {
+    std::cout << "VIEW TRANSFORM FAILED" << std::endl;
+    return false;
+  }
 }
