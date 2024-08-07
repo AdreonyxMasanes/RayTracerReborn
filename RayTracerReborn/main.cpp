@@ -3,6 +3,7 @@
 #include "Ray.hpp"
 #include "Material.hpp"
 #include "World.hpp"
+#include "Camera.hpp"
 
 #include "BulletSim.hpp"
 #include "ClockSim.hpp"
@@ -25,11 +26,12 @@ int main() {
   //Tuple::RunTest();
   //TupleManager::CreationTest();
   //Canvas::CanvasTest();
-  Matrix::RunTest();
+  //Matrix::RunTest();
   //Ray::RunTest();
   //Sphere::RunTest();
   //Material::RunTest();
   //World::RunTest();
+  Camera::RunTest();
   SphereManager::Shutdown();
   TupleManager::Shutdown();
   return 0;

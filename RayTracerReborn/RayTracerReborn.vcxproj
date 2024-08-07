@@ -131,6 +131,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BulletSim.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Canvas.cpp" />
     <ClCompile Include="ClockSim.cpp" />
     <ClCompile Include="Intersection.cpp" />
@@ -150,6 +151,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BulletSim.hpp" />
+    <ClInclude Include="Camera.hpp" />
     <ClInclude Include="Canvas.hpp" />
     <ClInclude Include="ClockSim.hpp" />
     <ClInclude Include="Intersection.hpp" />
