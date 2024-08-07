@@ -281,8 +281,8 @@ std::unique_ptr<Matrix> Matrix::Submatrix(float row, float col) {
   // Change the Size variables. COULD ALSO MAKE THE PRINT FUNCTION JUST USE .SIZE BUT THIS FUNCTIONS THE SAME o.O
   temp.SetHeight(temp.Height() - 1);
   temp.SetWidth(temp.Width() - 1);
-  std::unique_ptr<Matrix> result = std::make_unique<Matrix>(temp);
-  return result;
+
+  return std::make_unique<Matrix>(temp);
 }
 
 float Matrix::Minor(float row, float col) {
