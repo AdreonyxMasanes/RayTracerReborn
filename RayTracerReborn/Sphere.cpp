@@ -1,11 +1,11 @@
 #include "Sphere.hpp"
 
 Sphere::Sphere() 
-  : m_id(0), m_transform(*Matrix::GetIdentityMatrix()) {
+  : m_id(0), m_transform(Matrix::GetIdentityMatrix()) {
 }
 
 Sphere::Sphere(int id)
-  :m_id(id), m_transform(*Matrix::GetIdentityMatrix()) {
+  :m_id(id), m_transform(Matrix::GetIdentityMatrix()) {
 
 }
 
@@ -36,11 +36,11 @@ void Sphere::operator=(Sphere& rhs) {
 }
 
 std::unique_ptr<Tuple> Sphere::NormalAt(Tuple& world_point) {
-  Matrix inverted_transform = *(Transform().Invert());
-  Tuple object_point = *(inverted_transform * world_point);
+  Matrix inverted_transform = (Transform().Invert());
+  Tuple object_point = (inverted_transform * world_point);
   Tuple object_normal = *(object_point - *TupleManager::Instance()->Point(0.0f, 0.0f, 0.0f));
 
-  Tuple world_normal = *(*(inverted_transform).Transpose() * (object_normal));
+  Tuple world_normal = ((inverted_transform).Transpose() * (object_normal));
   world_normal.SetW(0.0f);
   return world_normal.Normalize();
 }
@@ -98,8 +98,8 @@ bool Sphere::NormalAtTest() {
     return false;
   }
 
-  std::unique_ptr<Matrix> translation = Matrix::TranslationMatrix(0.0f, 1.0f, 0.0f);
-  test_sphere.SetTransform(*translation);
+  Matrix translation = Matrix::TranslationMatrix(0.0f, 1.0f, 0.0f);
+  test_sphere.SetTransform(translation);
   point = TupleManager::Instance()->Point(0.0f, 1.70711f, -0.70711f);
   result = test_sphere.NormalAt(*point);
   success_v = TupleManager::Instance()->Vector(0.0f, 0.70711f, -0.70711f);
@@ -109,10 +109,10 @@ bool Sphere::NormalAtTest() {
   }
   
   float pi_5 = 0.62831853071;
-  std::unique_ptr<Matrix> scaling = Matrix::ScalingMatrix(1.0f, 0.50f, 1.0f);
-  std::unique_ptr<Matrix> rotation_z = Matrix::RotationZMatrix(pi_5);
-  std::unique_ptr<Matrix> transform = Matrix::TranformationMatrix(*rotation_z, *scaling);
-  test_sphere.SetTransform(*transform);
+  Matrix scaling = Matrix::ScalingMatrix(1.0f, 0.50f, 1.0f);
+  Matrix rotation_z = Matrix::RotationZMatrix(pi_5);
+  Matrix transform = Matrix::TranformationMatrix(rotation_z, scaling);
+  test_sphere.SetTransform(transform);
   point = TupleManager::Instance()->Point(0.0f, sqrtf(2) / 2.0f, -sqrtf(2) / 2.0f);
   result = test_sphere.NormalAt(*point);
   success_v = TupleManager::Instance()->Vector(0.0f, 0.97014f, -0.24254f);

@@ -95,8 +95,8 @@ void Matrix::SetWidth(float width) {
 }
 
 
-std::unique_ptr<Matrix> Matrix::Transpose() {
-  return std::make_unique<Matrix>(
+Matrix Matrix::Transpose() {
+  return Matrix(
     GetMatrix()[0][0], GetMatrix()[1][0], GetMatrix()[2][0], GetMatrix()[3][0],
     GetMatrix()[0][1], GetMatrix()[1][1], GetMatrix()[2][1], GetMatrix()[3][1],
     GetMatrix()[0][2], GetMatrix()[1][2], GetMatrix()[2][2], GetMatrix()[3][2],
@@ -104,8 +104,8 @@ std::unique_ptr<Matrix> Matrix::Transpose() {
   );
 }
 
-std::unique_ptr<Matrix> Matrix::TranslationMatrix(float x, float y, float z) {
-  return std::make_unique<Matrix>(
+Matrix Matrix::TranslationMatrix(float x, float y, float z) {
+  return Matrix(
     1.0f, 0.0f, 0.0f, x,
     0.0f, 1.0f, 0.0f, y,
     0.0f, 0.0f, 1.0f, z,
@@ -113,8 +113,8 @@ std::unique_ptr<Matrix> Matrix::TranslationMatrix(float x, float y, float z) {
   );
 }
 
-std::unique_ptr<Matrix> Matrix::ScalingMatrix(float x, float y, float z) {
-  return std::make_unique<Matrix>(
+Matrix Matrix::ScalingMatrix(float x, float y, float z) {
+  return Matrix(
     x, 0.0f, 0.0f, 0.0f,
     0.0f, y, 0.0f, 0.0f,
     0.0f, 0.0f, z, 0.0f,
@@ -122,8 +122,8 @@ std::unique_ptr<Matrix> Matrix::ScalingMatrix(float x, float y, float z) {
   );
 }
 
-std::unique_ptr<Matrix> Matrix::RotationXMatrix(float radians) {
-  return std::make_unique<Matrix>(
+Matrix Matrix::RotationXMatrix(float radians) {
+  return Matrix(
     1.0f, 0.0f, 0.0f, 0.0f,
     0.0f, cosf(radians), -sinf(radians), 0.0f,
     0.0f, sinf(radians), cosf(radians), 0.0f,
@@ -131,8 +131,8 @@ std::unique_ptr<Matrix> Matrix::RotationXMatrix(float radians) {
   );
 }
 
-std::unique_ptr<Matrix> Matrix::RotationYMatrix(float radians) {
-  return std::make_unique<Matrix>(
+Matrix Matrix::RotationYMatrix(float radians) {
+  return Matrix(
     cosf(radians), 0.0f, sinf(radians), 0.0f,
     0.0f, 1.0f, 0.0f, 0.0f,
     -sinf(radians), 0.0f, cosf(radians), 0.0f,
@@ -140,8 +140,8 @@ std::unique_ptr<Matrix> Matrix::RotationYMatrix(float radians) {
   );
 }
 
-std::unique_ptr<Matrix> Matrix::RotationZMatrix(float radians) {
-  return std::make_unique<Matrix>(
+Matrix Matrix::RotationZMatrix(float radians) {
+  return Matrix(
     cosf(radians), -sinf(radians), 0.0f, 0.0f,
     sinf(radians), cosf(radians), 0.0f, 0.0f,
     0.0f, 0.0f, 1.0f, 0.0f,
@@ -149,8 +149,8 @@ std::unique_ptr<Matrix> Matrix::RotationZMatrix(float radians) {
   );
 }
 
-std::unique_ptr<Matrix> Matrix::ShearingMatrix(float xy, float xz, float yx, float yz, float zx, float zy) {
-  return std::make_unique<Matrix>(
+Matrix Matrix::ShearingMatrix(float xy, float xz, float yx, float yz, float zx, float zy) {
+  return Matrix(
     1.0f,   xy,   xz, 0.0f,
       yx, 1.0f,   yz, 0.0f,
       zx,   zy, 1.0f, 0.0f,
@@ -158,16 +158,16 @@ std::unique_ptr<Matrix> Matrix::ShearingMatrix(float xy, float xz, float yx, flo
   );
 }
 
-std::unique_ptr<Matrix> Matrix::TranformationMatrix(Matrix& first, Matrix& second) {
+Matrix Matrix::TranformationMatrix(Matrix& first, Matrix& second) {
   return second * first;
 }
 
-std::unique_ptr<Matrix> Matrix::TranformationMatrix(Matrix& first, Matrix& second, Matrix& third) {
-  return *(third * second) * first;
+Matrix Matrix::TranformationMatrix(Matrix& first, Matrix& second, Matrix& third) {
+  return (third * second) * first;
 }
 
-std::unique_ptr<Matrix> Matrix::GetIdentityMatrix() {
-  return std::make_unique<Matrix>(
+Matrix Matrix::GetIdentityMatrix() {
+  return Matrix(
     1.0f, 0.0f, 0.0f, 0.0f,
     0.0f, 1.0f, 0.0f, 0.0f,
     0.0f, 0.0f, 1.0f, 0.0f,
@@ -175,7 +175,7 @@ std::unique_ptr<Matrix> Matrix::GetIdentityMatrix() {
   );
 }
 
-std::unique_ptr<Matrix> Matrix::GetViewTransform(Tuple& from, Tuple& to, Tuple& up) {
+Matrix Matrix::GetViewTransform(Tuple& from, Tuple& to, Tuple& up) {
   std::unique_ptr<Tuple> forward = (to - from)->Normalize();
   std::unique_ptr<Tuple> up_normal = up.Normalize();
   std::unique_ptr<Tuple> left = forward->Cross(*up_normal);
@@ -187,7 +187,9 @@ std::unique_ptr<Matrix> Matrix::GetViewTransform(Tuple& from, Tuple& to, Tuple& 
     -forward->X(), -forward->Y(), -forward->Z(), 0.0f,
     0.0f, 0.0f, 0.0f, 1.0f
   );
-  return orientation * *Matrix::TranslationMatrix(-from.X(), -from.Y(), -from.Z());
+
+  Matrix translation = Matrix::TranslationMatrix(-from.X(), -from.Y(), -from.Z());
+  return orientation * translation;
 }
 
 
@@ -210,15 +212,14 @@ bool Matrix::operator==(Matrix& rhs)  {
 // MAYBE MAKE SO IT WORKS WITH MORE THAN ONE SIZE OF MATRIX
 // USED FOR MAT4 MATRICIES ONLY
 // CHECK FOR NULLPTR UPON RETURN
-std::unique_ptr<Matrix> Matrix::operator*(Matrix& rhs) {
+Matrix Matrix::operator*(Matrix& rhs) {
   if (!(Height() == rhs.Height())) {
     std::cout << "MATRICIES ARE NOT THE SAME SIZE" << std::endl;
-    return nullptr;
   } else {
-    std::unique_ptr<Matrix> result = std::make_unique<Matrix>();
+    Matrix result;
     for (int row = 0; row < Height(); row++) {
       for (int col = 0; col < Width(); col++) {
-        result->GetMatrix()[row][col] =
+        result.GetMatrix()[row][col] =
           (GetMatrix()[row][0] * rhs.GetMatrix()[0][col]) +
           (GetMatrix()[row][1] * rhs.GetMatrix()[1][col]) +
           (GetMatrix()[row][2] * rhs.GetMatrix()[2][col]) +
@@ -229,23 +230,18 @@ std::unique_ptr<Matrix> Matrix::operator*(Matrix& rhs) {
   }
 }
 // ONLY FOR MAT4 
-std::unique_ptr<Tuple> Matrix::operator*(Tuple& rhs) {
-  if (!(Height() == 4.0f)) {
-    std::cout << "MATRICIES MULTIPLICATION ONLY AVAILABLE FOR MAT4" << std::endl;
-    return nullptr;
-  } else {
-    Matrix result(4.0, 1.0f);
-    for (int row = 0; row < result.Height(); row++) {
-      for (int col = 0; col < result.Width(); col++) {
-        result.GetMatrix()[row][col] =
-          GetMatrix()[row][0] * rhs.X() +
-          GetMatrix()[row][1] * rhs.Y() +
-          GetMatrix()[row][2] * rhs.Z() +
-          GetMatrix()[row][3] * rhs.W();
-      }
+Tuple Matrix::operator*(Tuple& rhs) {
+  Matrix result(4.0, 1.0f);
+  for (int row = 0; row < result.Height(); row++) {
+    for (int col = 0; col < result.Width(); col++) {
+      result.GetMatrix()[row][col] =
+        GetMatrix()[row][0] * rhs.X() +
+        GetMatrix()[row][1] * rhs.Y() +
+        GetMatrix()[row][2] * rhs.Z() +
+        GetMatrix()[row][3] * rhs.W();
     }
-    return std::make_unique<Tuple>(result.GetMatrix()[0][0], result.GetMatrix()[1][0], result.GetMatrix()[2][0], result.GetMatrix()[3][0]);
   }
+  return Tuple(result.GetMatrix()[0][0], result.GetMatrix()[1][0], result.GetMatrix()[2][0], result.GetMatrix()[3][0]);
 }
 
 Matrix& Matrix::operator=(Matrix& rhs) {
@@ -301,20 +297,20 @@ float Matrix::Cofactor(float row, float col) {
   }
 }
 
-std::unique_ptr<Matrix> Matrix::Invert() {
-  std::unique_ptr<Matrix> result = std::make_unique<Matrix>(Height(), Width());
+Matrix Matrix::Invert() {
+  Matrix result = Matrix(Height(), Width());
 
   if (!(Determinant() == 0)) {
     for (int row = 0; row < Height(); row++) {
       for (int col = 0; col < Width(); col++) {
         float c = Cofactor(row, col);
-        result->GetMatrix()[col][row] = c / Determinant();
+        result.GetMatrix()[col][row] = c / Determinant();
       }
     }
-  } else {
+  } /*else {
     std::cout << "Matrix is invertible " << std::endl;
     return nullptr;
-  }
+  }*/
   return result;
 }
 
@@ -434,8 +430,8 @@ bool Matrix::MatrixMultiplyTest() {
      40.0f, 58.0f, 110.0f, 102.0f,
      16.0f, 26.0f, 46.0f , 42.0f);
 
-  std::unique_ptr<Matrix> result = mat_4_a * mat_4_b;
-  if (!(*result == mat_4_solution)) {
+  Matrix result = mat_4_a * mat_4_b;
+  if (!(result == mat_4_solution)) {
     std::cout << "MULTIPLY MATRICIES TEST  FAILED" << std::endl;
     return false;
   } else {
@@ -451,9 +447,9 @@ bool Matrix::MatrixMultiplyByTupleTest() {
     0.0f, 0.0f, 0.0f, 1.0f);
   Tuple test_t(1.0f, 2.0f, 3.0f, 1.0f);
   Tuple test_solution_t(18.0f, 24.0f, 33.0f, 1.0f);
-  std::unique_ptr<Tuple> result = mat_4_a * test_t;
+  Tuple result = mat_4_a * test_t;
 
-  if (!(*result == test_solution_t)) {
+  if (!(result == test_solution_t)) {
     std::cout << "MULTIPLY MATRICIES BY TUPLE TEST  FAILED" << std::endl;
     return false;
   } else {
@@ -473,9 +469,9 @@ bool Matrix::TransposeTest() {
     3.0f, 0.0f, 5.0f, 5.0f,
     0.0f, 8.0f, 3.0f, 8.0f);
 
-  std::unique_ptr<Matrix> result = mat_4_a.Transpose();
+  Matrix result = mat_4_a.Transpose();
 
-  if (!(*result == mat_4_solution)) {
+  if (!(result == mat_4_solution)) {
     std::cout << "TRANSPOSE MATRICIES TEST  FAILED" << std::endl;
     return false;
   } else {
@@ -511,16 +507,16 @@ bool Matrix::DeterimantTest() {
 }
 
 bool Matrix::InversionTest() {
-  Matrix mat_4_a(
-    -4.0f,  2.0f, -2.0f, -3.0f,
-     9.0f,  6.0f,  2.0f,  6.0f,
-     0.0f, -5.0f,  1.0f, -5.0f,
-     0.0f,  0.0f,  0.0f,  0.0f);
-  std::unique_ptr<Matrix> mat_4_a_inversion = mat_4_a.Invert();
-  if (!(mat_4_a_inversion == nullptr)) {
-    std::cout << "INVERSION TEST 1 FAILED" << std::endl;
-    return false;
-  }
+  //Matrix mat_4_a(
+  //  -4.0f,  2.0f, -2.0f, -3.0f,
+  //   9.0f,  6.0f,  2.0f,  6.0f,
+  //   0.0f, -5.0f,  1.0f, -5.0f,
+  //   0.0f,  0.0f,  0.0f,  0.0f);
+  //Matrix mat_4_a_inversion = mat_4_a.Invert();
+  //if (!(mat_4_a_inversion == nullptr)) {
+  //  std::cout << "INVERSION TEST 1 FAILED" << std::endl;
+  //  return false;
+  //}
 
   Matrix mat_4_b(
    -5.0f,  2.0f,  6.0f, -8.0f,
@@ -532,8 +528,8 @@ bool Matrix::InversionTest() {
     -0.80825f, -1.45677f, -0.44361f,  0.52068f,
     -0.07895f, -0.22368f, -0.05263f,  0.19737f,
     -0.52256f, -0.81391f, -0.30075f,  0.30639f);
-  std::unique_ptr<Matrix> mat_4_b_inversion = mat_4_b.Invert();
-  if (!(mat_4_b_invert_success == *mat_4_b_inversion)) {
+  Matrix mat_4_b_inversion = mat_4_b.Invert();
+  if (!(mat_4_b_invert_success == mat_4_b_inversion)) {
     std::cout << "INVERSION TEST 2 FAILED" << std::endl;
     return false;
   }
@@ -548,8 +544,8 @@ bool Matrix::InversionTest() {
     -0.07692f, 0.12308f, 0.02564f, 0.03077f,
      0.35897f, 0.35897f, 0.43590f, 0.92308f,
     -0.69231f,-0.69231f,-0.76923f,-1.92308f);
-  std::unique_ptr<Matrix> mat_4_c_inversion = mat_4_c.Invert();
-  if (!(mat_4_c_invert_success == *mat_4_c_inversion)) {
+  Matrix mat_4_c_inversion = mat_4_c.Invert();
+  if (!(mat_4_c_invert_success == mat_4_c_inversion)) {
     std::cout << "INVERSION TEST 3 FAILED" << std::endl;
     return false;
   }
@@ -564,8 +560,8 @@ bool Matrix::InversionTest() {
     -0.07778f, 0.03333f, 0.36667f,-0.33333f,
     -0.02901f,-0.14630f,-0.10926f, 0.12963f,
      0.17778f, 0.06667f,-0.26667f, 0.33333f);
-  std::unique_ptr<Matrix> mat_4_d_inversion = mat_4_d.Invert();
-  if (!(mat_4_d_invert_success == *mat_4_d_inversion)) {
+  Matrix mat_4_d_inversion = mat_4_d.Invert();
+  if (!(mat_4_d_invert_success == mat_4_d_inversion)) {
     std::cout << "INVERSION TEST 4 FAILED" << std::endl;
     return false;
   } else {
@@ -578,135 +574,153 @@ bool Matrix::TransformTest() {
   float pi_2 = 1.57079632679;
 
 
-  // TRANSLATION
-  std::unique_ptr<Tuple> test_a_p = TupleManager::Instance()->Point(-3.0f, 4.0f, 5.0f);
-  std::unique_ptr<Matrix> translation = Matrix::TranslationMatrix(5.0f, -3.0f, 2.0f);
-  std::unique_ptr<Tuple> result = *translation * (*test_a_p);
-  Tuple translation_success_p(2.0f, 1.0f, 7.0f, 1.0f);
-  if (!(*result == translation_success_p)) {
-    std::cout << "TRANSLATION TEST FAILED" << std::endl;
-    return false;
+  {
+    // TRANSLATION
+    std::unique_ptr<Tuple> test_a_p = TupleManager::Instance()->Point(-3.0f, 4.0f, 5.0f);
+    Matrix translation = Matrix::TranslationMatrix(5.0f, -3.0f, 2.0f);
+    Tuple result = translation * (*test_a_p);
+    Tuple translation_success_p(2.0f, 1.0f, 7.0f, 1.0f);
+    if (!(result == translation_success_p)) {
+      std::cout << "TRANSLATION TEST FAILED" << std::endl;
+      return false;
+    }
   }
 
   // SCALING
-  test_a_p = TupleManager::Instance()->Point(-4.0f, 6.0f, 8.0f);
-  std::unique_ptr<Matrix> scaling = Matrix::ScalingMatrix(2.0f, 3.0f, 4.0f);
-  result = *scaling * (*test_a_p);
+  std::unique_ptr<Tuple> test_a_p = TupleManager::Instance()->Point(-4.0f, 6.0f, 8.0f);
+  Matrix scaling = Matrix::ScalingMatrix(2.0f, 3.0f, 4.0f);
+  Tuple result = scaling * (*test_a_p);
   Tuple scaling_success_p(-8.0f, 18.0f, 32.0f, 1.0f);
-  if (!(*result == scaling_success_p)) {
+  if (!(result == scaling_success_p)) {
     std::cout << "SCALING TEST FAILED" << std::endl;
     return false;
   }
 
-  // ROTATION X
-  test_a_p = TupleManager::Instance()->Point(0.0f, 1.0f, 0.0f);
-  std::unique_ptr<Matrix> half_quarer_rotation = Matrix::RotationXMatrix(pi_4);
-  std::unique_ptr<Matrix> full_quarter_rotation = Matrix::RotationXMatrix(pi_2);
-  Tuple rotation_x_half_success(0.0f, sqrtf(2.0f) / 2.0f, sqrtf(2.0f) / 2.0f, 1.0f);
-  Tuple rotation_x_full_success(0.0f, 0.0f, 1.0f, 1.0f);
-  result = *half_quarer_rotation * (*test_a_p);
-  if (!(*result == rotation_x_half_success)) {
-    std::cout << "ROTATION X HALF TEST FAILED" << std::endl;
-    return false;
-  }
-  result = *full_quarter_rotation * (*test_a_p);
-  if (!(*result == rotation_x_full_success)) {
-    std::cout << "ROTATION X HALF TEST FAILED" << std::endl;
-    return false;
-  }
-
-  // ROTATION Y
-  test_a_p = TupleManager::Instance()->Point(0.0f, 0.0f, 1.0f);
-  half_quarer_rotation = Matrix::RotationYMatrix(pi_4);
-  full_quarter_rotation = Matrix::RotationYMatrix(pi_2);
-  Tuple rotation_y_half_success(sqrtf(2.0f) / 2.0f, 0.0f, sqrtf(2.0f) / 2.0f, 1.0f);
-  Tuple rotation_y_full_success(1.0f, 0.0f, 0.0f, 1.0f);
-  result = *half_quarer_rotation * (*test_a_p);
-  if (!(*result == rotation_y_half_success)) {
-    std::cout << "ROTATION Y HALF TEST FAILED" << std::endl;
-    return false;
-  }
-  result = *full_quarter_rotation * (*test_a_p);
-  if (!(*result == rotation_y_full_success)) {
-    std::cout << "ROTATION Y HALF TEST FAILED" << std::endl;
-    return false;
+  {
+    // ROTATION X
+    test_a_p = TupleManager::Instance()->Point(0.0f, 1.0f, 0.0f);
+    Matrix half_quarer_rotation = Matrix::RotationXMatrix(pi_4);
+    Matrix full_quarter_rotation = Matrix::RotationXMatrix(pi_2);
+    Tuple rotation_x_half_success(0.0f, sqrtf(2.0f) / 2.0f, sqrtf(2.0f) / 2.0f, 1.0f);
+    Tuple rotation_x_full_success(0.0f, 0.0f, 1.0f, 1.0f);
+    result = half_quarer_rotation * (*test_a_p);
+    if (!(result == rotation_x_half_success)) {
+      std::cout << "ROTATION X HALF TEST FAILED" << std::endl;
+      return false;
+    }
+    result = full_quarter_rotation * (*test_a_p);
+    if (!(result == rotation_x_full_success)) {
+      std::cout << "ROTATION X HALF TEST FAILED" << std::endl;
+      return false;
+    }
   }
 
-  // ROTATION Z
-  test_a_p = TupleManager::Instance()->Point(0.0f, 1.0f, 0.0f);
-  // PI / 4
-  half_quarer_rotation = Matrix::RotationZMatrix(pi_4);
-  // PI / 2
-  full_quarter_rotation = Matrix::RotationZMatrix(pi_2);
-  Tuple rotation_z_half_success(-sqrtf(2.0f) / 2.0f, sqrtf(2.0f) / 2.0f, 0.0f, 1.0f);
-  Tuple rotation_z_full_success(-1.0f, 0.0f, 0.0f, 1.0f);
-  result = *half_quarer_rotation * (*test_a_p);
-  if (!(*result == rotation_z_half_success)) {
-    std::cout << "ROTATION Z HALF TEST FAILED" << std::endl;
-    return false;
+  {
+    // ROTATION Y
+    test_a_p = TupleManager::Instance()->Point(0.0f, 0.0f, 1.0f);
+    Matrix half_quarer_rotation = Matrix::RotationYMatrix(pi_4);
+    Matrix full_quarter_rotation = Matrix::RotationYMatrix(pi_2);
+    Tuple rotation_y_half_success(sqrtf(2.0f) / 2.0f, 0.0f, sqrtf(2.0f) / 2.0f, 1.0f);
+    Tuple rotation_y_full_success(1.0f, 0.0f, 0.0f, 1.0f);
+    result = half_quarer_rotation * (*test_a_p);
+    if (!(result == rotation_y_half_success)) {
+      std::cout << "ROTATION Y HALF TEST FAILED" << std::endl;
+      return false;
+    }
+    result = full_quarter_rotation * (*test_a_p);
+    if (!(result == rotation_y_full_success)) {
+      std::cout << "ROTATION Y HALF TEST FAILED" << std::endl;
+      return false;
+    }
   }
-  result = *full_quarter_rotation * (*test_a_p);
-  if (!(*result == rotation_z_full_success)) {
-    std::cout << "ROTATION Z HALF TEST FAILED" << std::endl;
-    return false;
+
+  {
+    // ROTATION Z
+    test_a_p = TupleManager::Instance()->Point(0.0f, 1.0f, 0.0f);
+    // PI / 4
+    Matrix half_quarer_rotation = Matrix::RotationZMatrix(pi_4);
+    // PI / 2
+    Matrix full_quarter_rotation = Matrix::RotationZMatrix(pi_2);
+    Tuple rotation_z_half_success(-sqrtf(2.0f) / 2.0f, sqrtf(2.0f) / 2.0f, 0.0f, 1.0f);
+    Tuple rotation_z_full_success(-1.0f, 0.0f, 0.0f, 1.0f);
+    result = half_quarer_rotation * (*test_a_p);
+    if (!(result == rotation_z_half_success)) {
+      std::cout << "ROTATION Z HALF TEST FAILED" << std::endl;
+      return false;
+    }
+    result = full_quarter_rotation * (*test_a_p);
+    if (!(result == rotation_z_full_success)) {
+      std::cout << "ROTATION Z HALF TEST FAILED" << std::endl;
+      return false;
+    }
   }
 }
 
 bool Matrix::ShearingTest() {
-  std::unique_ptr<Matrix> shearing = Matrix::ShearingMatrix(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+  Matrix shearing = Matrix::ShearingMatrix(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
   std::unique_ptr<Tuple> test_p = TupleManager::Instance()->Point(2.0f, 3.0f, 4.0f);
-  std::unique_ptr<Tuple> result = *shearing * (*test_p);
+  Tuple result = shearing * (*test_p);
   Tuple shearing_success(5.0f, 3.0f, 4.0f, 1.0f);
-  if (!(*result == shearing_success)) {
+  if (!(result == shearing_success)) {
     std::cout << "SHEARING TEST 1 FAILED" << std::endl;
     return false;
   }
 
-  shearing = Matrix::ShearingMatrix(0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-  test_p = TupleManager::Instance()->Point(2.0f, 3.0f, 4.0f);
-  result = *shearing * (*test_p);
-  shearing_success = Tuple(6.0f, 3.0f, 4.0f, 1.0f);
-  if (!(*result == shearing_success)) {
-    std::cout << "SHEARING TEST 2 FAILED" << std::endl;
-    return false;
+  {
+    Matrix shearing = Matrix::ShearingMatrix(0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+    test_p = TupleManager::Instance()->Point(2.0f, 3.0f, 4.0f);
+    result = shearing * (*test_p);
+    shearing_success = Tuple(6.0f, 3.0f, 4.0f, 1.0f);
+    if (!(result == shearing_success)) {
+      std::cout << "SHEARING TEST 2 FAILED" << std::endl;
+      return false;
+    }
   }
 
-  shearing = Matrix::ShearingMatrix(0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f);
-  test_p = TupleManager::Instance()->Point(2.0f, 3.0f, 4.0f);
-  result = *shearing * (*test_p);
-  shearing_success = Tuple(2.0f, 5.0f, 4.0f, 1.0f);
-  if (!(*result == shearing_success)) {
-    std::cout << "SHEARING TEST 3 FAILED" << std::endl;
-    return false;
+  {
+    Matrix shearing = Matrix::ShearingMatrix(0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f);
+    test_p = TupleManager::Instance()->Point(2.0f, 3.0f, 4.0f);
+    result = shearing * (*test_p);
+    shearing_success = Tuple(2.0f, 5.0f, 4.0f, 1.0f);
+    if (!(result == shearing_success)) {
+      std::cout << "SHEARING TEST 3 FAILED" << std::endl;
+      return false;
+    }
   }
 
-  shearing = Matrix::ShearingMatrix(0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f);
-  test_p = TupleManager::Instance()->Point(2.0f, 3.0f, 4.0f);
-  result = *shearing * (*test_p);
-  shearing_success = Tuple(2.0f, 7.0f, 4.0f, 1.0f);
-  if (!(*result == shearing_success)) {
-    std::cout << "SHEARING TEST 4 FAILED" << std::endl;
-    return false;
+  {
+    Matrix shearing = Matrix::ShearingMatrix(0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f);
+    test_p = TupleManager::Instance()->Point(2.0f, 3.0f, 4.0f);
+    result = shearing * (*test_p);
+    shearing_success = Tuple(2.0f, 7.0f, 4.0f, 1.0f);
+    if (!(result == shearing_success)) {
+      std::cout << "SHEARING TEST 4 FAILED" << std::endl;
+      return false;
+    }
   }
 
-  shearing = Matrix::ShearingMatrix(0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
-  test_p = TupleManager::Instance()->Point(2.0f, 3.0f, 4.0f);
-  result = *shearing * (*test_p);
-  shearing_success = Tuple(2.0f, 3.0f, 6.0f, 1.0f);
-  if (!(*result == shearing_success)) {
-    std::cout << "SHEARING TEST 5 FAILED" << std::endl;
-    return false;
+  {
+    Matrix shearing = Matrix::ShearingMatrix(0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+    test_p = TupleManager::Instance()->Point(2.0f, 3.0f, 4.0f);
+    result = shearing * (*test_p);
+    shearing_success = Tuple(2.0f, 3.0f, 6.0f, 1.0f);
+    if (!(result == shearing_success)) {
+      std::cout << "SHEARING TEST 5 FAILED" << std::endl;
+      return false;
+    }
   }
 
-  shearing = Matrix::ShearingMatrix(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
-  test_p = TupleManager::Instance()->Point(2.0f, 3.0f, 4.0f);
-  result = *shearing * (*test_p);
-  shearing_success = Tuple(2.0f, 3.0f, 7.0f, 1.0f);
-  if (!(*result == shearing_success)) {
-    std::cout << "SHEARING TEST 5 FAILED" << std::endl;
-    return false;
-  } else {
-    return true;
+  {
+    Matrix shearing = Matrix::ShearingMatrix(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+    test_p = TupleManager::Instance()->Point(2.0f, 3.0f, 4.0f);
+    result = shearing * (*test_p);
+    shearing_success = Tuple(2.0f, 3.0f, 7.0f, 1.0f);
+    if (!(result == shearing_success)) {
+      std::cout << "SHEARING TEST 5 FAILED" << std::endl;
+      return false;
+    } else {
+      return true;
+    }
   }
 }
 
@@ -715,13 +729,13 @@ bool Matrix::TranformChainingTest() {
   float pi_2 = 1.57079632679;
   
   std::unique_ptr<Tuple> test_p = TupleManager::Instance()->Point(1.0f, 0.0f, 1.0f);
-  std::unique_ptr<Matrix> rotation_x = Matrix::RotationXMatrix(pi_2);
-  std::unique_ptr<Matrix> scale = Matrix::ScalingMatrix(5.0f, 5.0f, 5.0f);
-  std::unique_ptr<Matrix> translate = Matrix::TranslationMatrix(10.0f, 5.0f, 7.0f);
-  std::unique_ptr<Matrix> transform = Matrix::TranformationMatrix(*rotation_x, *scale, *translate);
+  Matrix rotation_x = Matrix::RotationXMatrix(pi_2);
+  Matrix scale = Matrix::ScalingMatrix(5.0f, 5.0f, 5.0f);
+  Matrix translate = Matrix::TranslationMatrix(10.0f, 5.0f, 7.0f);
+  Matrix transform = Matrix::TranformationMatrix(rotation_x, scale, translate);
   Tuple test_success_p(15.0f, 0.0f, 7.0f, 1.0f);
-  std::unique_ptr<Tuple> result = *transform * (*test_p);
-  if (!(*result == test_success_p)) {
+  Tuple result = transform * (*test_p);
+  if (!(result == test_success_p)) {
     std::cout << "TRANSFORM CHAINGING TEST FAILED" << std::endl;
     return false;
   } else {
@@ -731,43 +745,57 @@ bool Matrix::TranformChainingTest() {
 }
 
 bool Matrix::ViewTransformTest() {
-  std::unique_ptr<Tuple> from = TupleManager::Instance()->Point(0.0f, 0.0f, 0.0f);
-  std::unique_ptr<Tuple> to = TupleManager::Instance()->Point(0.0f, 0.0f, -1.0f);
-  std::unique_ptr<Tuple> up = TupleManager::Instance()->Vector(0.0f, 1.0f, 0.0f);
-  // SO THIS STATIC FUNCTION WOULD BE IN THE UTITLITY NAMESPACE?!
-  std::unique_ptr<Matrix> view = GetViewTransform(*from, *to, *up);
-  if (!(*view == *Matrix::GetIdentityMatrix())) {
-    std::cout << "VIEW TRANSFORM TEST FAILED" << std::endl;
-    return false;
+  {
+    std::unique_ptr<Tuple> from = TupleManager::Instance()->Point(0.0f, 0.0f, 0.0f);
+    std::unique_ptr<Tuple> to = TupleManager::Instance()->Point(0.0f, 0.0f, -1.0f);
+    std::unique_ptr<Tuple> up = TupleManager::Instance()->Vector(0.0f, 1.0f, 0.0f);
+    // SO THIS STATIC FUNCTION WOULD BE IN THE UTITLITY NAMESPACE?!
+    Matrix view = GetViewTransform(*from, *to, *up);
+    Matrix success = Matrix::GetIdentityMatrix();
+    if (!(view == success)) {
+      std::cout << "VIEW TRANSFORM TEST FAILED" << std::endl;
+      return false;
+    }
   }
 
-  to = TupleManager::Instance()->Point(0.0f, 0.0f, 1.0f);
-  view = GetViewTransform(*from, *to, *up);
-  if (!(*view == *Matrix::ScalingMatrix(-1.0f, 1.0f, -1.0f))) {
-    std::cout << "VIEW TRANSFORM TEST 2 FAILED" << std::endl;
-    return false;
+  {
+    std::unique_ptr<Tuple> from = TupleManager::Instance()->Point(0.0f, 0.0f, 0.0f);
+    std::unique_ptr<Tuple> to = TupleManager::Instance()->Point(0.0f, 0.0f, 1.0f);
+    std::unique_ptr<Tuple> up = TupleManager::Instance()->Vector(0.0f, 1.0f, 0.0f);
+    Matrix view = GetViewTransform(*from, *to, *up);
+    Matrix success = Matrix::ScalingMatrix(-1.0f, 1.0f, -1.0f);
+    if (!(view == success)) {
+      std::cout << "VIEW TRANSFORM TEST 2 FAILED" << std::endl;
+      return false;
+    }
   }
 
-  from = TupleManager::Instance()->Point(0.0f, 0.0f, 8.0f);
-  to = TupleManager::Instance()->Point(0.0f, 0.0f, 0.0f);
-  view = GetViewTransform(*from, *to, *up);
-  if (!(*view == *Matrix::TranslationMatrix(0.0f, 0.0f, -8.0f))) {
-    std::cout << "VIEW TRANSFORM TEST 3 FAILED" << std::endl;
-    return false;
+  {
+    std::unique_ptr<Tuple> from = TupleManager::Instance()->Point(0.0f, 0.0f, 8.0f);
+    std::unique_ptr<Tuple> to = TupleManager::Instance()->Point(0.0f, 0.0f, 0.0f);
+    std::unique_ptr<Tuple> up = TupleManager::Instance()->Vector(0.0f, 1.0f, 0.0f);
+    Matrix view = GetViewTransform(*from, *to, *up);
+    Matrix success = Matrix::TranslationMatrix(0.0f, 0.0f, -8.0f);
+    if (!(view == success)) {
+      std::cout << "VIEW TRANSFORM TEST 3 FAILED" << std::endl;
+      return false;
+    }
   }
 
-  from = TupleManager::Instance()->Point(1.0f, 3.0f, 2.0f);
-  to = TupleManager::Instance()->Point(4.0f, -2.0f, 8.0f);
-  up = TupleManager::Instance()->Vector(1.0f, 1.0f, 0.0f);
-  view = GetViewTransform(*from, *to, *up);
-  Matrix success(
-    -0.50709f, 0.50709f, 0.67612f,-2.36643f,
-     0.76772f, 0.60609f, 0.12122f,-2.82843f,
-    -0.35857f, 0.59761f,-0.71714f, 0.00000f,
-     0.00000f, 0.00000f, 0.00000f, 1.00000f
-  );
-  if (!(*view == success)) {
-    std::cout << "VIEW TRANSFORM TEST 4 FAILED" << std::endl;
-    return false;
+  {
+    std::unique_ptr<Tuple> from = TupleManager::Instance()->Point(1.0f, 3.0f, 2.0f);
+    std::unique_ptr<Tuple> to = TupleManager::Instance()->Point(4.0f, -2.0f, 8.0f);
+    std::unique_ptr<Tuple> up = TupleManager::Instance()->Vector(1.0f, 1.0f, 0.0f);
+    Matrix view = GetViewTransform(*from, *to, *up);
+    Matrix success(
+      -0.50709f, 0.50709f, 0.67612f, -2.36643f,
+      0.76772f, 0.60609f, 0.12122f, -2.82843f,
+      -0.35857f, 0.59761f, -0.71714f, 0.00000f,
+      0.00000f, 0.00000f, 0.00000f, 1.00000f
+    );
+    if (!(view == success)) {
+      std::cout << "VIEW TRANSFORM TEST 4 FAILED" << std::endl;
+      return false;
+    }
   }
 }

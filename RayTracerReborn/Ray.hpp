@@ -21,7 +21,7 @@ public:
   void Cast(Sphere& sphere);
   void SortIntersections();
   Intersection* Hit();
-  std::unique_ptr<Ray> Transform(Matrix& transform);
+  Ray Transform(Matrix& transform);
   bool operator==(Ray& rhs);
 
 public:

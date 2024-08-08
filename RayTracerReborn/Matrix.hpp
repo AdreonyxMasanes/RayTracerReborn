@@ -38,31 +38,31 @@ public:
  
   // UTILTIY FUNCTIONS
 public:
-  std::unique_ptr<Matrix> Transpose();
+  Matrix Transpose();
 
-  static std::unique_ptr<Matrix> TranslationMatrix(float x, float y, float z);
-  static std::unique_ptr<Matrix> ScalingMatrix(float x, float y, float z);
-  static std::unique_ptr<Matrix> RotationXMatrix(float radians);
-  static std::unique_ptr<Matrix> RotationYMatrix(float radians);
-  static std::unique_ptr<Matrix> RotationZMatrix(float radians);
-  static std::unique_ptr<Matrix> ShearingMatrix(float xy, float xz, float yx, float yz, float zx, float zy);
-  static std::unique_ptr<Matrix> TranformationMatrix(Matrix& first, Matrix& second);
-  static std::unique_ptr<Matrix> TranformationMatrix(Matrix& first, Matrix& second, Matrix& third);
-  static std::unique_ptr<Matrix> GetIdentityMatrix();
-  static std::unique_ptr<Matrix> GetViewTransform(Tuple& from, Tuple& to, Tuple& up);
+  static Matrix TranslationMatrix(float x, float y, float z);
+  static Matrix ScalingMatrix(float x, float y, float z);
+  static Matrix RotationXMatrix(float radians);
+  static Matrix RotationYMatrix(float radians);
+  static Matrix RotationZMatrix(float radians);
+  static Matrix ShearingMatrix(float xy, float xz, float yx, float yz, float zx, float zy);
+  static Matrix TranformationMatrix(Matrix& first, Matrix& second);
+  static Matrix TranformationMatrix(Matrix& first, Matrix& second, Matrix& third);
+  static Matrix GetIdentityMatrix();
+  static Matrix GetViewTransform(Tuple& from, Tuple& to, Tuple& up);
 
   // MATH FUNCS
 public:
   bool operator==(Matrix& rhs);
-  std::unique_ptr<Matrix> operator*(Matrix& rhs);
-  std::unique_ptr<Tuple> operator*(Tuple& rhs);
+  Matrix operator*(Matrix& rhs);
+  Tuple operator*(Tuple& rhs);
   Matrix& operator=(Matrix& rhs);
 
   float Determinant();
   Matrix Submatrix(float row, float col);
   float Minor(float row, float col);
   float Cofactor(float row, float col);
-  std::unique_ptr<Matrix> Invert();
+  Matrix Invert();
 
   // DEBUG
 public:

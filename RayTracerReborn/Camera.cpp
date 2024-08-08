@@ -1,12 +1,12 @@
 #include "Camera.hpp"
 
 Camera::Camera() 
-  : m_transform(*Matrix::GetIdentityMatrix()), m_hsize_pixels(128.0f), m_vsize_pixels(128.0f), m_canvas(Canvas(128.0f, 128.0f)) {
+  : m_transform(Matrix::GetIdentityMatrix()), m_hsize_pixels(128.0f), m_vsize_pixels(128.0f), m_canvas(Canvas(128.0f, 128.0f)) {
   CalculatePixelSize();
 }
 
 Camera::Camera(float hsize, float vsize, float field_of_view) 
-  : m_transform(*Matrix::GetIdentityMatrix()), m_hsize_pixels(hsize),m_vsize_pixels(vsize), m_field_of_view(field_of_view), m_canvas(Canvas(m_hsize_pixels, m_vsize_pixels)) {
+  : m_transform(Matrix::GetIdentityMatrix()), m_hsize_pixels(hsize),m_vsize_pixels(vsize), m_field_of_view(field_of_view), m_canvas(Canvas(m_hsize_pixels, m_vsize_pixels)) {
   CalculatePixelSize();
 }
 
@@ -39,12 +39,12 @@ std::unique_ptr<Ray> Camera::RayForPixel(float px, float py) {
 
   float world_x = m_half_width - xoffset;
   float world_y = m_half_height - yoffset;
-  Matrix camera_matrix_inversion = *m_transform.Invert();
-  std::unique_ptr<Tuple> pixel = camera_matrix_inversion * *TupleManager::Instance()->Point(world_x, world_y, -1.0f);
-  std::unique_ptr<Tuple> origin = camera_matrix_inversion * *TupleManager::Instance()->Point(0.0f, 0.0f, 0.0f);
-  std::unique_ptr<Tuple> direction = (*pixel - *origin)->Normalize();
+  Matrix camera_matrix_inversion = m_transform.Invert();
+  Tuple pixel = camera_matrix_inversion * *TupleManager::Instance()->Point(world_x, world_y, -1.0f);
+  Tuple origin = camera_matrix_inversion * *TupleManager::Instance()->Point(0.0f, 0.0f, 0.0f);
+  Tuple direction = *(pixel - origin)->Normalize();
 
-  return std::make_unique<Ray>(*origin, *direction);
+  return std::make_unique<Ray>(origin, direction);
 
 }
 
@@ -97,8 +97,8 @@ bool Camera::GenerateCanvasTest() {
   std::unique_ptr<Tuple> from = TupleManager::Instance()->Point(0.0f, 0.0f, -5.0f);
   std::unique_ptr<Tuple> to = TupleManager::Instance()->Point(0.0f, 0.0f, 0.0f);
   std::unique_ptr<Tuple> up = TupleManager::Instance()->Vector(0.0f, 1.0f, 0.0f);
-  std::unique_ptr<Matrix> view = Matrix::GetViewTransform(*from, *to, *up);
-  test_camera.SetTransform(*view);
+  Matrix view = Matrix::GetViewTransform(*from, *to, *up);
+  test_camera.SetTransform(view);
   test_camera.GenerateCanvas(test_world);
   
   Tuple success_color = *TupleManager::Instance()->Color(0.38066f, 0.47583f, 0.2855f);

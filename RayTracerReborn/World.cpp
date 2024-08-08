@@ -20,8 +20,8 @@ World::World() {
   AddSphere(*temp_sphere);
   
   temp_sphere = SphereManager::Instance()->NewSphere();
-  std::unique_ptr<Matrix> transform = Matrix::ScalingMatrix(0.5f, 0.5f, 0.5f);
-  temp_sphere->SetTransform(*transform);
+  Matrix transform = Matrix::ScalingMatrix(0.5f, 0.5f, 0.5f);
+  temp_sphere->SetTransform(transform);
   AddSphere(*temp_sphere);
 }
 

@@ -26,14 +26,15 @@ std::unique_ptr<Tuple> Ray::Position(float time) {
 }
 
 void Ray::Cast(Sphere& sphere) {
-  std::unique_ptr<Ray> transformed_ray = Transform(*(sphere.Transform().Invert()));
+  Matrix inverted = sphere.Transform().Invert();
+  Ray transformed_ray = Transform((inverted));
   
   std::unique_ptr<Tuple> world_origin = TupleManager::Instance()->Point(0.0f, 0.0f, 0.0f);
 
-  std::unique_ptr<Tuple> sphere_to_ray = transformed_ray->Origin() - *world_origin;
+  std::unique_ptr<Tuple> sphere_to_ray = transformed_ray.Origin() - *world_origin;
 
-  float a = transformed_ray->Direction().Dot(transformed_ray->Direction());
-  float b = 2 * transformed_ray->Direction().Dot(*sphere_to_ray);
+  float a = transformed_ray.Direction().Dot(transformed_ray.Direction());
+  float b = 2 * transformed_ray.Direction().Dot(*sphere_to_ray);
   float c = sphere_to_ray->Dot(*sphere_to_ray) - 1;
   float discriminant = powf(b, 2) - 4 * a * c;
 
@@ -73,8 +74,10 @@ Intersection* Ray::Hit() {
   }
 }
 
-std::unique_ptr<Ray> Ray::Transform(Matrix& transform) {
-  return std::make_unique<Ray>(*(transform * Origin()), *(transform * Direction()));
+Ray Ray::Transform(Matrix& transform) {
+  Tuple origin = transform * Origin();
+  Tuple direction = transform * Direction();
+  return Ray(origin, direction);
 }
 
 bool Ray::operator==(Ray& rhs) {
@@ -190,8 +193,8 @@ bool Ray::CastTest() {
   ray_origin = TupleManager::Instance()->Point(0.0f, 0.0f, -5.0f);
   ray_direction = TupleManager::Instance()->Vector(0.0f, 0.0f, 1.0f);
   test_ray = Ray(*ray_origin, *ray_direction);
-  std::unique_ptr<Matrix> scaling = Matrix::ScalingMatrix(2.0f, 2.0f, 2.0f);
-  test_sphere.SetTransform(*scaling);
+  Matrix scaling = Matrix::ScalingMatrix(2.0f, 2.0f, 2.0f);
+  test_sphere.SetTransform(scaling);
   test_ray.Cast(test_sphere);
   if (!(Utility::FloatsAreEqual(test_ray.Intersections()[0].Time(), 3.0f) && Utility::FloatsAreEqual(test_ray.Intersections()[1].Time(), 7.0f))) {
     std::cout << "INTERSECTION TEST 6 FAILED" << std::endl;
@@ -199,8 +202,8 @@ bool Ray::CastTest() {
   }
   test_ray.Intersections().clear();
 
-  std::unique_ptr<Matrix> translation = Matrix::TranslationMatrix(5.0f, 0.0f, 0.0f);
-  test_sphere.SetTransform(*translation);
+  Matrix translation = Matrix::TranslationMatrix(5.0f, 0.0f, 0.0f);
+  test_sphere.SetTransform(translation);
   test_ray.Cast(test_sphere);
   if (!(test_ray.Intersections().size() == 0)) {
     std::cout << "INTERSECTION TEST 7 FAILED" << std::endl;
@@ -271,21 +274,21 @@ bool Ray::TransformTest() {
   std::unique_ptr<Tuple> ray_direction = TupleManager::Instance()->Vector(0.0f, 1.0f, 0.0f);
   std::unique_ptr<Tuple> ray_origin_success = TupleManager::Instance()->Point(4.0f, 6.0f, 8.0f);
   std::unique_ptr<Tuple> ray_direction_success = TupleManager::Instance()->Vector(0.0f, 1.0f, 0.0f);
-  std::unique_ptr<Matrix> translate = Matrix::TranslationMatrix(3.0f, 4.0f, 5.0f);
+  Matrix translate = Matrix::TranslationMatrix(3.0f, 4.0f, 5.0f);
   Ray test_ray(*ray_origin, *ray_direction);
   Ray test_ray_success(*ray_origin_success, *ray_direction_success);
-  std::unique_ptr<Ray> result = test_ray.Transform(*translate);
-  if (!(*result == test_ray_success)) {
+  Ray result = test_ray.Transform(translate);
+  if (!(result == test_ray_success)) {
     std::cout << "RAY TRANSFORM TEST FAILED" << std::endl;
     return false;
   }
 
-  std::unique_ptr<Matrix> scaling = Matrix::ScalingMatrix(2.0f, 3.0f, 4.0f);
+  Matrix scaling = Matrix::ScalingMatrix(2.0f, 3.0f, 4.0f);
   ray_origin_success = TupleManager::Instance()->Point(2.0f, 6.0f, 12.0f);
   ray_direction_success = TupleManager::Instance()->Vector(0.0f, 3.0f, 0.0f);
   test_ray_success = Ray(*ray_origin_success, *ray_direction_success);
-  result = test_ray.Transform(*scaling);
-  if (!(*result == test_ray_success)) {
+  result = test_ray.Transform(scaling);
+  if (!(result == test_ray_success)) {
     std::cout << "RAY TRANSFORM TEST 2 FAILED" << std::endl;
     return false;
   } else {
