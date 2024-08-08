@@ -83,7 +83,7 @@ void SceneSim::Run() {
   float pi_3 = 1.0471975512f;
   float fov = pi_3;
   World test_world(spheres, light);
-  Camera test_camera(160, 120, fov);
+  Camera test_camera(256 , 128, fov);
 
   std::unique_ptr<Tuple> from = TupleManager::Instance()->Point(0.0f, 1.5f, -5.0f);
   std::unique_ptr<Tuple> to = TupleManager::Instance()->Point(0.0f, 1.0f, 0.0f);

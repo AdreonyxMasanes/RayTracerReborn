@@ -270,7 +270,7 @@ float Matrix::Determinant() {
   return result;
 }
 
-std::unique_ptr<Matrix> Matrix::Submatrix(float row, float col) {
+Matrix Matrix::Submatrix(float row, float col) {
   // DONT WANT TO MODIFY ORIGINAL MATRIX SO CREATE A COPY
   Matrix temp = *this;
   // Erase rows and colums from matrix.
@@ -282,12 +282,12 @@ std::unique_ptr<Matrix> Matrix::Submatrix(float row, float col) {
   temp.SetHeight(temp.Height() - 1);
   temp.SetWidth(temp.Width() - 1);
 
-  return std::make_unique<Matrix>(temp);
+  return temp;
 }
 
 float Matrix::Minor(float row, float col) {
-  std::unique_ptr<Matrix> sub = Submatrix(row, col);
-  return sub->Determinant();
+  Matrix sub = Submatrix(row, col);
+  return sub.Determinant();
 }
 
 float Matrix::Cofactor(float row, float col) {
