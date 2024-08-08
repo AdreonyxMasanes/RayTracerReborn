@@ -33,18 +33,21 @@ void Camera::RunTest() {
   }
 }
 
-std::unique_ptr<Ray> Camera::RayForPixel(float px, float py) {
+Ray Camera::RayForPixel(float px, float py) {
   float xoffset = (px + 0.5f) * m_pixel_size;
   float yoffset = (py + 0.5f) * m_pixel_size;
 
   float world_x = m_half_width - xoffset;
   float world_y = m_half_height - yoffset;
   Matrix camera_matrix_inversion = m_transform.Invert();
-  Tuple pixel = camera_matrix_inversion * *TupleManager::Instance()->Point(world_x, world_y, -1.0f);
-  Tuple origin = camera_matrix_inversion * *TupleManager::Instance()->Point(0.0f, 0.0f, 0.0f);
-  Tuple direction = *(pixel - origin)->Normalize();
+  // LEAVE THIS COMMENT HERE FOR CONVERSION WITH MAX
+  Tuple world_point = TupleManager::Instance()->Point(world_x, world_y, -1.0f);
+  Tuple pixel = camera_matrix_inversion * world_point;
+  Tuple temp_origin = TupleManager::Instance()->Point(0.0f, 0.0f, 0.0f);
+  Tuple origin = camera_matrix_inversion * temp_origin;
+  Tuple direction = (pixel - origin).Normalize();
 
-  return std::make_unique<Ray>(origin, direction);
+  return Ray(origin, direction);
 
 }
 
@@ -52,9 +55,9 @@ void Camera::GenerateCanvas(World& world) {
   for (int y = 0; y < m_vsize_pixels - 1; y ++) {
     std::cout << "ROW: " << y << std::endl;
     for (int x = 0; x < m_hsize_pixels - 1; x++) {
-      std::unique_ptr<Ray> ray = RayForPixel(x, y);
-      std::unique_ptr<Tuple> color = world.ColorAt(*ray);
-      m_canvas.WritePixel(x, y, *color);
+      Ray ray = RayForPixel(x, y);
+      Tuple color = world.ColorAt(ray);
+      m_canvas.WritePixel(x, y, color);
     }
   }
   std::cout << "CANVAS GENERATED" << std::endl;
@@ -94,14 +97,14 @@ bool Camera::GenerateCanvasTest() {
   float pi_2 = 1.57079632679f;
   World test_world;
   Camera test_camera(11.0f, 11.0f, pi_2);
-  std::unique_ptr<Tuple> from = TupleManager::Instance()->Point(0.0f, 0.0f, -5.0f);
-  std::unique_ptr<Tuple> to = TupleManager::Instance()->Point(0.0f, 0.0f, 0.0f);
-  std::unique_ptr<Tuple> up = TupleManager::Instance()->Vector(0.0f, 1.0f, 0.0f);
-  Matrix view = Matrix::GetViewTransform(*from, *to, *up);
+  Tuple from = TupleManager::Instance()->Point(0.0f, 0.0f, -5.0f);
+  Tuple to = TupleManager::Instance()->Point(0.0f, 0.0f, 0.0f);
+  Tuple up = TupleManager::Instance()->Vector(0.0f, 1.0f, 0.0f);
+  Matrix view = Matrix::GetViewTransform(from, to, up);
   test_camera.SetTransform(view);
   test_camera.GenerateCanvas(test_world);
   
-  Tuple success_color = *TupleManager::Instance()->Color(0.38066f, 0.47583f, 0.2855f);
+  Tuple success_color = TupleManager::Instance()->Color(0.38066f, 0.47583f, 0.2855f);
   if (!(test_camera.GetCanvas().GetPixel(5.0f, 5.0f) == success_color)) {
     std::cout << "CANVAS FAILED TO GENERATE PROPERLY" << std::endl;
     return false;

@@ -36,20 +36,20 @@ public:
   
   // If need to modify but do not want to take ownership of objects lifetime take object pointer as a parameter and pass in the raw pointer contained within unique pointer using .get()
   // If need to read the value but do not want to take ownership of object lifetime take const object reference and pass in unique ptr dereferenced.
-  std::unique_ptr<Tuple> operator+(const Tuple& rhs) const;
-  std::unique_ptr<Tuple> operator-(const Tuple& rhs) const;
-  std::unique_ptr<Tuple> operator-() const;
-  std::unique_ptr<Tuple> operator*(float scalar) const;
-  std::unique_ptr<Tuple> operator*(const Tuple& rhs) const;
-  std::unique_ptr<Tuple> operator/(float scalar) const;
+  Tuple operator+(const Tuple& rhs) const;
+  Tuple operator-(const Tuple& rhs) const;
+  Tuple operator-() const;
+  Tuple operator*(float scalar) const;
+  Tuple operator*(const Tuple& rhs) const;
+  Tuple operator/(float scalar) const;
 
   // NEW VECTOR THAT IS PERPENDICULAR TO BOTH ORIGINAL VECTORS
-  std::unique_ptr<Tuple> Cross(const Tuple& rhs) const;
+  Tuple Cross(const Tuple& rhs) const;
   
   // MAGNITUDE == 1.0f
-  std::unique_ptr<Tuple> Normalize() const;
+  Tuple Normalize() const;
 
-  std::unique_ptr<Tuple> Reflect(const Tuple& normal) const;
+  Tuple Reflect(const Tuple& normal) const;
 
   // LENGTH OF VECTOR
   float Magnitude() const;

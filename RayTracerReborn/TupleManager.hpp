@@ -10,13 +10,13 @@ public:
 
 public:
 	// DEFAULT CONSTRUCTOS
-	std::unique_ptr<Tuple> Point() const;
-	std::unique_ptr<Tuple> Vector() const;
-	std::unique_ptr<Tuple> Color() const;
+	Tuple Point() const;
+	Tuple Vector() const;
+	Tuple Color() const;
 	// SPECIFIC CONSTRUCTORS
-	std::unique_ptr<Tuple> Point(float x, float y, float z) const;
-	std::unique_ptr<Tuple> Vector(float x, float y, float z) const;
-	std::unique_ptr<Tuple> Color(float r, float g, float b) const;
+	Tuple Point(float x, float y, float z) const;
+	Tuple Vector(float x, float y, float z) const;
+	Tuple Color(float r, float g, float b) const;
 	// GET FUNCTION
 	static TupleManager* Instance();
 

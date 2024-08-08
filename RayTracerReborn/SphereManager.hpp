@@ -7,7 +7,7 @@ public:
 	SphereManager();
 
 public:
-	std::unique_ptr<Sphere> NewSphere();
+	Sphere NewSphere();
 
 public:
 	// GET FUNCTION

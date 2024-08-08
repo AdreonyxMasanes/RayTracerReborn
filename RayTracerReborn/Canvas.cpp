@@ -34,11 +34,11 @@ void Canvas::WritePixel(float row, float col, const Tuple& color) {
 void Canvas::CanvasTest() {
   Canvas canvas(128.0f, 128.0f);
   
-  std::unique_ptr<Tuple> red_c = TupleManager::Instance()->Color(1.0f, 0.0f, 0.0f);
+  Tuple red_c = TupleManager::Instance()->Color(1.0f, 0.0f, 0.0f);
 
   for (int row = 0; row < canvas.Height() / 2.0f; row++) {
     for (int col = 0; col < canvas.Width(); col++) {
-      canvas.WritePixel(row, col, *red_c);
+      canvas.WritePixel(row, col, red_c);
     }
   }
   // SHOULD BE RED 1 0 0 0 

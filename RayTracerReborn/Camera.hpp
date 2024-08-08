@@ -17,7 +17,7 @@ public:
   void SetTransform(Matrix& transform);
 public:
   static void RunTest();
-  std::unique_ptr<Ray> RayForPixel(float px, float py);
+  Ray RayForPixel(float px, float py);
   void GenerateCanvas(World& world);
 private:
   float m_hsize_pixels = 0;

@@ -23,7 +23,7 @@ public:
 public:
   static void RunTest();
 public:
-  std::unique_ptr<Tuple> Lighting(Light& light, Tuple& position_p, Tuple& eye_v, Tuple& normal_v);
+  Tuple Lighting(Light& light, Tuple& position_p, Tuple& eye_v, Tuple& normal_v);
 private:
   float m_ambient = 0.1f;
   float m_diffuse = 0.9f;

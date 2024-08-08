@@ -17,7 +17,7 @@ public:
   std::vector<Intersection>& Intersections();
   // UTILITY
 public:
-  std::unique_ptr<Tuple> Position(float time);
+  Tuple Position(float time);
   void Cast(Sphere& sphere);
   void SortIntersections();
   Intersection* Hit();

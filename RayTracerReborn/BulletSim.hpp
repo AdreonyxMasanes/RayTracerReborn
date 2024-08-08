@@ -7,13 +7,13 @@ public:
   static void Run(bool printToPPM);
 private:
   struct Projectile {
-    std::unique_ptr<Tuple> position_p = std::make_unique<Tuple>();
-    std::unique_ptr<Tuple> velocity_v = std::make_unique<Tuple>();
+    Tuple position_p;
+    Tuple velocity_v;
   };
 
   struct Enviroment {
-    std::unique_ptr<Tuple> gravity_v = std::make_unique<Tuple>();
-    std::unique_ptr<Tuple> wind_v = std::make_unique<Tuple>();
+    Tuple gravity_v;
+    Tuple wind_v;
   };
 
   static void Tick(Enviroment& e, Projectile& p);

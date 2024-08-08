@@ -73,44 +73,44 @@ void Tuple::operator=(const Tuple& rhs) {
   m_w = rhs.W();
 }
 
-std::unique_ptr<Tuple> Tuple::operator+(const Tuple& rhs) const {
-  return std::make_unique<Tuple>(X() + rhs.X(), Y() + rhs.Y(), Z() + rhs.Z(), W() + rhs.W());
+Tuple Tuple::operator+(const Tuple& rhs) const {
+  return Tuple(X() + rhs.X(), Y() + rhs.Y(), Z() + rhs.Z(), W() + rhs.W());
 }
 
-std::unique_ptr<Tuple> Tuple::operator-(const Tuple& rhs) const {
-  return std::make_unique<Tuple>(X() - rhs.X(), Y() - rhs.Y(), Z() - rhs.Z(), W() - rhs.W());
+Tuple Tuple::operator-(const Tuple& rhs) const {
+  return Tuple(X() - rhs.X(), Y() - rhs.Y(), Z() - rhs.Z(), W() - rhs.W());
 }
 
-std::unique_ptr<Tuple> Tuple::operator-() const {
-  return std::make_unique<Tuple>(-X(), -Y(), -Z(), -W());
+Tuple Tuple::operator-() const {
+  return Tuple(-X(), -Y(), -Z(), -W());
 }
 
-std::unique_ptr<Tuple> Tuple::operator*(float scalar) const {
-  return std::make_unique<Tuple>(X() * scalar, Y() * scalar, Z() * scalar, W() * scalar);
+Tuple Tuple::operator*(float scalar) const {
+  return Tuple(X() * scalar, Y() * scalar, Z() * scalar, W() * scalar);
 }
 
-std::unique_ptr<Tuple> Tuple::operator*(const Tuple& rhs) const {
-  return std::make_unique<Tuple>(X() * rhs.X(), Y() * rhs.Y(), Z() * rhs.Z(), W() * rhs.W());
+Tuple Tuple::operator*(const Tuple& rhs) const {
+  return Tuple(X() * rhs.X(), Y() * rhs.Y(), Z() * rhs.Z(), W() * rhs.W());
 }
 
-std::unique_ptr<Tuple> Tuple::operator/(float scalar) const {
-  return std::make_unique<Tuple>(X() / scalar, Y() / scalar, Z() / scalar, W() / scalar);
+Tuple Tuple::operator/(float scalar) const {
+  return Tuple(X() / scalar, Y() / scalar, Z() / scalar, W() / scalar);
 }
 
-std::unique_ptr<Tuple> Tuple::Cross(const Tuple& rhs) const {
-  return std::make_unique<Tuple>(Y() * rhs.Z() - Z() * rhs.Y(),
+Tuple Tuple::Cross(const Tuple& rhs) const {
+  return Tuple(Y() * rhs.Z() - Z() * rhs.Y(),
     Z() * rhs.X() - X() * rhs.Z(),
     X() * rhs.Y() - Y() * rhs.X(), 
     0.0f);
 }
 
-std::unique_ptr<Tuple> Tuple::Normalize() const {
+Tuple Tuple::Normalize() const {
   float magnitude = Magnitude();
-  return std::make_unique<Tuple>(X() / magnitude, Y() / magnitude, Z() / magnitude, W() / magnitude);
+  return Tuple(X() / magnitude, Y() / magnitude, Z() / magnitude, W() / magnitude);
 }
 
-std::unique_ptr<Tuple> Tuple::Reflect(const Tuple& normal) const {
-  return *this - (*(normal * (2 * Dot(normal))));
+Tuple Tuple::Reflect(const Tuple& normal) const {
+  return *this - ((normal * (2 * Dot(normal))));
 }
 
 float Tuple::Magnitude() const {
@@ -157,9 +157,9 @@ bool Tuple::AdditionTest() {
   Tuple test_v(-2.0f, 3.0f, 1.0f, 0.0f);
   Tuple test_success_p(1.0f, 1.0f, 6.0f, 1.0f);
 
-  std::unique_ptr<Tuple> result = test_p + test_v;
+  Tuple result = test_p + test_v;
   
-  if (!(*result == test_success_p)) {
+  if (!(result == test_success_p)) {
     std::cout << "ADDITION TEST FAILED " << std::endl;
     return false;
   } else {
@@ -175,9 +175,9 @@ bool Tuple::SubtractionTest() {
   Tuple test_success_p(-2.0f, -4.0f, -6.0f, 1.0f);
 
   // TWO POINTS SUBTRACTED FROM EACH OTHER RETURNS A VECTOR FROM RHS POINTING TOWARDS LHS
-  std::unique_ptr<Tuple> result = test_a_p - test_b_p;
+  Tuple result = test_a_p - test_b_p;
 
-  if (!(*result == test_success_v)) {
+  if (!(result == test_success_v)) {
     std::cout << "SUBTRACTION TEST 1 FAILED " << std::endl;
     return false;
   }
@@ -186,7 +186,7 @@ bool Tuple::SubtractionTest() {
   // SUBTRACTING A VECTOR FROM A POINT RETURNS THE POINT THE VECTOR IS POINTING TOWARDS IF THE ORIGINAL POINT WAS THE ORIGIN
   result = test_a_p - test_a_v;
 
-  if (!(*result == test_success_p)) {
+  if (!(result == test_success_p)) {
     std::cout << "SUBTRACTION TEST 2 FAILED " << std::endl;
     return false;
   }
@@ -197,7 +197,7 @@ bool Tuple::SubtractionTest() {
   result = test_b_v - test_a_v;
 
 
-  if (!(*result == test_success_v)) {
+  if (!(result == test_success_v)) {
     std::cout << "SUBTRACTION TEST 3 FAILED " << std::endl;
     return false;
   }
@@ -206,9 +206,9 @@ bool Tuple::SubtractionTest() {
 bool Tuple::NegationTest() {
   Tuple test_p(1.0f, -2.0f, 3.0f, -4.0f);
   Tuple test_success_t(-1.0f, 2.0f, -3.0f, 4.0f);
-  std::unique_ptr<Tuple> result = -test_p;
+  Tuple result = -test_p;
 
-  if (!(*result == test_success_t)) {
+  if (!(result == test_success_t)) {
     std::cout << "NEGATION TEST FAILED " << std::endl;
     return false;
   }
@@ -217,9 +217,9 @@ bool Tuple::NegationTest() {
 bool Tuple::MultiplyTest() {
   Tuple test_t(1.0f, -2.0f, 3.0f, -4.0f);
   Tuple test_success_t(3.5f, -7.0f, 10.5f, -14.0f);
-  std::unique_ptr<Tuple> result = test_t * 3.5f;
+  Tuple result = test_t * 3.5f;
 
-  if (!(*result == test_success_t)) {
+  if (!(result == test_success_t)) {
     std::cout << "MULTIPLICATION TEST FAILED " << std::endl;
     return false;
   }
@@ -227,7 +227,7 @@ bool Tuple::MultiplyTest() {
   test_success_t = Tuple(0.5f, -1.0f, 1.5f, -2.0f);
   result = test_t * 0.5f;
 
-  if (!(*result == test_success_t)) {
+  if (!(result == test_success_t)) {
     std::cout << "MULTIPLICATION TEST 2 FAILED " << std::endl;
     return false;
   }
@@ -238,9 +238,9 @@ bool Tuple::MultipleTwoTuplesTest() {
   Tuple test_a_c(1.0f, 0.2f, 0.4f, 0.0f);
   Tuple test_b_c(0.9f, 1.0f, 0.1f, 0.0f);
   Tuple test_success_c(0.9f, 0.2f, 0.04f, 0.0f);
-  std::unique_ptr<Tuple> result = test_a_c * test_b_c;
+  Tuple result = test_a_c * test_b_c;
 
-  if (!(*result == test_success_c)) {
+  if (!(result == test_success_c)) {
     std::cout << "MULTIPLY TUPLES TOGETHER TEST FAILED " << std::endl;
     return false;
   }
@@ -250,9 +250,9 @@ bool Tuple::MultipleTwoTuplesTest() {
 bool Tuple::DivisonTest() {
   Tuple test_t(1.0f, -2.0f, 3.0f, -4.0f);
   Tuple test_success_t(0.5f, -1.0f, 1.5f, -2.0f);
-  std::unique_ptr<Tuple> result = test_t / 2.0f;
+  Tuple result = test_t / 2.0f;
 
-  if (!(*result == test_success_t)) {
+  if (!(result == test_success_t)) {
     std::cout << "DIVISON TEST FAILED " << std::endl;
     return false;
   } else {
@@ -304,8 +304,8 @@ bool Tuple::NormalizeTest() {
   Tuple test_v(4.0f, 0.0f, 0.0f, 0.0f);
   Tuple test_success_v(1.0f, 0.0f, 0.0f, 0.0f);
 
-  std::unique_ptr<Tuple> result = test_v.Normalize();
-  if (!(*result == test_success_v)) {
+  Tuple result = test_v.Normalize();
+  if (!(result == test_success_v)) {
     std::cout << "NORMALIZE TEST FAILED" << std::endl;
     return false;
   }
@@ -313,12 +313,12 @@ bool Tuple::NormalizeTest() {
   test_v = Tuple(1.0f, 2.0f, 3.0f, 0.0f);
   test_success_v = Tuple(1.0f / sqrtf(14), 2.0f / sqrtf(14), 3.0f / sqrtf(14), 0.0f);
   result = test_v.Normalize();
-  if (!(*result == test_success_v)) {
+  if (!(result == test_success_v)) {
     std::cout << "NORMALIZE TEST 2 FAILED" << std::endl;
     return false;
   }
 
-  if (!(Utility::FloatsAreEqual(result->Magnitude(), 1.0f))) {
+  if (!(Utility::FloatsAreEqual(result.Magnitude(), 1.0f))) {
     std::cout << "NORMALIZED TEST 3 FAILED" << std::endl;
     return false;
   } else {
@@ -330,8 +330,8 @@ bool Tuple::ReflectTest() {
   Tuple test_a_v(1.0f, -1.0f, 0.0f, 0.0f);
   Tuple test_a_normal_v(0.0f, 1.0f, 0.0f, 0.0f);
   Tuple test_a_success_v(1.0f, 1.0f, 0.0f, 0.0f);
-  std::unique_ptr<Tuple> result = test_a_v.Reflect(test_a_normal_v);
-  if (!(*result == test_a_success_v)) {
+  Tuple result = test_a_v.Reflect(test_a_normal_v);
+  if (!(result == test_a_success_v)) {
     std::cout << "REFELCT TEST FAILED" << std::endl;
     return false;
   }
@@ -340,7 +340,7 @@ bool Tuple::ReflectTest() {
   test_a_normal_v = Tuple(sqrtf(2) / 2.0f, sqrtf(2) / 2.0f, 0.0f, 0.0f);
   test_a_success_v = Tuple(1.0f, 0.0f, 0.0f, 0.0f);
   result = test_a_v.Reflect(test_a_normal_v);
-  if (!(*result == test_a_success_v)) {
+  if (!(result == test_a_success_v)) {
     std::cout << "REFELCT TEST FAILED" << std::endl;
     return false;
   }
@@ -366,15 +366,15 @@ bool Tuple::CrossTest() {
   Tuple test_b_v(2.0f, 3.0f, 4.0f, 0.0f);
   Tuple test_success_v(-1.0f, 2.0f, -1.0f, 0.0f);
 
-  std::unique_ptr<Tuple> result = test_a_v.Cross(test_b_v);
-  if (!(*result == test_success_v)) {
+  Tuple result = test_a_v.Cross(test_b_v);
+  if (!(result == test_success_v)) {
     std::cout << "CROSS TEST FAILED" << std::endl;
     return false;
   }
 
   test_success_v = Tuple(1.0f, -2.0f, 1.0f, 0.0f);
   result = test_b_v.Cross(test_a_v);
-  if (!(*result == test_success_v)) {
+  if (!(result == test_success_v)) {
     std::cout << "CROSS TEST 2 FAILED" << std::endl;
     return false;
   } else {

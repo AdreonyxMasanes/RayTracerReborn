@@ -17,7 +17,7 @@ public:
 public:
   bool operator==(Sphere& rhs);
   void operator=(Sphere& rhs);
-  std::unique_ptr<Tuple> NormalAt(Tuple& world_point);
+  Tuple NormalAt(Tuple& world_point);
   
   // SETS
 public:

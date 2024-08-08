@@ -35,10 +35,10 @@ void Sphere::operator=(Sphere& rhs) {
   SetMaterial(rhs.GetMaterial());
 }
 
-std::unique_ptr<Tuple> Sphere::NormalAt(Tuple& world_point) {
+Tuple Sphere::NormalAt(Tuple& world_point) {
   Matrix inverted_transform = (Transform().Invert());
   Tuple object_point = (inverted_transform * world_point);
-  Tuple object_normal = *(object_point - *TupleManager::Instance()->Point(0.0f, 0.0f, 0.0f));
+  Tuple object_normal = (object_point - TupleManager::Instance()->Point(0.0f, 0.0f, 0.0f));
 
   Tuple world_normal = ((inverted_transform).Transpose() * (object_normal));
   world_normal.SetW(0.0f);
@@ -66,34 +66,34 @@ void Sphere::RunTest() {
 }
 bool Sphere::NormalAtTest() {
   Sphere test_sphere(1.0f);
-  std::unique_ptr<Tuple> point = TupleManager::Instance()->Point(1.0f, 0.0f, 0.0f);
-  std::unique_ptr<Tuple> result = test_sphere.NormalAt(*point);
-  std::unique_ptr<Tuple> success_v = TupleManager::Instance()->Vector(1.0f, 0.0f, 0.0f);
-  if (!(*result == *success_v)) {
+  Tuple point = TupleManager::Instance()->Point(1.0f, 0.0f, 0.0f);
+  Tuple result = test_sphere.NormalAt(point);
+  Tuple success_v = TupleManager::Instance()->Vector(1.0f, 0.0f, 0.0f);
+  if (!(result == success_v)) {
     std::cout << "NORMAL TEST 1 FAILED" << std::endl;
     return false;
   }
 
   point = TupleManager::Instance()->Point(0.0f, 1.0f, 0.0f);
-  result = test_sphere.NormalAt(*point);
+  result = test_sphere.NormalAt(point);
   success_v = TupleManager::Instance()->Vector(0.0f, 1.0f, 0.0f);
-  if (!(*result == *success_v)) {
+  if (!(result == success_v)) {
     std::cout << "NORMAL TEST 2 FAILED" << std::endl;
     return false;
   }
 
   point = TupleManager::Instance()->Point(0.0f, 1.0f, 0.0f);
-  result = test_sphere.NormalAt(*point);
+  result = test_sphere.NormalAt(point);
   success_v = TupleManager::Instance()->Vector(0.0f, 1.0f, 0.0f);
-  if (!(*result == *success_v)) {
+  if (!(result == success_v)) {
     std::cout << "NORMAL TEST 3 FAILED" << std::endl;
     return false;
   }
 
   point = TupleManager::Instance()->Point(sqrtf(3.0f) / 3.0f, sqrtf(3.0f) / 3.0f, sqrtf(3.0f) / 3.0f);
-  result = test_sphere.NormalAt(*point);
+  result = test_sphere.NormalAt(point);
   success_v = TupleManager::Instance()->Vector(sqrtf(3.0f) / 3.0f, sqrtf(3.0f) / 3.0f, sqrtf(3.0f) / 3.0f);
-  if (!(*result == *success_v)) {
+  if (!(result == success_v)) {
     std::cout << "NORMAL TEST 4 FAILED" << std::endl;
     return false;
   }
@@ -101,9 +101,9 @@ bool Sphere::NormalAtTest() {
   Matrix translation = Matrix::TranslationMatrix(0.0f, 1.0f, 0.0f);
   test_sphere.SetTransform(translation);
   point = TupleManager::Instance()->Point(0.0f, 1.70711f, -0.70711f);
-  result = test_sphere.NormalAt(*point);
+  result = test_sphere.NormalAt(point);
   success_v = TupleManager::Instance()->Vector(0.0f, 0.70711f, -0.70711f);
-  if (!(*result == *success_v)) {
+  if (!(result == success_v)) {
     std::cout << "NORMAL TEST 5 FAILED" << std::endl;
     return false;
   }
@@ -114,9 +114,9 @@ bool Sphere::NormalAtTest() {
   Matrix transform = Matrix::TranformationMatrix(rotation_z, scaling);
   test_sphere.SetTransform(transform);
   point = TupleManager::Instance()->Point(0.0f, sqrtf(2) / 2.0f, -sqrtf(2) / 2.0f);
-  result = test_sphere.NormalAt(*point);
+  result = test_sphere.NormalAt(point);
   success_v = TupleManager::Instance()->Vector(0.0f, 0.97014f, -0.24254f);
-  if (!(*result == *success_v)) {
+  if (!(result == success_v)) {
     std::cout << "NORMAL TEST 6 FAILED" << std::endl;
     return false;
   }
@@ -124,9 +124,9 @@ bool Sphere::NormalAtTest() {
 
 //float* Sphere::Intersect(Ray& ray) {
 //  // SEMANTICS?!
-//  std::unique_ptr<Tuple> world_origin = TupleManager::Instance()->Point(0.0f, 0.0f, 0.0f);
+//  Tuple world_origin = TupleManager::Instance()->Point(0.0f, 0.0f, 0.0f);
 //
-//  std::unique_ptr<Tuple> sphere_to_ray = ray.Origin() - *world_origin;
+//  Tuple sphere_to_ray = ray.Origin() - *world_origin;
 //
 //  float a = ray.Direction().Dot(ray.Direction());
 //  float b = 2 * ray.Direction().Dot(*sphere_to_ray);
@@ -149,8 +149,8 @@ bool Sphere::NormalAtTest() {
 
 
 //bool Sphere::IntersectTest() {
-//  std::unique_ptr<Tuple> ray_origin = TupleManager::Instance()->Point(0.0f, 0.0f, -5.0f);
-//  std::unique_ptr<Tuple> ray_direction = TupleManager::Instance()->Vector(0.0f, 0.0f, 1.0f);
+//  Tuple ray_origin = TupleManager::Instance()->Point(0.0f, 0.0f, -5.0f);
+//  Tuple ray_direction = TupleManager::Instance()->Vector(0.0f, 0.0f, 1.0f);
 //  Ray test_ray(*ray_origin, *ray_direction);
 //  Sphere test_sphere(1);
 //  float* hits = test_sphere.Intersect(test_ray);

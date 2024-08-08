@@ -3,9 +3,9 @@
 SphereManager::SphereManager() {
 }
 
-std::unique_ptr<Sphere> SphereManager::NewSphere() {
+Sphere SphereManager::NewSphere() {
   total_entites++;
-  return std::make_unique<Sphere>(total_entites);
+  return Sphere(total_entites);
 
 }
 

@@ -31,7 +31,7 @@ public:
 
   // UTILITY
 public:
-  std::unique_ptr<Tuple> ColorAt(Ray& ray);
+  Tuple ColorAt(Ray& ray);
 public:
   static void RunTest();
 private:
@@ -40,7 +40,7 @@ private:
 private:
   void CastRay(Ray& ray);
   std::unique_ptr<CompiledData> PrepareData(Intersection& intersection, Ray& ray);
-  std::unique_ptr<Tuple> ShadeHit(CompiledData& data);
+  Tuple ShadeHit(CompiledData& data);
 
 private:
   static bool WorldCastTest();

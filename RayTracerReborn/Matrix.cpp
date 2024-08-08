@@ -176,15 +176,15 @@ Matrix Matrix::GetIdentityMatrix() {
 }
 
 Matrix Matrix::GetViewTransform(Tuple& from, Tuple& to, Tuple& up) {
-  std::unique_ptr<Tuple> forward = (to - from)->Normalize();
-  std::unique_ptr<Tuple> up_normal = up.Normalize();
-  std::unique_ptr<Tuple> left = forward->Cross(*up_normal);
-  std::unique_ptr<Tuple> true_up = left->Cross(*forward);
+  Tuple forward = (to - from).Normalize();
+  Tuple up_normal = up.Normalize();
+  Tuple left = forward.Cross(up_normal);
+  Tuple true_up = left.Cross(forward);
 
   Matrix orientation(
-    left->X(), left->Y(), left->Z(), 0.0f,
-    true_up->X(), true_up->Y(), true_up->Z(), 0.0f,
-    -forward->X(), -forward->Y(), -forward->Z(), 0.0f,
+    left.X(), left.Y(), left.Z(), 0.0f,
+    true_up.X(), true_up.Y(), true_up.Z(), 0.0f,
+    -forward.X(), -forward.Y(), -forward.Z(), 0.0f,
     0.0f, 0.0f, 0.0f, 1.0f
   );
 
@@ -576,9 +576,9 @@ bool Matrix::TransformTest() {
 
   {
     // TRANSLATION
-    std::unique_ptr<Tuple> test_a_p = TupleManager::Instance()->Point(-3.0f, 4.0f, 5.0f);
+    Tuple test_a_p = TupleManager::Instance()->Point(-3.0f, 4.0f, 5.0f);
     Matrix translation = Matrix::TranslationMatrix(5.0f, -3.0f, 2.0f);
-    Tuple result = translation * (*test_a_p);
+    Tuple result = translation * (test_a_p);
     Tuple translation_success_p(2.0f, 1.0f, 7.0f, 1.0f);
     if (!(result == translation_success_p)) {
       std::cout << "TRANSLATION TEST FAILED" << std::endl;
@@ -587,9 +587,9 @@ bool Matrix::TransformTest() {
   }
 
   // SCALING
-  std::unique_ptr<Tuple> test_a_p = TupleManager::Instance()->Point(-4.0f, 6.0f, 8.0f);
+  Tuple test_a_p = TupleManager::Instance()->Point(-4.0f, 6.0f, 8.0f);
   Matrix scaling = Matrix::ScalingMatrix(2.0f, 3.0f, 4.0f);
-  Tuple result = scaling * (*test_a_p);
+  Tuple result = scaling * (test_a_p);
   Tuple scaling_success_p(-8.0f, 18.0f, 32.0f, 1.0f);
   if (!(result == scaling_success_p)) {
     std::cout << "SCALING TEST FAILED" << std::endl;
@@ -603,12 +603,12 @@ bool Matrix::TransformTest() {
     Matrix full_quarter_rotation = Matrix::RotationXMatrix(pi_2);
     Tuple rotation_x_half_success(0.0f, sqrtf(2.0f) / 2.0f, sqrtf(2.0f) / 2.0f, 1.0f);
     Tuple rotation_x_full_success(0.0f, 0.0f, 1.0f, 1.0f);
-    result = half_quarer_rotation * (*test_a_p);
+    result = half_quarer_rotation * (test_a_p);
     if (!(result == rotation_x_half_success)) {
       std::cout << "ROTATION X HALF TEST FAILED" << std::endl;
       return false;
     }
-    result = full_quarter_rotation * (*test_a_p);
+    result = full_quarter_rotation * (test_a_p);
     if (!(result == rotation_x_full_success)) {
       std::cout << "ROTATION X HALF TEST FAILED" << std::endl;
       return false;
@@ -622,12 +622,12 @@ bool Matrix::TransformTest() {
     Matrix full_quarter_rotation = Matrix::RotationYMatrix(pi_2);
     Tuple rotation_y_half_success(sqrtf(2.0f) / 2.0f, 0.0f, sqrtf(2.0f) / 2.0f, 1.0f);
     Tuple rotation_y_full_success(1.0f, 0.0f, 0.0f, 1.0f);
-    result = half_quarer_rotation * (*test_a_p);
+    result = half_quarer_rotation * (test_a_p);
     if (!(result == rotation_y_half_success)) {
       std::cout << "ROTATION Y HALF TEST FAILED" << std::endl;
       return false;
     }
-    result = full_quarter_rotation * (*test_a_p);
+    result = full_quarter_rotation * (test_a_p);
     if (!(result == rotation_y_full_success)) {
       std::cout << "ROTATION Y HALF TEST FAILED" << std::endl;
       return false;
@@ -643,12 +643,12 @@ bool Matrix::TransformTest() {
     Matrix full_quarter_rotation = Matrix::RotationZMatrix(pi_2);
     Tuple rotation_z_half_success(-sqrtf(2.0f) / 2.0f, sqrtf(2.0f) / 2.0f, 0.0f, 1.0f);
     Tuple rotation_z_full_success(-1.0f, 0.0f, 0.0f, 1.0f);
-    result = half_quarer_rotation * (*test_a_p);
+    result = half_quarer_rotation * (test_a_p);
     if (!(result == rotation_z_half_success)) {
       std::cout << "ROTATION Z HALF TEST FAILED" << std::endl;
       return false;
     }
-    result = full_quarter_rotation * (*test_a_p);
+    result = full_quarter_rotation * (test_a_p);
     if (!(result == rotation_z_full_success)) {
       std::cout << "ROTATION Z HALF TEST FAILED" << std::endl;
       return false;
@@ -658,8 +658,8 @@ bool Matrix::TransformTest() {
 
 bool Matrix::ShearingTest() {
   Matrix shearing = Matrix::ShearingMatrix(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-  std::unique_ptr<Tuple> test_p = TupleManager::Instance()->Point(2.0f, 3.0f, 4.0f);
-  Tuple result = shearing * (*test_p);
+  Tuple test_p = TupleManager::Instance()->Point(2.0f, 3.0f, 4.0f);
+  Tuple result = shearing * (test_p);
   Tuple shearing_success(5.0f, 3.0f, 4.0f, 1.0f);
   if (!(result == shearing_success)) {
     std::cout << "SHEARING TEST 1 FAILED" << std::endl;
@@ -669,7 +669,7 @@ bool Matrix::ShearingTest() {
   {
     Matrix shearing = Matrix::ShearingMatrix(0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
     test_p = TupleManager::Instance()->Point(2.0f, 3.0f, 4.0f);
-    result = shearing * (*test_p);
+    result = shearing * (test_p);
     shearing_success = Tuple(6.0f, 3.0f, 4.0f, 1.0f);
     if (!(result == shearing_success)) {
       std::cout << "SHEARING TEST 2 FAILED" << std::endl;
@@ -680,7 +680,7 @@ bool Matrix::ShearingTest() {
   {
     Matrix shearing = Matrix::ShearingMatrix(0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f);
     test_p = TupleManager::Instance()->Point(2.0f, 3.0f, 4.0f);
-    result = shearing * (*test_p);
+    result = shearing * (test_p);
     shearing_success = Tuple(2.0f, 5.0f, 4.0f, 1.0f);
     if (!(result == shearing_success)) {
       std::cout << "SHEARING TEST 3 FAILED" << std::endl;
@@ -691,7 +691,7 @@ bool Matrix::ShearingTest() {
   {
     Matrix shearing = Matrix::ShearingMatrix(0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f);
     test_p = TupleManager::Instance()->Point(2.0f, 3.0f, 4.0f);
-    result = shearing * (*test_p);
+    result = shearing * (test_p);
     shearing_success = Tuple(2.0f, 7.0f, 4.0f, 1.0f);
     if (!(result == shearing_success)) {
       std::cout << "SHEARING TEST 4 FAILED" << std::endl;
@@ -702,7 +702,7 @@ bool Matrix::ShearingTest() {
   {
     Matrix shearing = Matrix::ShearingMatrix(0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
     test_p = TupleManager::Instance()->Point(2.0f, 3.0f, 4.0f);
-    result = shearing * (*test_p);
+    result = shearing * (test_p);
     shearing_success = Tuple(2.0f, 3.0f, 6.0f, 1.0f);
     if (!(result == shearing_success)) {
       std::cout << "SHEARING TEST 5 FAILED" << std::endl;
@@ -713,7 +713,7 @@ bool Matrix::ShearingTest() {
   {
     Matrix shearing = Matrix::ShearingMatrix(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
     test_p = TupleManager::Instance()->Point(2.0f, 3.0f, 4.0f);
-    result = shearing * (*test_p);
+    result = shearing * (test_p);
     shearing_success = Tuple(2.0f, 3.0f, 7.0f, 1.0f);
     if (!(result == shearing_success)) {
       std::cout << "SHEARING TEST 5 FAILED" << std::endl;
@@ -728,13 +728,13 @@ bool Matrix::TranformChainingTest() {
   float pi_4 = 0.78539816339;
   float pi_2 = 1.57079632679;
   
-  std::unique_ptr<Tuple> test_p = TupleManager::Instance()->Point(1.0f, 0.0f, 1.0f);
+  Tuple test_p = TupleManager::Instance()->Point(1.0f, 0.0f, 1.0f);
   Matrix rotation_x = Matrix::RotationXMatrix(pi_2);
   Matrix scale = Matrix::ScalingMatrix(5.0f, 5.0f, 5.0f);
   Matrix translate = Matrix::TranslationMatrix(10.0f, 5.0f, 7.0f);
   Matrix transform = Matrix::TranformationMatrix(rotation_x, scale, translate);
   Tuple test_success_p(15.0f, 0.0f, 7.0f, 1.0f);
-  Tuple result = transform * (*test_p);
+  Tuple result = transform * (test_p);
   if (!(result == test_success_p)) {
     std::cout << "TRANSFORM CHAINGING TEST FAILED" << std::endl;
     return false;
@@ -746,11 +746,11 @@ bool Matrix::TranformChainingTest() {
 
 bool Matrix::ViewTransformTest() {
   {
-    std::unique_ptr<Tuple> from = TupleManager::Instance()->Point(0.0f, 0.0f, 0.0f);
-    std::unique_ptr<Tuple> to = TupleManager::Instance()->Point(0.0f, 0.0f, -1.0f);
-    std::unique_ptr<Tuple> up = TupleManager::Instance()->Vector(0.0f, 1.0f, 0.0f);
+    Tuple from = TupleManager::Instance()->Point(0.0f, 0.0f, 0.0f);
+    Tuple to = TupleManager::Instance()->Point(0.0f, 0.0f, -1.0f);
+    Tuple up = TupleManager::Instance()->Vector(0.0f, 1.0f, 0.0f);
     // SO THIS STATIC FUNCTION WOULD BE IN THE UTITLITY NAMESPACE?!
-    Matrix view = GetViewTransform(*from, *to, *up);
+    Matrix view = GetViewTransform(from, to, up);
     Matrix success = Matrix::GetIdentityMatrix();
     if (!(view == success)) {
       std::cout << "VIEW TRANSFORM TEST FAILED" << std::endl;
@@ -759,10 +759,10 @@ bool Matrix::ViewTransformTest() {
   }
 
   {
-    std::unique_ptr<Tuple> from = TupleManager::Instance()->Point(0.0f, 0.0f, 0.0f);
-    std::unique_ptr<Tuple> to = TupleManager::Instance()->Point(0.0f, 0.0f, 1.0f);
-    std::unique_ptr<Tuple> up = TupleManager::Instance()->Vector(0.0f, 1.0f, 0.0f);
-    Matrix view = GetViewTransform(*from, *to, *up);
+    Tuple from = TupleManager::Instance()->Point(0.0f, 0.0f, 0.0f);
+    Tuple to = TupleManager::Instance()->Point(0.0f, 0.0f, 1.0f);
+    Tuple up = TupleManager::Instance()->Vector(0.0f, 1.0f, 0.0f);
+    Matrix view = GetViewTransform(from, to, up);
     Matrix success = Matrix::ScalingMatrix(-1.0f, 1.0f, -1.0f);
     if (!(view == success)) {
       std::cout << "VIEW TRANSFORM TEST 2 FAILED" << std::endl;
@@ -771,10 +771,10 @@ bool Matrix::ViewTransformTest() {
   }
 
   {
-    std::unique_ptr<Tuple> from = TupleManager::Instance()->Point(0.0f, 0.0f, 8.0f);
-    std::unique_ptr<Tuple> to = TupleManager::Instance()->Point(0.0f, 0.0f, 0.0f);
-    std::unique_ptr<Tuple> up = TupleManager::Instance()->Vector(0.0f, 1.0f, 0.0f);
-    Matrix view = GetViewTransform(*from, *to, *up);
+    Tuple from = TupleManager::Instance()->Point(0.0f, 0.0f, 8.0f);
+    Tuple to = TupleManager::Instance()->Point(0.0f, 0.0f, 0.0f);
+    Tuple up = TupleManager::Instance()->Vector(0.0f, 1.0f, 0.0f);
+    Matrix view = GetViewTransform(from, to, up);
     Matrix success = Matrix::TranslationMatrix(0.0f, 0.0f, -8.0f);
     if (!(view == success)) {
       std::cout << "VIEW TRANSFORM TEST 3 FAILED" << std::endl;
@@ -783,10 +783,10 @@ bool Matrix::ViewTransformTest() {
   }
 
   {
-    std::unique_ptr<Tuple> from = TupleManager::Instance()->Point(1.0f, 3.0f, 2.0f);
-    std::unique_ptr<Tuple> to = TupleManager::Instance()->Point(4.0f, -2.0f, 8.0f);
-    std::unique_ptr<Tuple> up = TupleManager::Instance()->Vector(1.0f, 1.0f, 0.0f);
-    Matrix view = GetViewTransform(*from, *to, *up);
+    Tuple from = TupleManager::Instance()->Point(1.0f, 3.0f, 2.0f);
+    Tuple to = TupleManager::Instance()->Point(4.0f, -2.0f, 8.0f);
+    Tuple up = TupleManager::Instance()->Vector(1.0f, 1.0f, 0.0f);
+    Matrix view = GetViewTransform(from, to, up);
     Matrix success(
       -0.50709f, 0.50709f, 0.67612f, -2.36643f,
       0.76772f, 0.60609f, 0.12122f, -2.82843f,
