@@ -18,6 +18,47 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\BulletSim.cpp" />
+    <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\Canvas.cpp" />
+    <ClCompile Include="src\ClockSim.cpp" />
+    <ClCompile Include="src\Intersection.cpp" />
+    <ClCompile Include="src\Light.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Material.cpp" />
+    <ClCompile Include="src\Matrix.cpp" />
+    <ClCompile Include="src\PPM.cpp" />
+    <ClCompile Include="src\Ray.cpp" />
+    <ClCompile Include="src\SceneSim.cpp" />
+    <ClCompile Include="src\ShadowSim.cpp" />
+    <ClCompile Include="src\Sphere.cpp" />
+    <ClCompile Include="src\SphereManager.cpp" />
+    <ClCompile Include="src\Tuple.cpp" />
+    <ClCompile Include="src\TupleManager.cpp" />
+    <ClCompile Include="src\Utility.cpp" />
+    <ClCompile Include="src\World.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\BulletSim.hpp" />
+    <ClInclude Include="src\Camera.hpp" />
+    <ClInclude Include="src\Canvas.hpp" />
+    <ClInclude Include="src\ClockSim.hpp" />
+    <ClInclude Include="src\Intersection.hpp" />
+    <ClInclude Include="src\Light.hpp" />
+    <ClInclude Include="src\Material.hpp" />
+    <ClInclude Include="src\Matrix.hpp" />
+    <ClInclude Include="src\PPM.hpp" />
+    <ClInclude Include="src\Ray.hpp" />
+    <ClInclude Include="src\SceneSim.hpp" />
+    <ClInclude Include="src\ShadowSim.hpp" />
+    <ClInclude Include="src\Sphere.hpp" />
+    <ClInclude Include="src\SphereManager.hpp" />
+    <ClInclude Include="src\Tuple.hpp" />
+    <ClInclude Include="src\TupleManager.hpp" />
+    <ClInclude Include="src\Utility.hpp" />
+    <ClInclude Include="src\World.hpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -129,47 +170,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="BulletSim.cpp" />
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Canvas.cpp" />
-    <ClCompile Include="ClockSim.cpp" />
-    <ClCompile Include="Intersection.cpp" />
-    <ClCompile Include="Light.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="Material.cpp" />
-    <ClCompile Include="Matrix.cpp" />
-    <ClCompile Include="PPM.cpp" />
-    <ClCompile Include="Ray.cpp" />
-    <ClCompile Include="SceneSim.cpp" />
-    <ClCompile Include="ShadowSim.cpp" />
-    <ClCompile Include="Sphere.cpp" />
-    <ClCompile Include="SphereManager.cpp" />
-    <ClCompile Include="Tuple.cpp" />
-    <ClCompile Include="TupleManager.cpp" />
-    <ClCompile Include="Utility.cpp" />
-    <ClCompile Include="World.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="BulletSim.hpp" />
-    <ClInclude Include="Camera.hpp" />
-    <ClInclude Include="Canvas.hpp" />
-    <ClInclude Include="ClockSim.hpp" />
-    <ClInclude Include="Intersection.hpp" />
-    <ClInclude Include="Light.hpp" />
-    <ClInclude Include="Material.hpp" />
-    <ClInclude Include="Matrix.hpp" />
-    <ClInclude Include="PPM.hpp" />
-    <ClInclude Include="Ray.hpp" />
-    <ClInclude Include="SceneSim.hpp" />
-    <ClInclude Include="ShadowSim.hpp" />
-    <ClInclude Include="Sphere.hpp" />
-    <ClInclude Include="SphereManager.hpp" />
-    <ClInclude Include="Tuple.hpp" />
-    <ClInclude Include="TupleManager.hpp" />
-    <ClInclude Include="Utility.hpp" />
-    <ClInclude Include="World.hpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
