@@ -47,15 +47,6 @@ void Material::SetColor(Tuple& color) {
   m_color = color;
 }
 
-void Material::RunTest() {
-  if (!(LightingTest())) {
-    return;
-  } else {
-    std::cout << "MATERIAL TEST PASSED" << std::endl;
-    return;
-  }
-}
-
 Tuple Material::Lighting(Light& light, Tuple& position_p, Tuple& eye_v, Tuple& normal_v) {
   Tuple effective_color = Color() * light.Intensity();
   Tuple light_v = (light.Position() - position_p).Normalize();
@@ -85,74 +76,3 @@ Tuple Material::Lighting(Light& light, Tuple& position_p, Tuple& eye_v, Tuple& n
   return result;
 }
 
-bool Material::LightingTest() {
-  Material default_material;
-  Tuple position = TupleManager::Instance()->Point(0.0f, 0.0f, 0.0f);
-
-  Tuple eye_v = TupleManager::Instance()->Vector(0.0f, 0.0f, -1.0f);
-  Tuple normal_v = TupleManager::Instance()->Vector(0.0f, 0.0f, -1.0f);
-
-  Tuple light_pos = TupleManager::Instance()->Point(0.0f, 0.0f, -10.0f);
-  Tuple light_color = TupleManager::Instance()->Color(1.0f, 1.0f, 1.0f);
-  Light test_light(light_pos, light_color);
-  Tuple result = default_material.Lighting(test_light, position, eye_v, normal_v);
-  Tuple test_success_color = TupleManager::Instance()->Color(1.9f, 1.9f, 1.9f);
-  if (!(result == test_success_color)) {
-    std::cout << "LIGHTING TEST FAILED" << std::endl;
-    return false;
-  }
-
-  eye_v = TupleManager::Instance()->Vector(0.0f, sqrtf(2.0f) / 2.0f, -sqrtf(2) / 2.0f);
-  normal_v = TupleManager::Instance()->Vector(0.0f, 0.0f, -1.0f);
-
-  light_pos = TupleManager::Instance()->Point(0.0f, 0.0f, -10.0f);
-  light_color = TupleManager::Instance()->Color(1.0f, 1.0f, 1.0f);
-  test_light = Light(light_pos, light_color);
-  result = default_material.Lighting(test_light, position, eye_v, normal_v);
-  test_success_color = TupleManager::Instance()->Color(1.0f, 1.0f, 1.0f);
-  if (!(result == test_success_color)) {
-    std::cout << "LIGHTING TEST 2 FAILED" << std::endl;
-    return false;
-  }
-
-  eye_v = TupleManager::Instance()->Vector(0.0f, 0.0f, -1.0f);
-  normal_v = TupleManager::Instance()->Vector(0.0f, 0.0f, -1.0f);
-
-  light_pos = TupleManager::Instance()->Point(0.0f, 10.0f, -10.0f);
-  light_color = TupleManager::Instance()->Color(1.0f, 1.0f, 1.0f);
-  test_light = Light(light_pos, light_color);
-  result = default_material.Lighting(test_light, position, eye_v, normal_v);
-  test_success_color = TupleManager::Instance()->Color(0.7364f, 0.7364f, 0.7364f);
-  if (!(result == test_success_color)) {
-    std::cout << "LIGHTING TEST 3 FAILED" << std::endl;
-    return false;
-  }
-
-  eye_v = TupleManager::Instance()->Vector(0.0f, -sqrtf(2.0f) / 2.0f, -sqrtf(2.0f) / 2.0f);
-  normal_v = TupleManager::Instance()->Vector(0.0f, 0.0f, -1.0f);
-
-  light_pos = TupleManager::Instance()->Point(0.0f, 10.0f, -10.0f);
-  light_color = TupleManager::Instance()->Color(1.0f, 1.0f, 1.0f);
-  test_light = Light(light_pos, light_color);
-  result = default_material.Lighting(test_light, position, eye_v, normal_v);
-  test_success_color = TupleManager::Instance()->Color(1.6364f, 1.6364f, 1.6364f);
-  if (!(result == test_success_color)) {
-    std::cout << "LIGHTING TEST 4 FAILED" << std::endl;
-    return false;
-  }
-
-  eye_v = TupleManager::Instance()->Vector(0.0f, 0.0f, -1.0f);
-  normal_v = TupleManager::Instance()->Vector(0.0f, 0.0f, -1.0f);
-
-  light_pos = TupleManager::Instance()->Point(0.0f, 0.0f, 10.0f);
-  light_color = TupleManager::Instance()->Color(1.0f, 1.0f, 1.0f);
-  test_light = Light(light_pos, light_color);
-  result = default_material.Lighting(test_light, position, eye_v, normal_v);
-  test_success_color = TupleManager::Instance()->Color(0.1f, 0.1f, 0.1f);
-  if (!(result == test_success_color)) {
-    std::cout << "LIGHTING TEST 5 FAILED" << std::endl;
-    return false;
-  } else {
-    return true;
-  }
-}

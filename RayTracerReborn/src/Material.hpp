@@ -21,8 +21,6 @@ public:
   void SetColor(Tuple& color);
 
 public:
-  static void RunTest();
-public:
   Tuple Lighting(Light& light, Tuple& position_p, Tuple& eye_v, Tuple& normal_v);
 private:
   float m_ambient = 0.1f;
@@ -31,7 +29,5 @@ private:
   float m_shininess = 200.0f;
   Tuple m_color = Tuple(1.0f, 1.0f, 1.0f, 0.0f);
 
-private:
-  static bool LightingTest();
 };
 #endif // !MATERIAL_H

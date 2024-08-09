@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Camera-Test", "Camera-Test\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tuple-Test", "Tuple-Test\Tuple-Test.vcxproj", "{21D61E63-9644-49DF-AEE4-1FE020A20C34}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Material-Test", "Material-Test\Material-Test.vcxproj", "{E8A55C3A-F5D4-4845-B260-777D93840BD9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -41,6 +43,14 @@ Global
 		{21D61E63-9644-49DF-AEE4-1FE020A20C34}.Release|x64.Build.0 = Release|x64
 		{21D61E63-9644-49DF-AEE4-1FE020A20C34}.Release|x86.ActiveCfg = Release|Win32
 		{21D61E63-9644-49DF-AEE4-1FE020A20C34}.Release|x86.Build.0 = Release|Win32
+		{E8A55C3A-F5D4-4845-B260-777D93840BD9}.Debug|x64.ActiveCfg = Debug|x64
+		{E8A55C3A-F5D4-4845-B260-777D93840BD9}.Debug|x64.Build.0 = Debug|x64
+		{E8A55C3A-F5D4-4845-B260-777D93840BD9}.Debug|x86.ActiveCfg = Debug|Win32
+		{E8A55C3A-F5D4-4845-B260-777D93840BD9}.Debug|x86.Build.0 = Debug|Win32
+		{E8A55C3A-F5D4-4845-B260-777D93840BD9}.Release|x64.ActiveCfg = Release|x64
+		{E8A55C3A-F5D4-4845-B260-777D93840BD9}.Release|x64.Build.0 = Release|x64
+		{E8A55C3A-F5D4-4845-B260-777D93840BD9}.Release|x86.ActiveCfg = Release|Win32
+		{E8A55C3A-F5D4-4845-B260-777D93840BD9}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
