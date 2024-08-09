@@ -56,30 +56,8 @@ public:
   
   // COSINE OF ANGLE BETWEEN TWO VECTORS, CLOSER TO 1 THE CLOSER THEY ARE TO BEING IDENTICAL, CLOSER TO -1 THE CLOSEST THEY ARE TO BEING OPPOSITES 
   float Dot(const Tuple& rhs) const;
-
-
-// TESTS
-public:
-  static void RunTest();
-
 private:
   float m_x = 0, m_y = 0, m_z = 0, m_w = 0;
-
-// TEST FUNCTIONS
-private:
-  static bool AdditionTest();
-  static bool SubtractionTest();
-  static bool NegationTest();
-  static bool MultiplyTest();
-  static bool MultipleTwoTuplesTest();
-  static bool DivisonTest();
-  static bool MagnitudeTest();
-  static bool NormalizeTest();
-  static bool ReflectTest();
-  static bool DotTest();
-  static bool CrossTest();
-  static bool IsPointTest();
-  static bool IsEqualTest();
 };
 
 #endif // !TUPLE_H
