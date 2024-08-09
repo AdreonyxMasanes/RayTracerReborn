@@ -1,5 +1,7 @@
 #include "Matrix.hpp"
 
+
+//TODO REFORMAT WITH CONST CORRECTNESS USING CONST CASTING?
 Matrix::Matrix() 
   :m_height(4), m_width(4) {
   for (int row = 0; row < Height(); row++) {
@@ -73,6 +75,14 @@ Matrix::Matrix(float zero_zero, float zero_one,
   GetMatrix()[1][1] = one_one;
 }
 
+float Matrix::Width() const {
+  return m_width;
+}
+
+float Matrix::Height() const {
+  return m_height;
+}
+
 float Matrix::Width() {
   return m_width;
 }
@@ -81,7 +91,11 @@ float Matrix::Height() {
   return m_height;
 }
 
-std::vector<std::vector<float>>& Matrix::GetMatrix() {
+const std::vector<std::vector<float>>& Matrix::GetMatrix() const {
+  return m_matrix;
+}
+
+std::vector<std::vector<float>>& Matrix::GetMatrix()  {
   return m_matrix;
 }
 
@@ -193,7 +207,7 @@ Matrix Matrix::GetViewTransform(Tuple& from, Tuple& to, Tuple& up) {
 }
 
 
-bool Matrix::operator==(Matrix& rhs)  {
+bool Matrix::operator==(const Matrix& rhs)  const {
   if (Height() == rhs.Height() && Width() == rhs.Width()) {
     for (int row = 0; row < Height(); row++) {
       for (int col = 0; col < Width(); col++) {
@@ -518,16 +532,16 @@ bool Matrix::InversionTest() {
   //  return false;
   //}
 
-  Matrix mat_4_b(
-   -5.0f,  2.0f,  6.0f, -8.0f,
-    1.0f, -5.0f,  1.0f,  8.0f,
-    7.0f,  7.0f, -6.0f, -7.0f,
-    1.0f, -3.0f,  7.0f,  4.0f);
-  Matrix mat_4_b_invert_success(
-     0.21805f,  0.45113f,  0.24060f, -0.04511f,
-    -0.80825f, -1.45677f, -0.44361f,  0.52068f,
-    -0.07895f, -0.22368f, -0.05263f,  0.19737f,
-    -0.52256f, -0.81391f, -0.30075f,  0.30639f);
+    Matrix mat_4_b(
+     -5.0f,  2.0f,  6.0f, -8.0f,
+      1.0f, -5.0f,  1.0f,  8.0f,
+      7.0f,  7.0f, -6.0f, -7.0f,
+      1.0f, -3.0f,  7.0f,  4.0f);
+    Matrix mat_4_b_invert_success(
+       0.21805f,  0.45113f,  0.24060f, -0.04511f,
+      -0.80825f, -1.45677f, -0.44361f,  0.52068f,
+      -0.07895f, -0.22368f, -0.05263f,  0.19737f,
+      -0.52256f, -0.81391f, -0.30075f,  0.30639f);
   Matrix mat_4_b_inversion = mat_4_b.Invert();
   if (!(mat_4_b_invert_success == mat_4_b_inversion)) {
     std::cout << "INVERSION TEST 2 FAILED" << std::endl;
@@ -587,10 +601,10 @@ bool Matrix::TransformTest() {
   }
 
   // SCALING
-  Tuple test_a_p = TupleManager::Instance()->Point(-4.0f, 6.0f, 8.0f);
-  Matrix scaling = Matrix::ScalingMatrix(2.0f, 3.0f, 4.0f);
-  Tuple result = scaling * (test_a_p);
-  Tuple scaling_success_p(-8.0f, 18.0f, 32.0f, 1.0f);
+    Tuple test_a_p = TupleManager::Instance()->Point(-4.0f, 6.0f, 8.0f);
+    Matrix scaling = Matrix::ScalingMatrix(2.0f, 3.0f, 4.0f);
+    Tuple result = scaling * (test_a_p);
+    Tuple scaling_success_p(-8.0f, 18.0f, 32.0f, 1.0f);
   if (!(result == scaling_success_p)) {
     std::cout << "SCALING TEST FAILED" << std::endl;
     return false;

@@ -27,8 +27,11 @@ public:
     float one_zero, float one_one);
   // GETS
 public:
+  float Width() const;
+  float Height() const;
   float Width();
   float Height();
+  const std::vector<std::vector<float>>& GetMatrix() const;
   std::vector<std::vector<float>>& GetMatrix();
 
   // SETS
@@ -53,7 +56,7 @@ public:
 
   // MATH FUNCS
 public:
-  bool operator==(Matrix& rhs);
+  bool operator==(const Matrix& rhs) const;
   Matrix operator*(Matrix& rhs);
   Tuple operator*(Tuple& rhs);
   Matrix& operator=(Matrix& rhs);
