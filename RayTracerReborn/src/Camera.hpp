@@ -16,7 +16,6 @@ public:
 public: 
   void SetTransform(const Matrix& transform);
 public:
-  static void RunTest();
   Ray RayForPixel(float px, float py) const;
   void GenerateCanvas(World& world);
 private:
@@ -30,8 +29,5 @@ private:
   Canvas m_canvas;
 private: 
   void CalculatePixelSize();
-private:
-  static bool PixelSizeTest();
-  static bool GenerateCanvasTest();
 };
 #endif // !CAMERA_H

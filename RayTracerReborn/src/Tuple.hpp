@@ -19,7 +19,7 @@ public:
   void SetZ(float z);
   void SetW(float w);
 
-  void Print();
+  void Print() const;
 
   float X() const;
   float Y() const;

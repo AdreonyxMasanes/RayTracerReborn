@@ -42,17 +42,6 @@ public:
 public:
   Matrix Transpose();
 
-  static Matrix TranslationMatrix(float x, float y, float z);
-  static Matrix ScalingMatrix(float x, float y, float z);
-  static Matrix RotationXMatrix(float radians);
-  static Matrix RotationYMatrix(float radians);
-  static Matrix RotationZMatrix(float radians);
-  static Matrix ShearingMatrix(float xy, float xz, float yx, float yz, float zx, float zy);
-  static Matrix TranformationMatrix(const Matrix& first, const Matrix& second);
-  static Matrix TranformationMatrix(const Matrix& first, const Matrix& second, const Matrix& third);
-  static Matrix GetIdentityMatrix();
-  static Matrix GetViewTransform(const Tuple& from, const Tuple& to, const Tuple& up);
-
   // MATH FUNCS
 public:
   bool operator==(const Matrix& rhs) const;

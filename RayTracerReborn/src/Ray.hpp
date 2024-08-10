@@ -25,19 +25,10 @@ public:
   Ray Transform(const Matrix& transform) const;
   bool operator==(const Ray& rhs) const;
 
-public:
-  static void RunTest();
 private:
   Tuple m_origin_p;
   Tuple m_direction_v;
   std::vector<Intersection> m_intersections;
-private:
-
-
-  static bool PositionTest();
-  static bool CastTest();
-  static bool HitTest();
-  static bool TransformTest();
 };
 
 #endif // !RAY_H

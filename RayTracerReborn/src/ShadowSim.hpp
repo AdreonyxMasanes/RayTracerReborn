@@ -7,8 +7,7 @@
 #include "Canvas.hpp"
 #include "PPM.hpp"
 
-class ShadowSim {
-public:
-  static void Run(bool shading);
+namespace ShadowSim {
+  void Run(bool shading);
 };
 #endif // !SHADOW_SIM_H
