@@ -9,20 +9,21 @@
 class Ray {
 public:
   Ray();
-  Ray(Tuple& origin_p, Tuple& direction_v);
+  Ray(const Tuple& origin_p, const Tuple& direction_v);
   // GETS
 public:
-  Tuple& Origin();
-  Tuple& Direction();
-  std::vector<Intersection>& Intersections();
+  const Tuple& Origin() const;
+  const Tuple& Direction() const;
+  const std::vector<Intersection>& Intersections() const;
+  std::vector<Intersection>& ModifyIntersections();
   // UTILITY
 public:
-  Tuple Position(float time);
-  void Cast(Sphere& sphere);
+  Tuple Position(float time) const;
+  void Cast(const Sphere& sphere);
   void SortIntersections();
-  Intersection* Hit();
-  Ray Transform(Matrix& transform);
-  bool operator==(Ray& rhs);
+  const Intersection* Hit() const;
+  Ray Transform(const Matrix& transform) const;
+  bool operator==(const Ray& rhs) const;
 
 public:
   static void RunTest();

@@ -29,10 +29,9 @@ public:
 public:
   float Width() const;
   float Height() const;
-  float Width();
-  float Height();
   const std::vector<std::vector<float>>& GetMatrix() const;
-  std::vector<std::vector<float>>& GetMatrix();
+  // Return an non const reference that allows modification of the value
+  std::vector<std::vector<float>>& ModifyMatrix();
 
   // SETS
 public:
@@ -49,27 +48,27 @@ public:
   static Matrix RotationYMatrix(float radians);
   static Matrix RotationZMatrix(float radians);
   static Matrix ShearingMatrix(float xy, float xz, float yx, float yz, float zx, float zy);
-  static Matrix TranformationMatrix(Matrix& first, Matrix& second);
-  static Matrix TranformationMatrix(Matrix& first, Matrix& second, Matrix& third);
+  static Matrix TranformationMatrix(const Matrix& first, const Matrix& second);
+  static Matrix TranformationMatrix(const Matrix& first, const Matrix& second, const Matrix& third);
   static Matrix GetIdentityMatrix();
-  static Matrix GetViewTransform(Tuple& from, Tuple& to, Tuple& up);
+  static Matrix GetViewTransform(const Tuple& from, const Tuple& to, const Tuple& up);
 
   // MATH FUNCS
 public:
   bool operator==(const Matrix& rhs) const;
-  Matrix operator*(Matrix& rhs);
-  Tuple operator*(Tuple& rhs);
-  Matrix& operator=(Matrix& rhs);
+  Matrix operator*(const Matrix& rhs) const;
+  Tuple operator*(const Tuple& rhs) const;
+  Matrix& operator=(const Matrix& rhs);
 
-  float Determinant();
-  Matrix Submatrix(float row, float col);
-  float Minor(float row, float col);
-  float Cofactor(float row, float col);
-  Matrix Invert();
+  float Determinant() const;
+  Matrix Submatrix(float row, float col) const;
+  float Minor(float row, float col) const;
+  float Cofactor(float row, float col) const;
+  Matrix Invert() const;
 
   // DEBUG
 public:
-  void Print();
+  void Print() const;
   static void RunTest();
 private:
   float m_width;

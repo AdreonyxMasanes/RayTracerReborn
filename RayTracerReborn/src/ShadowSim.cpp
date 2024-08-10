@@ -13,7 +13,7 @@ void ShadowSim::Run(bool shading) {
   Sphere sphere = SphereManager::Instance()->NewSphere();
 
   Tuple material_color = TupleManager::Instance()->Color(1.0f, 0.2f, 1.0f);
-  sphere.GetMaterial().SetColor(material_color);
+  sphere.ModifyMaterial().SetColor(material_color);
 
   Tuple light_pos = TupleManager::Instance()->Point(-10.0f, 10.0f, 10.0f);
   Tuple light_color = TupleManager::Instance()->Color(1.0f, 1.0f, 1.0f);
@@ -31,7 +31,7 @@ void ShadowSim::Run(bool shading) {
       ray.SortIntersections();
       if (!(ray.Intersections().size() == 0)) {
         if (shading) {
-          Intersection* hit = nullptr;
+          const Intersection* hit = nullptr;
           hit = ray.Hit();
           Tuple point_p = ray.Position(hit->Time());
           Tuple normal_v = hit->GetSphere().NormalAt(point_p);

@@ -12,11 +12,11 @@ World::World() {
   float material_specular = 0.2f;
   float material_shininess = 200.0f;
   Tuple material_color = TupleManager::Instance()->Color(0.8f, 1.0f, 0.6f);
-  temp_sphere.GetMaterial().SetAmbient(material_ambient);
-  temp_sphere.GetMaterial().SetDiffuse(material_diffuse);
-  temp_sphere.GetMaterial().SetSpecular(material_specular);
-  temp_sphere.GetMaterial().SetShininess(material_shininess);
-  temp_sphere.GetMaterial().SetColor(material_color);
+  temp_sphere.ModifyMaterial().SetAmbient(material_ambient);
+  temp_sphere.ModifyMaterial().SetDiffuse(material_diffuse);
+  temp_sphere.ModifyMaterial().SetSpecular(material_specular);
+  temp_sphere.ModifyMaterial().SetShininess(material_shininess);
+  temp_sphere.ModifyMaterial().SetColor(material_color);
   AddSphere(temp_sphere);
   
   Sphere temp_sphere_b = SphereManager::Instance()->NewSphere();
@@ -25,7 +25,7 @@ World::World() {
   AddSphere(temp_sphere);
 }
 
-World::World(std::vector<Sphere>& spheres, Light& light) 
+World::World(const std::vector<Sphere>& spheres, const Light& light) 
   :m_light(light), m_spheres(spheres) {
 }
 
@@ -37,11 +37,11 @@ std::vector<Sphere>& World::Spheres() {
   return m_spheres;
 }
 
-void World::SetLight(Light& light) {
+void World::SetLight(const Light& light) {
   m_light = light;
 }
 
-void World::AddSphere(Sphere& sphere) {
+void World::AddSphere(const Sphere& sphere) {
   m_spheres.push_back(sphere);
 }
 
@@ -57,7 +57,7 @@ void World::CastRay(Ray& ray) {
 
 Tuple World::ColorAt(Ray& ray) {
   CastRay(ray);
-  Intersection* hit = nullptr;
+  const Intersection* hit = nullptr;
   hit = ray.Hit();
   if (!(hit == nullptr)) {
     std::unique_ptr<CompiledData> data = PrepareData(*hit, ray);
@@ -75,7 +75,7 @@ void World::RunTest() {
   }
 }
 
-std::unique_ptr<CompiledData> World::PrepareData(Intersection& intersection, Ray& ray) {
+std::unique_ptr<CompiledData> World::PrepareData(const Intersection& intersection, const Ray& ray) {
   std::unique_ptr<CompiledData> data = std::make_unique<CompiledData>();
   data->m_time = intersection.Time();
   data->m_sphere = intersection.GetSphere();
@@ -93,7 +93,7 @@ std::unique_ptr<CompiledData> World::PrepareData(Intersection& intersection, Ray
   return data;
 }
 
-Tuple World::ShadeHit(CompiledData& data) {
+Tuple World::ShadeHit(const CompiledData& data) const {
   return data.m_sphere.GetMaterial().Lighting(m_light, data.m_point_p, data.m_eye_v, data.m_normal_v);
 }
 
@@ -120,12 +120,12 @@ bool World::WorldCastTest() {
     return false;
   }
 
-  test_world.Spheres()[0].GetMaterial().SetAmbient(1.0f);
-  test_world.Spheres()[1].GetMaterial().SetAmbient(1.0f);
+  test_world.Spheres()[0].ModifyMaterial().SetAmbient(1.0f);
+  test_world.Spheres()[1].ModifyMaterial().SetAmbient(1.0f);
   ray_origin = TupleManager::Instance()->Point(0.0f, 0.0f, 0.75f);
   ray_direction = TupleManager::Instance()->Vector(0.0f, 0.0f, -1.0f);
   test_ray = Ray(ray_origin, ray_direction);
-  color_success = test_world.Spheres()[1].GetMaterial().Color();
+  color_success = test_world.Spheres()[1].ModifyMaterial().Color();
   result = test_world.ColorAt(test_ray);
   if (!(result == color_success)) {
     std::cout << "COLOR AT TEST 3 FAILED" << std::endl;

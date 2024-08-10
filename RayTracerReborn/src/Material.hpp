@@ -5,23 +5,23 @@
 class Material {
 public:
   Material();
-  Material(float ambient, float diffuse, float specular, float shininess, Tuple& color);
+  Material(float ambient, float diffuse, float specular, float shininess, const Tuple& color);
 public:
-  float Ambient();
-  float Diffuse();
-  float Specular();
-  float Shininess();
-  Tuple& Color();
+  float Ambient() const;
+  float Diffuse() const;
+  float Specular() const;
+  float Shininess() const;
+  const Tuple& Color() const;
 
 public:
   void SetAmbient(float ambient);
   void SetDiffuse(float diffuse);
   void SetSpecular(float specular);
   void SetShininess(float shininess);
-  void SetColor(Tuple& color);
+  void SetColor(const Tuple& color);
 
 public:
-  Tuple Lighting(Light& light, Tuple& position_p, Tuple& eye_v, Tuple& normal_v);
+  Tuple Lighting(const Light& light, const Tuple& position_p, const Tuple& eye_v, const Tuple& normal_v) const;
 private:
   float m_ambient = 0.1f;
   float m_diffuse = 0.9f;

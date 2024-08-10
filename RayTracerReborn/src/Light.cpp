@@ -4,15 +4,15 @@ Light::Light()
   : m_position(Tuple(0.0f, 0.0f, 0.0f, 1.0f)), m_intensity(0.0f, 0.0f, 0.0f, 0.0f) {
 }
 
-Light::Light(Tuple& position, Tuple& intensity) 
+Light::Light(const Tuple& position, const Tuple& intensity) 
   : m_position(position), m_intensity(intensity) {
 }
 
-Tuple& Light::Intensity() {
+const Tuple& Light::Intensity() const{
   return m_intensity;
 }
 
-Tuple& Light::Position() {
+const Tuple& Light::Position() const {
   return m_position;
 }
 

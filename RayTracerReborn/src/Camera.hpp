@@ -11,13 +11,13 @@ public:
 
   // GETS
 public:
-  float PixelSize();
-  Canvas& GetCanvas();
+  float PixelSize() const;
+  const Canvas& GetCanvas() const;
 public: 
-  void SetTransform(Matrix& transform);
+  void SetTransform(const Matrix& transform);
 public:
   static void RunTest();
-  Ray RayForPixel(float px, float py);
+  Ray RayForPixel(float px, float py) const;
   void GenerateCanvas(World& world);
 private:
   float m_hsize_pixels = 0;

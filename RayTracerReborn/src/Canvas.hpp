@@ -9,14 +9,17 @@ public:
   Canvas(float width, float height);
   // GET
 public:
-  std::vector<std::vector<Tuple>>& GetCanvas();
-  float Height();
-  float Width();
-  Tuple& GetPixel(float row, float col);
+  const std::vector<std::vector<Tuple>>& GetCanvas() const;
+  float Height() const;
+  float Width() const;
+
+  const Tuple& GetPixel(float row, float col) const;
 
   // SET
 public:
   void WritePixel(float row, float col, const Tuple& color);
+  Tuple& ModifyPixel(float row, float col);
+  std::vector<std::vector<Tuple>>& ModifyCanvas();
 
 
 public:

@@ -28,51 +28,51 @@ Matrix::Matrix(float zero_zero, float zero_one, float zero_two, float zero_three
   float one_zero, float one_one, float one_two, float one_three, 
   float two_zero,float two_one, float two_two, float two_three, 
   float three_zero, float three_one, float three_two, float three_three) : Matrix(4.0f, 4.0f) {
-  GetMatrix()[0][0] = zero_zero;
-  GetMatrix()[0][1] = zero_one;
-  GetMatrix()[0][2] = zero_two;
-  GetMatrix()[0][3] = zero_three;
+  ModifyMatrix()[0][0] = zero_zero;
+  ModifyMatrix()[0][1] = zero_one;
+  ModifyMatrix()[0][2] = zero_two;
+  ModifyMatrix()[0][3] = zero_three;
 
-  GetMatrix()[1][0] = one_zero;
-  GetMatrix()[1][1] = one_one;
-  GetMatrix()[1][2] = one_two;
-  GetMatrix()[1][3] = one_three;
+  ModifyMatrix()[1][0] = one_zero;
+  ModifyMatrix()[1][1] = one_one;
+  ModifyMatrix()[1][2] = one_two;
+  ModifyMatrix()[1][3] = one_three;
 
-  GetMatrix()[2][0] = two_zero;
-  GetMatrix()[2][1] = two_one;
-  GetMatrix()[2][2] = two_two;
-  GetMatrix()[2][3] = two_three;
+  ModifyMatrix()[2][0] = two_zero;
+  ModifyMatrix()[2][1] = two_one;
+  ModifyMatrix()[2][2] = two_two;
+  ModifyMatrix()[2][3] = two_three;
 
-  GetMatrix()[3][0] = three_zero;
-  GetMatrix()[3][1] = three_one;
-  GetMatrix()[3][2] = three_two;
-  GetMatrix()[3][3] = three_three;
+  ModifyMatrix()[3][0] = three_zero;
+  ModifyMatrix()[3][1] = three_one;
+  ModifyMatrix()[3][2] = three_two;
+  ModifyMatrix()[3][3] = three_three;
 
 }
 
 Matrix::Matrix(float zero_zero, float zero_one, float zero_two,
   float one_zero, float one_one, float one_two,
   float two_zero, float two_one, float two_two) : Matrix(3.0f, 3.0f) {
-  GetMatrix()[0][0] = zero_zero;
-  GetMatrix()[0][1] = zero_one;
-  GetMatrix()[0][2] = zero_two;
+  ModifyMatrix()[0][0] = zero_zero;
+  ModifyMatrix()[0][1] = zero_one;
+  ModifyMatrix()[0][2] = zero_two;
 
-  GetMatrix()[1][0] = one_zero;
-  GetMatrix()[1][1] = one_one;
-  GetMatrix()[1][2] = one_two;
+  ModifyMatrix()[1][0] = one_zero;
+  ModifyMatrix()[1][1] = one_one;
+  ModifyMatrix()[1][2] = one_two;
 
-  GetMatrix()[2][0] = two_zero;
-  GetMatrix()[2][1] = two_one;
-  GetMatrix()[2][2] = two_two;
+  ModifyMatrix()[2][0] = two_zero;
+  ModifyMatrix()[2][1] = two_one;
+  ModifyMatrix()[2][2] = two_two;
 }
 
 Matrix::Matrix(float zero_zero, float zero_one,
   float one_zero, float one_one) : Matrix(2.0f, 2.0f) {
-  GetMatrix()[0][0] = zero_zero;
-  GetMatrix()[0][1] = zero_one;
+  ModifyMatrix()[0][0] = zero_zero;
+  ModifyMatrix()[0][1] = zero_one;
 
-  GetMatrix()[1][0] = one_zero;
-  GetMatrix()[1][1] = one_one;
+  ModifyMatrix()[1][0] = one_zero;
+  ModifyMatrix()[1][1] = one_one;
 }
 
 float Matrix::Width() const {
@@ -83,19 +83,11 @@ float Matrix::Height() const {
   return m_height;
 }
 
-float Matrix::Width() {
-  return m_width;
-}
-
-float Matrix::Height() {
-  return m_height;
-}
-
 const std::vector<std::vector<float>>& Matrix::GetMatrix() const {
   return m_matrix;
 }
 
-std::vector<std::vector<float>>& Matrix::GetMatrix()  {
+std::vector<std::vector<float>>& Matrix::ModifyMatrix()  {
   return m_matrix;
 }
 
@@ -172,11 +164,11 @@ Matrix Matrix::ShearingMatrix(float xy, float xz, float yx, float yz, float zx, 
   );
 }
 
-Matrix Matrix::TranformationMatrix(Matrix& first, Matrix& second) {
+Matrix Matrix::TranformationMatrix(const Matrix& first, const Matrix& second) {
   return second * first;
 }
 
-Matrix Matrix::TranformationMatrix(Matrix& first, Matrix& second, Matrix& third) {
+Matrix Matrix::TranformationMatrix(const Matrix& first, const Matrix& second, const Matrix& third) {
   return (third * second) * first;
 }
 
@@ -189,7 +181,7 @@ Matrix Matrix::GetIdentityMatrix() {
   );
 }
 
-Matrix Matrix::GetViewTransform(Tuple& from, Tuple& to, Tuple& up) {
+Matrix Matrix::GetViewTransform(const Tuple& from, const Tuple& to, const Tuple& up) {
   Tuple forward = (to - from).Normalize();
   Tuple up_normal = up.Normalize();
   Tuple left = forward.Cross(up_normal);
@@ -226,14 +218,14 @@ bool Matrix::operator==(const Matrix& rhs)  const {
 // MAYBE MAKE SO IT WORKS WITH MORE THAN ONE SIZE OF MATRIX
 // USED FOR MAT4 MATRICIES ONLY
 // CHECK FOR NULLPTR UPON RETURN
-Matrix Matrix::operator*(Matrix& rhs) {
+Matrix Matrix::operator*(const Matrix& rhs) const{
   if (!(Height() == rhs.Height())) {
     std::cout << "MATRICIES ARE NOT THE SAME SIZE" << std::endl;
   } else {
     Matrix result;
     for (int row = 0; row < Height(); row++) {
       for (int col = 0; col < Width(); col++) {
-        result.GetMatrix()[row][col] =
+        result.ModifyMatrix()[row][col] =
           (GetMatrix()[row][0] * rhs.GetMatrix()[0][col]) +
           (GetMatrix()[row][1] * rhs.GetMatrix()[1][col]) +
           (GetMatrix()[row][2] * rhs.GetMatrix()[2][col]) +
@@ -244,11 +236,11 @@ Matrix Matrix::operator*(Matrix& rhs) {
   }
 }
 // ONLY FOR MAT4 
-Tuple Matrix::operator*(Tuple& rhs) {
+Tuple Matrix::operator*(const Tuple& rhs) const{
   Matrix result(4.0, 1.0f);
   for (int row = 0; row < result.Height(); row++) {
     for (int col = 0; col < result.Width(); col++) {
-      result.GetMatrix()[row][col] =
+      result.ModifyMatrix()[row][col] =
         GetMatrix()[row][0] * rhs.X() +
         GetMatrix()[row][1] * rhs.Y() +
         GetMatrix()[row][2] * rhs.Z() +
@@ -258,16 +250,16 @@ Tuple Matrix::operator*(Tuple& rhs) {
   return Tuple(result.GetMatrix()[0][0], result.GetMatrix()[1][0], result.GetMatrix()[2][0], result.GetMatrix()[3][0]);
 }
 
-Matrix& Matrix::operator=(Matrix& rhs) {
+Matrix& Matrix::operator=(const Matrix& rhs) {
   for (int row = 0; row < Height(); row++) {
     for (int col = 0; col < Width(); col++) {
-      GetMatrix()[row][col] = rhs.GetMatrix()[row][col];
+      ModifyMatrix()[row][col] = rhs.GetMatrix()[row][col];
     }
   }
   return *this;
 }
 
-float Matrix::Determinant() {
+float Matrix::Determinant() const{
   float result = 0;
 
   if (Width() == 2) {
@@ -280,12 +272,12 @@ float Matrix::Determinant() {
   return result;
 }
 
-Matrix Matrix::Submatrix(float row, float col) {
+Matrix Matrix::Submatrix(float row, float col) const{
   // DONT WANT TO MODIFY ORIGINAL MATRIX SO CREATE A COPY
   Matrix temp = *this;
   // Erase rows and colums from matrix.
-  temp.GetMatrix().erase(temp.GetMatrix().begin() + row);
-  for (auto& row : temp.GetMatrix()) {
+  temp.ModifyMatrix().erase(temp.GetMatrix().begin() + row);
+  for (auto& row : temp.ModifyMatrix()) {
     row.erase(row.begin() + col);
   }
   // Change the Size variables. COULD ALSO MAKE THE PRINT FUNCTION JUST USE .SIZE BUT THIS FUNCTIONS THE SAME o.O
@@ -295,12 +287,12 @@ Matrix Matrix::Submatrix(float row, float col) {
   return temp;
 }
 
-float Matrix::Minor(float row, float col) {
+float Matrix::Minor(float row, float col) const{
   Matrix sub = Submatrix(row, col);
   return sub.Determinant();
 }
 
-float Matrix::Cofactor(float row, float col) {
+float Matrix::Cofactor(float row, float col) const{
   float result;
   if ((static_cast<int>(row) + static_cast<int>(col)) % 2 == 0) {
     result = Minor(row, col);
@@ -311,14 +303,14 @@ float Matrix::Cofactor(float row, float col) {
   }
 }
 
-Matrix Matrix::Invert() {
+Matrix Matrix::Invert() const{
   Matrix result = Matrix(Height(), Width());
 
   if (!(Determinant() == 0)) {
     for (int row = 0; row < Height(); row++) {
       for (int col = 0; col < Width(); col++) {
         float c = Cofactor(row, col);
-        result.GetMatrix()[col][row] = c / Determinant();
+        result.ModifyMatrix()[col][row] = c / Determinant();
       }
     }
   } /*else {
@@ -328,7 +320,7 @@ Matrix Matrix::Invert() {
   return result;
 }
 
-void Matrix::Print() {
+void Matrix::Print() const {
   for (int row = 0; row < Height(); row++) {
     for (int col = 0; col < Width(); col++) {
       if (!(col == Width() - 1.0f)) {
@@ -407,7 +399,7 @@ bool Matrix::EqualityTest() {
   }
 
   
-  mat_4_b.GetMatrix()[0][0] = 0.0f;
+  mat_4_b.ModifyMatrix()[0][0] = 0.0f;
   if ((mat_4_a == mat_4_b)) {
     std::cout << "MAT EQUALITY TEST 2 FAILED" << std::endl;
     return false;

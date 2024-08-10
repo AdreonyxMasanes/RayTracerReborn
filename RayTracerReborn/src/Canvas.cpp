@@ -11,24 +11,29 @@ Canvas::Canvas(float width, float height)
     for (int col = 0; col < width; col++) {
       temp.push_back(Tuple(0.0f, 0.0f, 0.0f, 0.0f));
     }
-    GetCanvas().push_back(temp);
+    m_canvas.push_back(temp);
   }
 }
 
-std::vector<std::vector<Tuple>>& Canvas::GetCanvas() {
+const std::vector<std::vector<Tuple>>& Canvas::GetCanvas() const{
   return m_canvas;
 }
 
-float Canvas::Height() {
+std::vector<std::vector<Tuple>>& Canvas::ModifyCanvas() {
+  return m_canvas;
+}
+
+
+float Canvas::Height() const {
   return m_height;
 }
 
-float Canvas::Width() {
+float Canvas::Width() const{
   return m_width;
 }
 
 void Canvas::WritePixel(float row, float col, const Tuple& color) {
-  GetPixel(row, col) = color;
+  ModifyPixel(row, col) = color;
 }
 
 void Canvas::CanvasTest() {
@@ -52,6 +57,10 @@ void Canvas::CanvasTest() {
 
 }
 
-Tuple& Canvas::GetPixel(float row, float col) {
-  return GetCanvas().at(col).at(row);
+Tuple& Canvas::ModifyPixel(float row, float col) {
+  return m_canvas.at(col).at(row);
+}
+
+const Tuple& Canvas::GetPixel(float row, float col) const {
+  return m_canvas.at(col).at(row);
 }

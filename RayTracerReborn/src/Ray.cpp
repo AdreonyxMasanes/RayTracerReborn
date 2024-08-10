@@ -4,28 +4,32 @@ Ray::Ray()
   : m_origin_p(Tuple(0.0f, 0.0f, 0.0f, 1.0f)), m_direction_v(Tuple(0.0f, 0.0f, 0.0f, 0.0f)) {
 }
 
-Ray::Ray(Tuple& origin_p, Tuple& direction_v) 
+Ray::Ray(const Tuple& origin_p, const Tuple& direction_v) 
   : m_origin_p(origin_p), m_direction_v(direction_v) {
 }
 
-Tuple& Ray::Origin() {
+const Tuple& Ray::Origin() const {
   return m_origin_p;
 }
 
-Tuple& Ray::Direction() {
+const Tuple& Ray::Direction() const {
   return m_direction_v;
 }
 
 
-std::vector<Intersection>& Ray::Intersections() {
+const std::vector<Intersection>& Ray::Intersections() const {
   return m_intersections;
 }
 
-Tuple Ray::Position(float time) {
-  return Origin() + (Direction() * time);
+std::vector<Intersection>& Ray::ModifyIntersections() {
+  return m_intersections;
 }
 
-void Ray::Cast(Sphere& sphere) {
+Tuple Ray::Position(float time) const {
+  return m_origin_p + (m_direction_v * time);
+}
+
+void Ray::Cast(const Sphere& sphere) {
   Matrix inverted = sphere.Transform().Invert();
   Ray transformed_ray = Transform((inverted));
   
@@ -46,13 +50,13 @@ void Ray::Cast(Sphere& sphere) {
 
 void Ray::SortIntersections() {
   bool isSorted = false;
-  while (!isSorted && Intersections().size() > 0) {
-    for (int i = 0; i < Intersections().size(); i++) {
-      if (!(i == Intersections().size() - 1)) {
-        if (Intersections().at(i).Time() > Intersections().at(i + 1).Time()) {
-          Intersection temp = Intersections().at(i);
-          Intersections().at(i) = Intersections().at(i + 1);
-          Intersections().at(i + 1) = temp;
+  while (!isSorted && m_intersections.size() > 0) {
+    for (int i = 0; i < m_intersections.size(); i++) {
+      if (!(i == m_intersections.size() - 1)) {
+        if (m_intersections.at(i).Time() > m_intersections.at(i + 1).Time()) {
+          Intersection temp = m_intersections.at(i);
+          m_intersections.at(i) = m_intersections.at(i + 1);
+          m_intersections.at(i + 1) = temp;
           break;
         }
       } else {
@@ -63,27 +67,28 @@ void Ray::SortIntersections() {
 }
 
 // CAN BE NULL SO WE NEED TO KNOW SO PASS POINTER INSTEAD OF REFERENCE
-Intersection* Ray::Hit() {
+const Intersection* Ray::Hit() const{
 
   // WHILE SORTING JUST POP A VALUE IF IT IS NEGATIVE THEN CAN JUST RETURN INTERSECTIONS[0]
   // since it is sorted, returns the first non negative value.
-  for (auto& intersection : Intersections()) {
+  for (auto& intersection : m_intersections) {
     if (intersection.Time() >= 0) {
       return &intersection;
     }
   }
+  return nullptr;
 }
 
-Ray Ray::Transform(Matrix& transform) {
-  Tuple origin = transform * Origin();
-  Tuple direction = transform * Direction();
+Ray Ray::Transform(const Matrix& transform) const{
+  Tuple origin = transform * m_origin_p;
+  Tuple direction = transform * m_direction_v;
   return Ray(origin, direction);
 }
 
-bool Ray::operator==(Ray& rhs) {
-  if (!(Origin() == rhs.Origin())) {
+bool Ray::operator==(const Ray& rhs) const{
+  if (!(m_origin_p == rhs.Origin())) {
     return false;
-  } else if (!(Direction() == rhs.Direction())) {
+  } else if (!(m_direction_v == rhs.Direction())) {
     return false;
   } else {
     return true;
@@ -148,47 +153,47 @@ bool Ray::CastTest() {
   Ray test_ray(ray_origin, ray_direction);
   Sphere test_sphere(1);
   test_ray.Cast(test_sphere);
-  if (!(Utility::FloatsAreEqual(test_ray.Intersections()[0].Time(), 4.0f) && Utility::FloatsAreEqual(test_ray.Intersections()[1].Time(), 6.0f))) {
+  if (!(Utility::FloatsAreEqual(test_ray.m_intersections[0].Time(), 4.0f) && Utility::FloatsAreEqual(test_ray.m_intersections[1].Time(), 6.0f))) {
     std::cout << "INTERSECTION TEST 1 FAILED" << std::endl;
     return false;
   }
-  test_ray.Intersections().clear();
+  test_ray.m_intersections.clear();
 
   ray_origin = TupleManager::Instance()->Point(0.0f, 1.0f, -5.0f);
   test_ray = Ray(ray_origin, ray_direction);
   test_ray.Cast(test_sphere);
-  if (!(Utility::FloatsAreEqual(test_ray.Intersections()[0].Time(), 5.0f) && Utility::FloatsAreEqual(test_ray.Intersections()[1].Time(), 5.0f))) {
+  if (!(Utility::FloatsAreEqual(test_ray.m_intersections[0].Time(), 5.0f) && Utility::FloatsAreEqual(test_ray.m_intersections[1].Time(), 5.0f))) {
     std::cout << "INTERSECTION TEST 2 FAILED" << std::endl;
     return false;
   }
-  test_ray.Intersections().clear();
+  test_ray.m_intersections.clear();
 
   ray_origin = TupleManager::Instance()->Point(0.0f, 2.0f, -5.0f);
   test_ray = Ray(ray_origin, ray_direction);
   test_ray.Cast(test_sphere);
-  if (!(test_ray.Intersections().size() == 0)) {
+  if (!(test_ray.m_intersections.size() == 0)) {
     std::cout << "INTERSECTION TEST 3 FAILED" << std::endl;
     return false;
   }
-  test_ray.Intersections().clear();
+  test_ray.m_intersections.clear();
 
   ray_origin = TupleManager::Instance()->Point(0.0f, 0.0f, 0.0f);
   test_ray = Ray(ray_origin, ray_direction);
   test_ray.Cast(test_sphere);
-  if (!(Utility::FloatsAreEqual(test_ray.Intersections()[0].Time(), -1.0f) && Utility::FloatsAreEqual(test_ray.Intersections()[1].Time(), 1.0f))) {
+  if (!(Utility::FloatsAreEqual(test_ray.m_intersections[0].Time(), -1.0f) && Utility::FloatsAreEqual(test_ray.m_intersections[1].Time(), 1.0f))) {
     std::cout << "INTERSECTION TEST 4 FAILED" << std::endl;
     return false;
   }
-  test_ray.Intersections().clear();
+  test_ray.m_intersections.clear();
 
   ray_origin = TupleManager::Instance()->Point(0.0f, 0.0f, 5.0f);
   test_ray = Ray(ray_origin, ray_direction);
   test_ray.Cast(test_sphere);
-  if (!(Utility::FloatsAreEqual(test_ray.Intersections()[0].Time(), -6.0f) && Utility::FloatsAreEqual(test_ray.Intersections()[1].Time(), -4.0f))) {
+  if (!(Utility::FloatsAreEqual(test_ray.m_intersections[0].Time(), -6.0f) && Utility::FloatsAreEqual(test_ray.m_intersections[1].Time(), -4.0f))) {
     std::cout << "INTERSECTION TEST 5 FAILED" << std::endl;
     return false;
   }
-  test_ray.Intersections().clear();
+  test_ray.m_intersections.clear();
 
   ray_origin = TupleManager::Instance()->Point(0.0f, 0.0f, -5.0f);
   ray_direction = TupleManager::Instance()->Vector(0.0f, 0.0f, 1.0f);
@@ -196,16 +201,16 @@ bool Ray::CastTest() {
   Matrix scaling = Matrix::ScalingMatrix(2.0f, 2.0f, 2.0f);
   test_sphere.SetTransform(scaling);
   test_ray.Cast(test_sphere);
-  if (!(Utility::FloatsAreEqual(test_ray.Intersections()[0].Time(), 3.0f) && Utility::FloatsAreEqual(test_ray.Intersections()[1].Time(), 7.0f))) {
+  if (!(Utility::FloatsAreEqual(test_ray.m_intersections[0].Time(), 3.0f) && Utility::FloatsAreEqual(test_ray.m_intersections[1].Time(), 7.0f))) {
     std::cout << "INTERSECTION TEST 6 FAILED" << std::endl;
     return false;
   }
-  test_ray.Intersections().clear();
+  test_ray.m_intersections.clear();
 
   Matrix translation = Matrix::TranslationMatrix(5.0f, 0.0f, 0.0f);
   test_sphere.SetTransform(translation);
   test_ray.Cast(test_sphere);
-  if (!(test_ray.Intersections().size() == 0)) {
+  if (!(test_ray.m_intersections.size() == 0)) {
     std::cout << "INTERSECTION TEST 7 FAILED" << std::endl;
     return false;
   } else {
@@ -220,52 +225,52 @@ bool Ray::HitTest() {
   Sphere test_sphere(1);
   Intersection test_a_intersection(1.0f, test_sphere);
   Intersection test_b_intersection(2.0f, test_sphere);
-  test_ray.Intersections().push_back(test_b_intersection);
-  test_ray.Intersections().push_back(test_a_intersection);
-  Intersection* hit = test_ray.Hit();
+  test_ray.m_intersections.push_back(test_b_intersection);
+  test_ray.m_intersections.push_back(test_a_intersection);
+  const Intersection* hit = test_ray.Hit();
   if (!(*hit == test_a_intersection)) {
     std::cout << "HIT TEST 1 FAILED" << std::endl;
     return false;
   }
-  test_ray.Intersections().clear();
+  test_ray.m_intersections.clear();
 
   test_a_intersection.SetTime(1.0f);
   test_b_intersection.SetTime(1.0f);
-  test_ray.Intersections().push_back(test_b_intersection);
-  test_ray.Intersections().push_back(test_a_intersection);
+  test_ray.m_intersections.push_back(test_b_intersection);
+  test_ray.m_intersections.push_back(test_a_intersection);
   hit = test_ray.Hit();
   if (!(*hit == test_b_intersection)) {
     std::cout << "HIT TEST 2 FAILED" << std::endl;
     return false;
   }
-  test_ray.Intersections().clear();
+  test_ray.m_intersections.clear();
 
   test_a_intersection.SetTime(-2.0f);
   test_b_intersection.SetTime(-1.0f);
-  test_ray.Intersections().push_back(test_b_intersection);
-  test_ray.Intersections().push_back(test_a_intersection);
+  test_ray.m_intersections.push_back(test_b_intersection);
+  test_ray.m_intersections.push_back(test_a_intersection);
   hit = test_ray.Hit();
   if (!(hit == nullptr)) {
     std::cout << "HIT TEST 3 FAILED" << std::endl;
     return false;
   }
-  test_ray.Intersections().clear();
+  test_ray.m_intersections.clear();
 
 
   test_a_intersection.SetTime(5.0f);
   test_b_intersection.SetTime(7.0f);
   Intersection test_c_intersection(-3.0f, test_sphere);
   Intersection test_d_intersection(2.0f, test_sphere);
-  test_ray.Intersections().push_back(test_a_intersection);
-  test_ray.Intersections().push_back(test_b_intersection);
-  test_ray.Intersections().push_back(test_c_intersection);
-  test_ray.Intersections().push_back(test_d_intersection);
+  test_ray.m_intersections.push_back(test_a_intersection);
+  test_ray.m_intersections.push_back(test_b_intersection);
+  test_ray.m_intersections.push_back(test_c_intersection);
+  test_ray.m_intersections.push_back(test_d_intersection);
   hit = test_ray.Hit();
   if (!(*hit == test_d_intersection)) {
     std::cout << "HIT TEST 4 FAILED" << std::endl;
     return false;
   }
-  test_ray.Intersections().clear();
+  test_ray.m_intersections.clear();
 
 }
 

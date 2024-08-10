@@ -1,5 +1,5 @@
 #include "PPM.hpp"
-PPM::PPM(Canvas& c) {
+PPM::PPM(const Canvas& c) {
   std::string temp;
   std::ostringstream oss;
   oss << std::setprecision(8) << std::noshowpoint << c.Width();
@@ -59,11 +59,7 @@ PPM::PPM(Canvas& c) {
   }
 
   std::ofstream ppm_file("img//PPM.ppm");
-  ppm_file << Value() << std::endl;
+  ppm_file << m_value << std::endl;
   ppm_file.close();
 
-}
-
-std::string& PPM::Value() {
-  return m_value;
 }

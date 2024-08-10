@@ -4,11 +4,11 @@
 class Light {
 public:
   Light();
-  Light(Tuple& position, Tuple& intensity);
+  Light(const Tuple& position, const Tuple& intensity);
 
 public:
-  Tuple& Intensity();
-  Tuple& Position();
+  const Tuple& Intensity() const;
+  const Tuple& Position() const;
 public:
   void SetIntensity(Tuple& intensity);
   void SetPosition(Tuple& position);

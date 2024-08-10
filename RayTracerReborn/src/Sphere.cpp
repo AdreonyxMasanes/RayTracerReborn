@@ -9,19 +9,27 @@ Sphere::Sphere(int id)
 
 }
 
-int Sphere::ID() {
+int Sphere::ID() const {
   return m_id;
 }
 
-Matrix& Sphere::Transform() {
+Matrix& Sphere::ModifyTransform() {
   return m_transform;
 }
 
-Material& Sphere::GetMaterial() {
+Material& Sphere::ModifyMaterial() {
   return m_material;
 }
 
-bool Sphere::operator==(Sphere& rhs) {
+const Matrix& Sphere::Transform() const{
+  return m_transform;
+}
+
+const Material& Sphere::GetMaterial() const{
+  return m_material;
+}
+
+bool Sphere::operator==(const Sphere& rhs) const{
   if (!(ID() == rhs.ID())) {
     return false;
   } else {
@@ -29,13 +37,13 @@ bool Sphere::operator==(Sphere& rhs) {
   }
 }
 
-void Sphere::operator=(Sphere& rhs) {
+void Sphere::operator=(const Sphere& rhs) {
   SetID(rhs.ID());
   SetTransform(rhs.m_transform);
   SetMaterial(rhs.GetMaterial());
 }
 
-Tuple Sphere::NormalAt(Tuple& world_point) {
+Tuple Sphere::NormalAt(const Tuple& world_point) const{
   Matrix inverted_transform = (Transform().Invert());
   Tuple object_point = (inverted_transform * world_point);
   Tuple object_normal = (object_point - TupleManager::Instance()->Point(0.0f, 0.0f, 0.0f));
@@ -45,7 +53,7 @@ Tuple Sphere::NormalAt(Tuple& world_point) {
   return world_normal.Normalize();
 }
 
-void Sphere::SetTransform(Matrix& transform) {
+void Sphere::SetTransform(const Matrix& transform) {
   m_transform = transform;
 }
 
@@ -53,7 +61,7 @@ void Sphere::SetID(int id) {
   m_id = id;
 }
 
-void Sphere::SetMaterial(Material& material) {
+void Sphere::SetMaterial(const Material& material) {
   m_material = material;
 }
 

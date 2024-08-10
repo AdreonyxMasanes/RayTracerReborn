@@ -18,7 +18,7 @@ struct CompiledData {
 class World {
 public:
   World();
-  World(std::vector<Sphere>& spheres, Light& light);
+  World(const std::vector<Sphere>& spheres, const Light& light);
 
   // GET
 public:
@@ -26,8 +26,8 @@ public:
   std::vector<Sphere>& Spheres();
   // ADDS
 public:
-  void SetLight(Light& light);
-  void AddSphere(Sphere& sphere);
+  void SetLight(const Light& light);
+  void AddSphere(const Sphere& sphere);
 
   // UTILITY
 public:
@@ -38,9 +38,10 @@ private:
   Light m_light;
   std::vector<Sphere> m_spheres;
 private:
+  // Can not be const.
   void CastRay(Ray& ray);
-  std::unique_ptr<CompiledData> PrepareData(Intersection& intersection, Ray& ray);
-  Tuple ShadeHit(CompiledData& data);
+  std::unique_ptr<CompiledData> PrepareData(const Intersection& intersection, const Ray& ray);
+  Tuple ShadeHit(const CompiledData& data) const;
 
 private:
   static bool WorldCastTest();

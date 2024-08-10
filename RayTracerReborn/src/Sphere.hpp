@@ -9,21 +9,23 @@ public:
 
   // GETS
 public:
-  int ID();
-  Matrix& Transform();
-  Material& GetMaterial();
+  int ID() const;
+  const Matrix& Transform() const;
+  const Material& GetMaterial() const;
   
+  Matrix& ModifyTransform();
+  Material& ModifyMaterial();
   // UTILTIY
 public:
-  bool operator==(Sphere& rhs);
-  void operator=(Sphere& rhs);
-  Tuple NormalAt(Tuple& world_point);
+  bool operator==(const Sphere& rhs) const;
+  void operator=(const Sphere& rhs);
+  Tuple NormalAt(const Tuple& world_point) const;
   
   // SETS
 public:
-  void SetTransform(Matrix& transform);
+  void SetTransform(const Matrix& transform);
   void SetID(int ID);
-  void SetMaterial(Material& material);
+  void SetMaterial(const Material& material);
 
 public:
   //float* Intersect(Ray& ray);

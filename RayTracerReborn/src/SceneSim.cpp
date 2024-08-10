@@ -8,8 +8,8 @@ void SceneSim::Run() {
   Tuple floor_color = TupleManager::Instance()->Color(1.0f, 0.9f, 0.9f);
   float floor_specular = 0.0f;
   floor.SetTransform(floor_transform);
-  floor.GetMaterial().SetColor(floor_color);
-  floor.GetMaterial().SetSpecular(floor_specular);
+  floor.ModifyMaterial().SetColor(floor_color);
+  floor.ModifyMaterial().SetSpecular(floor_specular);
   spheres.push_back(floor);
 
   float pi_2 = 1.57079632679;
@@ -44,9 +44,9 @@ void SceneSim::Run() {
   float middle_diffuse = 0.7f;
   float middle_specular = 0.3f;
   middle.SetTransform(middle_translation);
-  middle.GetMaterial().SetColor(middle_color);
-  middle.GetMaterial().SetDiffuse(middle_diffuse);
-  middle.GetMaterial().SetSpecular(middle_specular);
+  middle.ModifyMaterial().SetColor(middle_color);
+  middle.ModifyMaterial().SetDiffuse(middle_diffuse);
+  middle.ModifyMaterial().SetSpecular(middle_specular);
   spheres.push_back(middle);
 
  Sphere right = SphereManager::Instance()->NewSphere();
@@ -57,9 +57,9 @@ void SceneSim::Run() {
   float right_diffuse = 0.7f;
   float right_specular = 0.3f;
   right.SetTransform(right_transform);
-  right.GetMaterial().SetColor(right_color);
-  right.GetMaterial().SetDiffuse(right_diffuse);
-  right.GetMaterial().SetSpecular(right_specular);
+  right.ModifyMaterial().SetColor(right_color);
+  right.ModifyMaterial().SetDiffuse(right_diffuse);
+  right.ModifyMaterial().SetSpecular(right_specular);
   spheres.push_back(right);
 
  Sphere left = SphereManager::Instance()->NewSphere();
@@ -70,9 +70,9 @@ void SceneSim::Run() {
   float left_diffuse = 0.7f;
   float left_specular = 0.3f;
   left.SetTransform(left_transform);
-  left.GetMaterial().SetColor(left_color);
-  left.GetMaterial().SetDiffuse(left_diffuse);
-  left.GetMaterial().SetSpecular(left_specular);
+  left.ModifyMaterial().SetColor(left_color);
+  left.ModifyMaterial().SetDiffuse(left_diffuse);
+  left.ModifyMaterial().SetSpecular(left_specular);
   spheres.push_back(left);
 
   Tuple light_pos = TupleManager::Instance()->Point(-10.0f, 10.0f, -10.0f);

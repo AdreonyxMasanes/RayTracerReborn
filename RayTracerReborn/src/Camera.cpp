@@ -10,15 +10,15 @@ Camera::Camera(float hsize, float vsize, float field_of_view)
   CalculatePixelSize();
 }
 
-float Camera::PixelSize() {
+float Camera::PixelSize() const {
   return m_pixel_size;
 }
 
-Canvas& Camera::GetCanvas() {
+const Canvas& Camera::GetCanvas() const{
   return m_canvas;
 }
 
-void Camera::SetTransform(Matrix& transform) {
+void Camera::SetTransform(const Matrix& transform) {
   m_transform = transform;
 }
 
@@ -33,7 +33,7 @@ void Camera::RunTest() {
   }
 }
 
-Ray Camera::RayForPixel(float px, float py) {
+Ray Camera::RayForPixel(float px, float py) const {
   float xoffset = (px + 0.5f) * m_pixel_size;
   float yoffset = (py + 0.5f) * m_pixel_size;
 

@@ -9,8 +9,7 @@
 
 class PPM {
 public:
-  PPM(Canvas& c);
-  std::string& Value();
+  PPM(const Canvas& c);
 private:
   //TODO: MAKE NO LINE LONGER THAN 70 CHAR
   int charCounter = 0;
