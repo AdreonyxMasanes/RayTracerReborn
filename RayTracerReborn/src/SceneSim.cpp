@@ -3,7 +3,7 @@
 void SceneSim::Run() {
   auto start = std::chrono::system_clock::now();
   std::vector<Sphere> spheres;
- Sphere floor = SphereManager::Instance()->NewSphere();
+  Sphere floor = SphereManager::Instance()->NewSphere();
   Matrix floor_transform = Matrix::ScalingMatrix(10.0f, 0.01f, 10.0f);
   Tuple floor_color = TupleManager::Instance()->Color(1.0f, 0.9f, 0.9f);
   float floor_specular = 0.0f;
@@ -14,7 +14,7 @@ void SceneSim::Run() {
 
   float pi_2 = 1.57079632679;
   float pi_4 = 0.78539816339;
- Sphere left_wall = SphereManager::Instance()->NewSphere();
+  Sphere left_wall = SphereManager::Instance()->NewSphere();
   left_wall.SetMaterial(floor.GetMaterial());
   Matrix left_wall_scale = Matrix::ScalingMatrix(10.0f, 0.01f, 10.0f);
   Matrix left_wall_rotation_x = Matrix::RotationXMatrix(pi_2);
@@ -26,7 +26,7 @@ void SceneSim::Run() {
   left_wall.SetTransform(transform_a);
   spheres.push_back(left_wall);
 
- Sphere right_wall = SphereManager::Instance()->NewSphere();
+  Sphere right_wall = SphereManager::Instance()->NewSphere();
   right_wall.SetMaterial(floor.GetMaterial());
   Matrix right_wall_scale = Matrix::ScalingMatrix(10.0f, 0.01f, 10.0f);
   Matrix right_wall_rotation_x = Matrix::RotationXMatrix(pi_2);
@@ -38,7 +38,7 @@ void SceneSim::Run() {
   right_wall.SetTransform(transform_b);
   spheres.push_back(right_wall);
 
- Sphere middle = SphereManager::Instance()->NewSphere();
+  Sphere middle = SphereManager::Instance()->NewSphere();
   Matrix middle_translation = Matrix::TranslationMatrix(-0.5f, 1.0f, 0.5f);
   Tuple middle_color = TupleManager::Instance()->Color(0.1f, 1.0f, 0.5f);
   float middle_diffuse = 0.7f;
@@ -49,7 +49,7 @@ void SceneSim::Run() {
   middle.ModifyMaterial().SetSpecular(middle_specular);
   spheres.push_back(middle);
 
- Sphere right = SphereManager::Instance()->NewSphere();
+  Sphere right = SphereManager::Instance()->NewSphere();
   Matrix right_translation = Matrix::TranslationMatrix(1.5f, 0.5f, -0.5f);
   Matrix right_scale = Matrix::ScalingMatrix(0.5f, 0.5f, 0.5f);
   Matrix right_transform = Matrix::TranformationMatrix(right_scale, right_translation);
@@ -62,7 +62,7 @@ void SceneSim::Run() {
   right.ModifyMaterial().SetSpecular(right_specular);
   spheres.push_back(right);
 
- Sphere left = SphereManager::Instance()->NewSphere();
+  Sphere left = SphereManager::Instance()->NewSphere();
   Matrix left_translation = Matrix::TranslationMatrix(-1.5f, 0.33f, -0.75f);
   Matrix left_scale = Matrix::ScalingMatrix(0.33f, 0.33f, 0.33f);
   Matrix left_transform = Matrix::TranformationMatrix(left_scale, left_translation);
