@@ -1,9 +1,10 @@
 #ifndef CAMERA_H
 #define CAMERA_H
-#include "Matrix.hpp"
+#include "MatrixUtil.hpp"
 #include "Ray.hpp"
 #include "World.hpp"
 #include "Canvas.hpp"
+using namespace MatrixUtil;
 class Camera {
 public:
   Camera();

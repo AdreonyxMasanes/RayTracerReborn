@@ -4,8 +4,8 @@
 #include <vector>
 #include <memory>
 #include <iostream>
-#include "Utility.hpp"
 #include "TupleManager.hpp"
+#include "Utility.hpp"
 class Matrix {
 public:
   Matrix();
@@ -58,22 +58,9 @@ public:
   // DEBUG
 public:
   void Print() const;
-  static void RunTest();
 private:
   float m_width;
   float m_height;
   std::vector<std::vector<float>> m_matrix;
-
-  static void CreationTest();
-  static bool EqualityTest();
-  static bool MatrixMultiplyTest();
-  static bool MatrixMultiplyByTupleTest();
-  static bool TransposeTest();
-  static bool DeterimantTest();
-  static bool InversionTest();
-  static bool TransformTest();
-  static bool ShearingTest();
-  static bool TranformChainingTest();
-  static bool ViewTransformTest();
 };
 #endif // !MATRIX_H

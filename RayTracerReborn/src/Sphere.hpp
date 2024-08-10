@@ -1,7 +1,8 @@
 #ifndef SPHERE_H
 #define SPHERE_H
-#include "Matrix.hpp"
+#include "MatrixUtil.hpp"
 #include "Material.hpp"
+using namespace MatrixUtil;
 class Sphere {
 public:
   Sphere();

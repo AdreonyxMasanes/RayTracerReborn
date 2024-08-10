@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Ray.hpp"
+using namespace MatrixUtil;
 
 TEST(RayTest, PositionTest) {
   Tuple ray_origin = TupleManager::Instance()->Point(2.0f, 3.0f, 4.0f);
@@ -58,14 +59,14 @@ TEST(RayTest, CastTest) {
   ray_origin = TupleManager::Instance()->Point(0.0f, 0.0f, -5.0f);
   ray_direction = TupleManager::Instance()->Vector(0.0f, 0.0f, 1.0f);
   test_ray = Ray(ray_origin, ray_direction);
-  Matrix scaling = Matrix::ScalingMatrix(2.0f, 2.0f, 2.0f);
+  Matrix scaling = ScalingMatrix(2.0f, 2.0f, 2.0f);
   test_sphere.SetTransform(scaling);
   test_ray.Cast(test_sphere);
   EXPECT_FLOAT_EQ(test_ray.Intersections()[0].Time(), 3.0f);
   EXPECT_FLOAT_EQ(test_ray.Intersections()[1].Time(), 7.0f);
   test_ray.ModifyIntersections().clear();
 
-  Matrix translation = Matrix::TranslationMatrix(5.0f, 0.0f, 0.0f);
+  Matrix translation = TranslationMatrix(5.0f, 0.0f, 0.0f);
   test_sphere.SetTransform(translation);
   test_ray.Cast(test_sphere);
   EXPECT_FLOAT_EQ(test_ray.Intersections().size(), 0.0f);
@@ -77,12 +78,12 @@ TEST(RayTest, TransformTest) {
   Tuple ray_direction = TupleManager::Instance()->Vector(0.0f, 1.0f, 0.0f);
   Tuple ray_origin_success = TupleManager::Instance()->Point(4.0f, 6.0f, 8.0f);
   Tuple ray_direction_success = TupleManager::Instance()->Vector(0.0f, 1.0f, 0.0f);
-  Matrix translate = Matrix::TranslationMatrix(3.0f, 4.0f, 5.0f);
+  Matrix translate = TranslationMatrix(3.0f, 4.0f, 5.0f);
   Ray test_ray(ray_origin, ray_direction);
   Ray test_ray_success(ray_origin_success, ray_direction_success);
   EXPECT_EQ(test_ray.Transform(translate), test_ray_success);
 
-  Matrix scaling = Matrix::ScalingMatrix(2.0f, 3.0f, 4.0f);
+  Matrix scaling = ScalingMatrix(2.0f, 3.0f, 4.0f);
   ray_origin_success = TupleManager::Instance()->Point(2.0f, 6.0f, 12.0f);
   ray_direction_success = TupleManager::Instance()->Vector(0.0f, 3.0f, 0.0f);
   test_ray_success = Ray(ray_origin_success, ray_direction_success);

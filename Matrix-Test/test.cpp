@@ -1,6 +1,6 @@
 #include "pch.h"
-#include "Matrix.hpp"
-
+#include "MatrixUtil.hpp"
+using namespace MatrixUtil;
 TEST(MatrixTest, EqualityTest) {
   Matrix mat_4_a(
     1.0f, 2.0f, 3.0f, 4.0f,
@@ -93,14 +93,14 @@ TEST(MatrixTest, InversionTest) {
 
 TEST(MatrixTest, TranlastionTest) {
   Tuple test_a_p = TupleManager::Instance()->Point(-3.0f, 4.0f, 5.0f);
-  Matrix translation = Matrix::TranslationMatrix(5.0f, -3.0f, 2.0f);
+  Matrix translation = TranslationMatrix(5.0f, -3.0f, 2.0f);
   Tuple translation_success_p(2.0f, 1.0f, 7.0f, 1.0f);
   EXPECT_EQ(translation * test_a_p, translation_success_p);
 }
 
 TEST(MatrixTest, ScalingTest) {
   Tuple test_a_p = TupleManager::Instance()->Point(-4.0f, 6.0f, 8.0f);
-  Matrix scaling = Matrix::ScalingMatrix(2.0f, 3.0f, 4.0f);
+  Matrix scaling = ScalingMatrix(2.0f, 3.0f, 4.0f);
   Tuple scaling_success_p(-8.0f, 18.0f, 32.0f, 1.0f);
   EXPECT_EQ(scaling * test_a_p, scaling_success_p);
 }
@@ -109,8 +109,8 @@ TEST(MatrixTest, RotationXTest) {
   float pi_4 = 0.78539816339;
   float pi_2 = 1.57079632679;
   Tuple test_a_p = TupleManager::Instance()->Point(0.0f, 1.0f, 0.0f);
-  Matrix half_quarer_rotation = Matrix::RotationXMatrix(pi_4);
-  Matrix full_quarter_rotation = Matrix::RotationXMatrix(pi_2);
+  Matrix half_quarer_rotation = RotationXMatrix(pi_4);
+  Matrix full_quarter_rotation = RotationXMatrix(pi_2);
   Tuple rotation_x_half_success(0.0f, sqrtf(2.0f) / 2.0f, sqrtf(2.0f) / 2.0f, 1.0f);
   Tuple rotation_x_full_success(0.0f, 0.0f, 1.0f, 1.0f);
   EXPECT_EQ(half_quarer_rotation * test_a_p, rotation_x_half_success);
@@ -121,8 +121,8 @@ TEST(MatrixTest, RotationYTest) {
   float pi_4 = 0.78539816339;
   float pi_2 = 1.57079632679;
   Tuple test_a_p = TupleManager::Instance()->Point(0.0f, 0.0f, 1.0f);
-  Matrix half_quarer_rotation = Matrix::RotationYMatrix(pi_4);
-  Matrix full_quarter_rotation = Matrix::RotationYMatrix(pi_2);
+  Matrix half_quarer_rotation = RotationYMatrix(pi_4);
+  Matrix full_quarter_rotation = RotationYMatrix(pi_2);
   Tuple rotation_y_half_success(sqrtf(2.0f) / 2.0f, 0.0f, sqrtf(2.0f) / 2.0f, 1.0f);
   Tuple rotation_y_full_success(1.0f, 0.0f, 0.0f, 1.0f);
   EXPECT_EQ(half_quarer_rotation * test_a_p, rotation_y_half_success);
@@ -133,8 +133,8 @@ TEST(MatrixTest, RotationZTest) {
   float pi_4 = 0.78539816339;
   float pi_2 = 1.57079632679;
   Tuple test_a_p = TupleManager::Instance()->Point(0.0f, 1.0f, 0.0f);
-  Matrix half_quarer_rotation = Matrix::RotationZMatrix(pi_4);
-  Matrix full_quarter_rotation = Matrix::RotationZMatrix(pi_2);
+  Matrix half_quarer_rotation = RotationZMatrix(pi_4);
+  Matrix full_quarter_rotation = RotationZMatrix(pi_2);
   Tuple rotation_z_half_success(-sqrtf(2.0f) / 2.0f, sqrtf(2.0f) / 2.0f, 0.0f, 1.0f);
   Tuple rotation_z_full_success(-1.0f, 0.0f, 0.0f, 1.0f);
   EXPECT_EQ(half_quarer_rotation * test_a_p, rotation_z_half_success);
@@ -142,32 +142,32 @@ TEST(MatrixTest, RotationZTest) {
 }
 
 TEST(MatrixTest, ShearingTest) {
-  Matrix shearing = Matrix::ShearingMatrix(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+  Matrix shearing = ShearingMatrix(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
   Tuple test_p = TupleManager::Instance()->Point(2.0f, 3.0f, 4.0f);
   Tuple shearing_success(5.0f, 3.0f, 4.0f, 1.0f);
   EXPECT_EQ(shearing * test_p, shearing_success);
 
-  shearing = Matrix::ShearingMatrix(0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+  shearing = ShearingMatrix(0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
   test_p = TupleManager::Instance()->Point(2.0f, 3.0f, 4.0f);
   shearing_success = Tuple(6.0f, 3.0f, 4.0f, 1.0f);
   EXPECT_EQ(shearing * test_p, shearing_success);
 
-  shearing = Matrix::ShearingMatrix(0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f);
+  shearing = ShearingMatrix(0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f);
   test_p = TupleManager::Instance()->Point(2.0f, 3.0f, 4.0f);
   shearing_success = Tuple(2.0f, 5.0f, 4.0f, 1.0f);
   EXPECT_EQ(shearing * test_p, shearing_success);
 
-  shearing = Matrix::ShearingMatrix(0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f);
+  shearing = ShearingMatrix(0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f);
   test_p = TupleManager::Instance()->Point(2.0f, 3.0f, 4.0f);
   shearing_success = Tuple(2.0f, 7.0f, 4.0f, 1.0f);
   EXPECT_EQ(shearing * test_p, shearing_success);
 
-  shearing = Matrix::ShearingMatrix(0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+  shearing = ShearingMatrix(0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
   test_p = TupleManager::Instance()->Point(2.0f, 3.0f, 4.0f);
   shearing_success = Tuple(2.0f, 3.0f, 6.0f, 1.0f);
   EXPECT_EQ(shearing * test_p, shearing_success);
 
-  shearing = Matrix::ShearingMatrix(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+  shearing = ShearingMatrix(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
   test_p = TupleManager::Instance()->Point(2.0f, 3.0f, 4.0f);
   shearing_success = Tuple(2.0f, 3.0f, 7.0f, 1.0f);
   EXPECT_EQ(shearing * test_p, shearing_success);
@@ -178,10 +178,10 @@ TEST(MatrixTest, MatrixChaining) {
   float pi_2 = 1.57079632679;
 
   Tuple test_p = TupleManager::Instance()->Point(1.0f, 0.0f, 1.0f);
-  Matrix rotation_x = Matrix::RotationXMatrix(pi_2);
-  Matrix scale = Matrix::ScalingMatrix(5.0f, 5.0f, 5.0f);
-  Matrix translate = Matrix::TranslationMatrix(10.0f, 5.0f, 7.0f);
-  Matrix transform = Matrix::TranformationMatrix(rotation_x, scale, translate);
+  Matrix rotation_x = RotationXMatrix(pi_2);
+  Matrix scale = ScalingMatrix(5.0f, 5.0f, 5.0f);
+  Matrix translate = TranslationMatrix(10.0f, 5.0f, 7.0f);
+  Matrix transform = TranformationMatrix(rotation_x, scale, translate);
   Tuple test_success_p(15.0f, 0.0f, 7.0f, 1.0f);
 
   EXPECT_EQ(transform * test_p, test_success_p);
@@ -191,28 +191,28 @@ TEST(MatrixTest, ViewMatrix) {
   Tuple from = TupleManager::Instance()->Point(0.0f, 0.0f, 0.0f);
   Tuple to = TupleManager::Instance()->Point(0.0f, 0.0f, -1.0f);
   Tuple up = TupleManager::Instance()->Vector(0.0f, 1.0f, 0.0f);
-  Matrix view = Matrix::GetViewTransform(from, to, up);
-  Matrix success = Matrix::GetIdentityMatrix();
+  Matrix view = GetViewTransform(from, to, up);
+  Matrix success = GetIdentityMatrix();
   EXPECT_EQ(view, success);
 
   from = TupleManager::Instance()->Point(0.0f, 0.0f, 0.0f);
   to = TupleManager::Instance()->Point(0.0f, 0.0f, 1.0f);
   up = TupleManager::Instance()->Vector(0.0f, 1.0f, 0.0f);
-  view = Matrix::GetViewTransform(from, to, up);
-  success = Matrix::ScalingMatrix(-1.0f, 1.0f, -1.0f);
+  view = GetViewTransform(from, to, up);
+  success = ScalingMatrix(-1.0f, 1.0f, -1.0f);
   EXPECT_EQ(view, success);
 
   from = TupleManager::Instance()->Point(0.0f, 0.0f, 8.0f);
   to = TupleManager::Instance()->Point(0.0f, 0.0f, 0.0f);
   up = TupleManager::Instance()->Vector(0.0f, 1.0f, 0.0f);
-  view = Matrix::GetViewTransform(from, to, up);
-  success = Matrix::TranslationMatrix(0.0f, 0.0f, -8.0f);
+  view = GetViewTransform(from, to, up);
+  success = TranslationMatrix(0.0f, 0.0f, -8.0f);
   EXPECT_EQ(view, success);
 
   from = TupleManager::Instance()->Point(1.0f, 3.0f, 2.0f);
   to = TupleManager::Instance()->Point(4.0f, -2.0f, 8.0f);
   up = TupleManager::Instance()->Vector(1.0f, 1.0f, 0.0f);
-  view = Matrix::GetViewTransform(from, to, up);
+  view = GetViewTransform(from, to, up);
   success = Matrix(
     -0.50709f, 0.50709f, 0.67612f, -2.36643f,
     0.76772f, 0.60609f, 0.12122f, -2.82843f,

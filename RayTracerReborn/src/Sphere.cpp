@@ -1,11 +1,11 @@
 #include "Sphere.hpp"
 
 Sphere::Sphere() 
-  : m_id(0), m_transform(Matrix::GetIdentityMatrix()) {
+  : m_id(0), m_transform(GetIdentityMatrix()) {
 }
 
 Sphere::Sphere(int id)
-  :m_id(id), m_transform(Matrix::GetIdentityMatrix()) {
+  :m_id(id), m_transform(GetIdentityMatrix()) {
 
 }
 
@@ -106,7 +106,7 @@ bool Sphere::NormalAtTest() {
     return false;
   }
 
-  Matrix translation = Matrix::TranslationMatrix(0.0f, 1.0f, 0.0f);
+  Matrix translation = TranslationMatrix(0.0f, 1.0f, 0.0f);
   test_sphere.SetTransform(translation);
   point = TupleManager::Instance()->Point(0.0f, 1.70711f, -0.70711f);
   result = test_sphere.NormalAt(point);
@@ -117,9 +117,9 @@ bool Sphere::NormalAtTest() {
   }
   
   float pi_5 = 0.62831853071;
-  Matrix scaling = Matrix::ScalingMatrix(1.0f, 0.50f, 1.0f);
-  Matrix rotation_z = Matrix::RotationZMatrix(pi_5);
-  Matrix transform = Matrix::TranformationMatrix(rotation_z, scaling);
+  Matrix scaling = ScalingMatrix(1.0f, 0.50f, 1.0f);
+  Matrix rotation_z = RotationZMatrix(pi_5);
+  Matrix transform = TranformationMatrix(rotation_z, scaling);
   test_sphere.SetTransform(transform);
   point = TupleManager::Instance()->Point(0.0f, sqrtf(2) / 2.0f, -sqrtf(2) / 2.0f);
   result = test_sphere.NormalAt(point);

@@ -28,6 +28,7 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Material.cpp" />
     <ClCompile Include="src\Matrix.cpp" />
+    <ClCompile Include="src\MatrixUtil.cpp" />
     <ClCompile Include="src\PPM.cpp" />
     <ClCompile Include="src\Ray.cpp" />
     <ClCompile Include="src\SceneSim.cpp" />
@@ -48,6 +49,7 @@
     <ClInclude Include="src\Light.hpp" />
     <ClInclude Include="src\Material.hpp" />
     <ClInclude Include="src\Matrix.hpp" />
+    <ClInclude Include="src\MatrixUtil.hpp" />
     <ClInclude Include="src\PPM.hpp" />
     <ClInclude Include="src\Ray.hpp" />
     <ClInclude Include="src\SceneSim.hpp" />

@@ -20,7 +20,7 @@ World::World() {
   AddSphere(temp_sphere);
   
   Sphere temp_sphere_b = SphereManager::Instance()->NewSphere();
-  Matrix transform = Matrix::ScalingMatrix(0.5f, 0.5f, 0.5f);
+  Matrix transform = ScalingMatrix(0.5f, 0.5f, 0.5f);
   temp_sphere_b.SetTransform(transform);
   AddSphere(temp_sphere);
 }

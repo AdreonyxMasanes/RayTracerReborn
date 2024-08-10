@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Camera.hpp"
+using namespace MatrixUtil;
 
 
 class CameraTest : public testing::Test {
@@ -13,7 +14,7 @@ protected:
     Tuple from = TupleManager::Instance()->Point(0.0f, 0.0f, -5.0f);
     Tuple to = TupleManager::Instance()->Point(0.0f, 0.0f, 0.0f);
     Tuple up = TupleManager::Instance()->Vector(0.0f, 1.0f, 0.0f);
-    Matrix view = Matrix::GetViewTransform(from, to, up);
+    Matrix view = GetViewTransform(from, to, up);
     camera_b.SetTransform(view);
     camera_b.GenerateCanvas(t_world);
   }

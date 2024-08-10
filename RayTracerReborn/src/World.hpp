@@ -5,6 +5,8 @@
 #include "Ray.hpp"
 #include "SphereManager.hpp"
 #include "TupleManager.hpp"
+#include "MatrixUtil.hpp"
+using namespace MatrixUtil;
 
 struct CompiledData {
   float m_time;
