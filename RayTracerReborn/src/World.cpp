@@ -45,7 +45,7 @@ void World::AddSphere(const Sphere& sphere) {
   m_spheres.push_back(sphere);
 }
 
-void World::CastRay(Ray& ray) {
+void World::CastRay(Ray& ray) const{
   for (auto& obj: m_spheres) {
     ray.Cast(obj);
   }
@@ -54,8 +54,8 @@ void World::CastRay(Ray& ray) {
 
 
 
-
-Tuple World::ColorAt(Ray& ray) {
+// Should be const
+Tuple World::ColorAt(Ray& ray) const{
   CastRay(ray);
   const Intersection* hit = nullptr;
   hit = ray.Hit();
@@ -75,7 +75,7 @@ void World::RunTest() {
   }
 }
 
-std::unique_ptr<CompiledData> World::PrepareData(const Intersection& intersection, const Ray& ray) {
+std::unique_ptr<CompiledData> World::PrepareData(const Intersection& intersection, const Ray& ray) const{
   std::unique_ptr<CompiledData> data = std::make_unique<CompiledData>();
   data->m_time = intersection.Time();
   data->m_sphere = intersection.GetSphere();

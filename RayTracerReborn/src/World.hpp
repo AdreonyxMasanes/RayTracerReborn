@@ -33,7 +33,7 @@ public:
 
   // UTILITY
 public:
-  Tuple ColorAt(Ray& ray);
+  Tuple ColorAt(Ray& ray) const;
 public:
   static void RunTest();
 private:
@@ -41,8 +41,8 @@ private:
   std::vector<Sphere> m_spheres;
 private:
   // Can not be const.
-  void CastRay(Ray& ray);
-  std::unique_ptr<CompiledData> PrepareData(const Intersection& intersection, const Ray& ray);
+  void CastRay(Ray& ray) const;
+  std::unique_ptr<CompiledData> PrepareData(const Intersection& intersection, const Ray& ray) const;
   Tuple ShadeHit(const CompiledData& data) const;
 
 private:

@@ -20,10 +20,10 @@ int main() {
 
   //BulletSim::Run(false);
   //BulletSim::Run(true);
-  ClockSim::Run();
+  //ClockSim::Run();
   //ShadowSim::Run(false);
   //ShadowSim::Run(true);
-  //SceneSim::Run();
+  SceneSim::Run();
 
   //Tuple::RunTest();
   //TupleManager::CreationTest();

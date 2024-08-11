@@ -41,12 +41,33 @@ Ray Camera::RayForPixel(float px, float py) const {
 }
 
 void Camera::GenerateCanvas(World& world) {
+  int thread_count = 20;
+  std::vector<PixelData> data;
+  std::vector<std::future<PixelData>> asyncs;
   for (int y = 0; y < m_vsize_pixels - 1; y ++) {
     std::cout << "ROW: " << y << std::endl;
-    for (int x = 0; x < m_hsize_pixels - 1; x++) {
-      Ray ray = RayForPixel(x, y);
-      Tuple color = world.ColorAt(ray);
-      m_canvas.WritePixel(x, y, color);
+    for (int x = 0; x < m_hsize_pixels; x += thread_count) {
+      data.clear();
+      asyncs.clear();
+      // GET PIXEL COLOR VALUES ASYNCRONOUSLY TO PREVENT THE RACE CONDITION ON DATA VECTOR
+      if (!(x > m_hsize_pixels - thread_count)) {
+        for (int i = 0; i < thread_count; i++) {
+          asyncs.push_back(std::async(std::launch::async, &Camera::CalculatePixelData, std::ref(*this), x + i, y, std::ref(world), std::ref(data)));
+        }
+        // COPY DATA VECTOR TO A PERMANENT VECTOR
+        for (auto& future : asyncs) {
+          data.push_back(future.get());
+        }
+        ProccessPixelData(data);
+      } else {
+        for (int i = 0; i < m_hsize_pixels - x; i++) {
+          asyncs.push_back(std::async(std::launch::async, &Camera::CalculatePixelData, std::ref(*this), x + i, y, std::ref(world), std::ref(data)));
+        }
+        for (auto& future : asyncs) {
+          data.push_back(future.get());
+        }
+        ProccessPixelData(data);
+      }
     }
   }
   std::cout << "CANVAS GENERATED" << std::endl;
@@ -65,3 +86,43 @@ void Camera::CalculatePixelSize() {
   }
   m_pixel_size = (m_half_width * 2) / m_hsize_pixels;
 }
+
+PixelData Camera::CalculatePixelData(int x, int y, const World& world, std::vector<PixelData>& data) {
+  Ray ray = RayForPixel(x, y);
+  Tuple color = world.ColorAt(ray);
+  // HAS TO BE COPIED INTO DATA MAYBE CHANGE IF IT ENDS UP SLOW
+  return PixelData( color, x, y );
+}
+
+void Camera::ProccessPixelData(std::vector<PixelData>& data) {
+  for (PixelData& pixel_data : data) {
+    // ALSO COPYING DATA FROM VECTOR
+    m_canvas.WritePixel(pixel_data.col, pixel_data.row, pixel_data.color);
+  }
+}
+
+//std::latch done(thread_count);
+//data.clear();
+//threads.clear();
+//if (!(x > m_hsize_pixels - thread_count)) {
+//  for (int i = 0; i < thread_count; i++) {
+//    threads.push_back(std::jthread(&Camera::CalculatePixelData, std::ref(*this), x + i, y, std::ref(world), std::ref(data)));
+//    done.count_down();
+//  }
+//  done.wait();
+//  for (auto& thread : threads) {
+//    thread.join();
+//  }
+//  ProccessPixelData(data);
+//} else {
+//  std::latch remaining(m_hsize_pixels - x);
+//  for (int i = 0; i < m_hsize_pixels - x; i++) {
+//    threads.push_back(std::jthread(&Camera::CalculatePixelData, std::ref(*this), x + i, y, std::ref(world), std::ref(data)));
+//    remaining.count_down();
+//  }
+//  remaining.wait();
+//  for (auto& thread : threads) {
+//    thread.join();
+//  }
+//  ProccessPixelData(data);
+//}
