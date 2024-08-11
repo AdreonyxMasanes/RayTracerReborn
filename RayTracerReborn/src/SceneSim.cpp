@@ -53,7 +53,7 @@ void SceneSim::Run() {
   Matrix right_translation = TranslationMatrix(1.5f, 0.5f, -0.5f);
   Matrix right_scale = ScalingMatrix(0.5f, 0.5f, 0.5f);
   Matrix right_transform = TranformationMatrix(right_scale, right_translation);
-  Tuple right_color = TupleManager::Instance()->Color(1.0f, 0.0f, 0.0f);
+  Tuple right_color = TupleManager::Instance()->Color(0.0f, 1.0f, 0.0f);
   float right_diffuse = 0.7f;
   float right_specular = 0.3f;
   right.SetTransform(right_transform);
@@ -83,7 +83,7 @@ void SceneSim::Run() {
   float pi_3 = 1.0471975512f;
   float fov = pi_3;
   World test_world(spheres, light);
-  Camera test_camera(1920 , 1080, fov);
+  Camera test_camera(1280 , 720, fov);
 
   Tuple from = TupleManager::Instance()->Point(0.0f, 1.5f, -5.0f);
   Tuple to = TupleManager::Instance()->Point(0.0f, 1.0f, 0.0f);
