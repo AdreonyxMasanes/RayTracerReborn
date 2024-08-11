@@ -2,10 +2,8 @@
 #include "TupleManager.hpp"
 #include "Canvas.hpp"
 #include "PPM.hpp"
-class BulletSim {
-public:
-  static void Run(bool printToPPM);
-private:
+namespace BulletSim {
+  void Run(bool printToPPM);
   struct Projectile {
     Tuple position_p;
     Tuple velocity_v;

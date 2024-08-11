@@ -8,6 +8,7 @@ protected:
   float pi_2 = 1.57079632679f;
   Camera camera_a = Camera(200.0f, 125.0f, pi_2);
   Camera camera_b = Camera(11.0f, 11.0f, pi_2);
+  Camera camera_c = Camera(125.05, 200.0f, pi_2);
 
   CameraTest() {
     World t_world;
@@ -22,7 +23,7 @@ protected:
 
 TEST_F(CameraTest, PixelSizeCalculation) {
   EXPECT_EQ(camera_a.PixelSize(), 0.01f);
-  EXPECT_EQ(camera_b.PixelSize(), 0.00451054890f);
+  EXPECT_FLOAT_EQ(camera_c.PixelSize(), 0.01f);
 }
 
 TEST_F(CameraTest, CanvasGeneration) {

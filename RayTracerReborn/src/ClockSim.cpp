@@ -17,7 +17,7 @@ void ClockSim::Run() {
     Matrix new_rotation = RotationZMatrix(i * pi_6);
     Tuple rotated_p = new_rotation * (point);
     Tuple rotated_p_a = rotated_p + center;
-    canvas.WritePixel(rotated_p.X(), canvas.Height() - rotated_p.Y(), white);
+    canvas.WritePixel(rotated_p_a.X(), canvas.Height() - rotated_p_a.Y(), white);
   }
   PPM ppm(canvas);
   std::cout << "CREATED PPM SUCCESSFULLY" << std::endl;
