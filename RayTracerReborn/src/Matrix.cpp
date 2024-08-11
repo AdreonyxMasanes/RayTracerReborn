@@ -103,10 +103,10 @@ void Matrix::SetWidth(float width) {
 
 Matrix Matrix::Transpose() {
   return Matrix(
-    GetMatrix()[0][0], GetMatrix()[1][0], GetMatrix()[2][0], GetMatrix()[3][0],
-    GetMatrix()[0][1], GetMatrix()[1][1], GetMatrix()[2][1], GetMatrix()[3][1],
-    GetMatrix()[0][2], GetMatrix()[1][2], GetMatrix()[2][2], GetMatrix()[3][2],
-    GetMatrix()[0][3], GetMatrix()[1][3], GetMatrix()[2][3], GetMatrix()[3][3]
+    m_matrix[0][0], m_matrix[1][0], m_matrix[2][0], m_matrix[3][0],
+    m_matrix[0][1], m_matrix[1][1], m_matrix[2][1], m_matrix[3][1],
+    m_matrix[0][2], m_matrix[1][2], m_matrix[2][2], m_matrix[3][2],
+    m_matrix[0][3], m_matrix[1][3], m_matrix[2][3], m_matrix[3][3]
   );
 }
 
@@ -114,7 +114,7 @@ bool Matrix::operator==(const Matrix& rhs)  const {
   if (Height() == rhs.Height() && Width() == rhs.Width()) {
     for (int row = 0; row < Height(); row++) {
       for (int col = 0; col < Width(); col++) {
-        if (!(Utility::FloatsAreEqual(GetMatrix()[row][col], rhs.GetMatrix()[row][col]))) {
+        if (!(Utility::FloatsAreEqual(m_matrix[row][col], rhs.GetMatrix()[row][col]))) {
           return false;
         }
       }
@@ -137,10 +137,10 @@ Matrix Matrix::operator*(const Matrix& rhs) const{
     for (int row = 0; row < Height(); row++) {
       for (int col = 0; col < Width(); col++) {
         result.ModifyMatrix()[row][col] =
-          (GetMatrix()[row][0] * rhs.GetMatrix()[0][col]) +
-          (GetMatrix()[row][1] * rhs.GetMatrix()[1][col]) +
-          (GetMatrix()[row][2] * rhs.GetMatrix()[2][col]) +
-          (GetMatrix()[row][3] * rhs.GetMatrix()[3][col]);
+          (m_matrix[row][0] * rhs.GetMatrix()[0][col]) +
+          (m_matrix[row][1] * rhs.GetMatrix()[1][col]) +
+          (m_matrix[row][2] * rhs.GetMatrix()[2][col]) +
+          (m_matrix[row][3] * rhs.GetMatrix()[3][col]);
       }
     }
     return result;
@@ -164,7 +164,7 @@ Tuple Matrix::operator*(const Tuple& rhs) const{
 Matrix& Matrix::operator=(const Matrix& rhs) {
   for (int row = 0; row < Height(); row++) {
     for (int col = 0; col < Width(); col++) {
-      ModifyMatrix()[row][col] = rhs.GetMatrix()[row][col];
+      m_matrix[row][col] = rhs.GetMatrix()[row][col];
     }
   }
   return *this;
@@ -174,7 +174,7 @@ float Matrix::Determinant() const{
   float result = 0;
 
   if (Width() == 2) {
-    return GetMatrix()[0][0] * GetMatrix()[1][1] - GetMatrix()[0][1] * GetMatrix()[1][0];
+    return m_matrix[0][0] * m_matrix[1][1] - m_matrix[0][1] * m_matrix[1][0];
   } else {
     for (int col = 0; col < Width(); col++) {
       result += GetMatrix()[0][col] * Cofactor(0, col);
@@ -216,12 +216,12 @@ float Matrix::Cofactor(float row, float col) const{
 
 Matrix Matrix::Invert() const{
   Matrix result = Matrix(Height(), Width());
-
-  if (!(Determinant() == 0)) {
+  float determinant = Determinant();
+  if (!(determinant == 0)) {
     for (int row = 0; row < Height(); row++) {
       for (int col = 0; col < Width(); col++) {
         float c = Cofactor(row, col);
-        result.ModifyMatrix()[col][row] = c / Determinant();
+        result.ModifyMatrix()[col][row] = c / determinant;
       }
     }
   } /*else {

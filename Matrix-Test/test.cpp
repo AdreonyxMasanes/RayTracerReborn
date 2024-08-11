@@ -221,3 +221,11 @@ TEST(MatrixTest, ViewMatrix) {
   );
   EXPECT_EQ(view, success);
 }
+
+int main(int argc, char**argv) {
+  TupleManager::Init();
+  testing::InitGoogleTest(&argc, argv);
+  int success = RUN_ALL_TESTS();
+  TupleManager::Shutdown();
+  return success;
+}
