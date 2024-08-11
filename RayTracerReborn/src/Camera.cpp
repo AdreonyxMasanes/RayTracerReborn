@@ -41,7 +41,7 @@ Ray Camera::RayForPixel(float px, float py) const {
 }
 
 void Camera::GenerateCanvas(World& world) {
-  int thread_count = 20;
+  int thread_count = 30;
   std::vector<PixelData> data;
   std::vector<std::future<PixelData>> asyncs;
   for (int y = 0; y < m_vsize_pixels - 1; y ++) {
