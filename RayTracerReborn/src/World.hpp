@@ -12,9 +12,11 @@ struct CompiledData {
   float m_time;
   Sphere m_sphere;
   Tuple m_point_p;
+  Tuple m_over_point_p;
   Tuple m_eye_v;
   Tuple m_normal_v;
   bool m_inside_sphere;
+  bool m_is_shadowed;
 };
 
 class World {
@@ -34,6 +36,9 @@ public:
   // UTILITY
 public:
   Tuple ColorAt(Ray& ray) const;
+  bool IsShadowed(const Tuple& point) const;
+  std::unique_ptr<CompiledData> PrepareData(const Intersection& intersection, const Ray& ray) const;
+  Tuple ShadeHit(const CompiledData& data) const;
 public:
   static void RunTest();
 private:
@@ -42,8 +47,9 @@ private:
 private:
   // Can not be const.
   void CastRay(Ray& ray) const;
-  std::unique_ptr<CompiledData> PrepareData(const Intersection& intersection, const Ray& ray) const;
-  Tuple ShadeHit(const CompiledData& data) const;
+
+
+
 
 private:
   static bool WorldCastTest();

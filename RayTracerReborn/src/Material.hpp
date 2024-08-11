@@ -21,7 +21,7 @@ public:
   void SetColor(const Tuple& color);
 
 public:
-  Tuple Lighting(const Light& light, const Tuple& position_p, const Tuple& eye_v, const Tuple& normal_v) const;
+  Tuple Lighting(const Light& light, const Tuple& position_p, const Tuple& eye_v, const Tuple& normal_v, bool is_shadowed) const;
 private:
   float m_ambient = 0.1f;
   float m_diffuse = 0.9f;

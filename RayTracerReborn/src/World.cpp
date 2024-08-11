@@ -77,24 +77,42 @@ void World::RunTest() {
 
 std::unique_ptr<CompiledData> World::PrepareData(const Intersection& intersection, const Ray& ray) const{
   std::unique_ptr<CompiledData> data = std::make_unique<CompiledData>();
+  const float kEpsilon = 0.01f;
   data->m_time = intersection.Time();
   data->m_sphere = intersection.GetSphere();
   data->m_point_p = ray.Position(data->m_time);
   data->m_eye_v = -ray.Direction();
   data->m_normal_v = data->m_sphere.NormalAt(data->m_point_p);
-
   if (data->m_normal_v.Dot(data->m_eye_v) < 0) {
     data->m_inside_sphere = true;
     data->m_normal_v = -data->m_normal_v;
   } else {
     data->m_inside_sphere = false;
   }
+  data->m_over_point_p = data->m_point_p + (data->m_normal_v * kEpsilon);
 
   return data;
 }
 
 Tuple World::ShadeHit(const CompiledData& data) const {
-  return data.m_sphere.GetMaterial().Lighting(m_light, data.m_point_p, data.m_eye_v, data.m_normal_v);
+  bool shadowed = IsShadowed(data.m_over_point_p);
+  return data.m_sphere.GetMaterial().Lighting(m_light, data.m_over_point_p, data.m_eye_v, data.m_normal_v,shadowed);
+}
+
+bool World::IsShadowed(const Tuple& point) const {
+  Tuple to_light_direction = m_light.Position() - point;
+  float distance = to_light_direction.Magnitude();
+  Tuple to_light_direction_normal = to_light_direction.Normalize();
+  Ray ray(point, to_light_direction_normal);
+  CastRay(ray);
+  const Intersection* hit = nullptr;
+  hit = ray.Hit();
+  // If the intersection is longer than distance the point is past the light souce and nothing is blocking the point from seeing the light
+  if (!(hit == nullptr) && (hit->Time() < distance)) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 

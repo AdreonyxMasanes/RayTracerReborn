@@ -47,7 +47,7 @@ void Material::SetColor(const Tuple& color) {
   m_color = color;
 }
 
-Tuple Material::Lighting(const Light& light, const Tuple& position_p, const Tuple& eye_v, const Tuple& normal_v) const{
+Tuple Material::Lighting(const Light& light, const Tuple& position_p, const Tuple& eye_v, const Tuple& normal_v, bool is_shadowed) const{
   Tuple effective_color = m_color * light.Intensity();
   Tuple light_v = (light.Position() - position_p).Normalize();
   Tuple ambient = effective_color * m_ambient;
@@ -72,7 +72,10 @@ Tuple Material::Lighting(const Light& light, const Tuple& position_p, const Tupl
       specular = (light.Intensity() * m_specular) * factor;
     }
   }
-  Tuple result = (ambient + diffuse) + specular;
-  return result;
+  if (!is_shadowed) {
+    return (ambient + diffuse) + specular;
+  } else {
+    return ambient;
+  }
 }
 

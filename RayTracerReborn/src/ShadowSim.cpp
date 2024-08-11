@@ -36,7 +36,7 @@ void ShadowSim::Run(bool shading) {
           Tuple point_p = ray.Position(hit->Time());
           Tuple normal_v = hit->GetSphere().NormalAt(point_p);
           Tuple eye_v = -ray.Direction();
-          Tuple color = sphere.GetMaterial().Lighting(light, point_p, eye_v, normal_v);
+          Tuple color = sphere.GetMaterial().Lighting(light, point_p, eye_v, normal_v, false);
           canvas.WritePixel(row, col, color);
         } else {
           canvas.WritePixel(row, col, red);
