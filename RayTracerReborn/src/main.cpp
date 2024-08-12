@@ -16,24 +16,7 @@ int main() {
   SphereManager::Init();
 
 
-
-
-  //BulletSim::Run(false);
-  //BulletSim::Run(true);
-  //ClockSim::Run();
-  //ShadowSim::Run(false);
-  //ShadowSim::Run(true);
   SceneSim::Run();
-
-  //Tuple::RunTest();
-  //TupleManager::CreationTest();
-  //Canvas::CanvasTest();
-  //Matrix::RunTest();
-  //Ray::RunTest();
-  //Sphere::RunTest();
-  //Material::RunTest();
-  //World::RunTest();
-  //Camera::RunTest();
   
   
   SphereManager::Shutdown();
