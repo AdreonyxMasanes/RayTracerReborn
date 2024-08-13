@@ -1,13 +1,13 @@
 # RayTracing Engine in C++
 
-
 # Things I have learned during this process
 ## How to analyze and improve performance
 During the first few iterations of this project I had a lot of performance problems. Right now, I can render at 1920 x 1080 in about 50 seconds on both my laptop and desktop.
 Originally It would have taken 7 minutes! That is  a crazy improvement! To understand where my problem was coming from I used the built in performance profiler within Visual Studio. Here, before multi threading, I was able to determine a few issues. 
-### First, within a few functions I was calling very expensive functions. For example, in the Matrix::Invert function I was calling the Matrix::Deterimanant function twice.
+First, within a few functions I was calling very expensive functions. For example, in the Matrix::Invert function I was calling the Matrix::Deterimanant function twice.
 By removing one call and storing it in a variable I saw an approximate 25% increase in performance. There was another case where I was inverted a matrix twice in one function and I had similar success but only calling it once and store that value to be used later.  
-### Second, I learned how to use multithreading.
+
+Second, I learned how to use multithreading.
 
 ## This project, as of now, generates a PPM image file of a 2D scene with Ray Tracing applied to it to make it feel 3D.
 This engine I created is made from scratch. There are a few key components to understand what is happening to generate the image. 
