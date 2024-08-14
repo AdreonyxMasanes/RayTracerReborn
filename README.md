@@ -56,7 +56,7 @@ World::ShadeHit takes the now prepared data and returns the color of that point 
 This class stores a few bits of data. Such as the FOV of the camera, where the camera is in the world, its canvas to draw to, how big each pixel within the canvas will be, the width and height of the canvas, as where the middle of the width and height are.
 We also have a special data structure which store the current pixels x and y values and what color it is.
 ### Camera Functions
-On creation the camera calculates how large each pixel using Camera::CalculatePixelSize.\n
+On creation the camera calculates how large each pixel using Camera::CalculatePixelSize.<br>
 Camera::RayForPixel determines the pixel we are calculating the color for.<br>
 Camera::CalculatePixelData determines the color of a pixel and stores it.<br>
 Camera::ProcessPixelData takes a collection PixelData and writes them to the canvas.<br>
