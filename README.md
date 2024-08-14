@@ -37,30 +37,30 @@ An intersection is a way to combine data for a Ray, a future object. When a ray 
 ## Finally, into the fun stuff we have the Ray class. A fundamental piece of any Ray Tracer.
 A Ray consists of an origin(A point), a direction(A direction) and a collection intersections. When a ray is casted into the scene we need to know what objects it hit, thus the collection of intersections. Also we need to know where it started from as well as the direction it is going in. 
 ### Ray Functions
-Ray::Position returns a point in space after the ray travels x time
-Ray::Cast takes a sphere and cast towards it and determines if there is a hit or not
-Ray::Intersection sorts all of the intersections from lowest to highest.
-Ray::Hit Returns the first obj to be hit. For example if the the ray hits an obj A after 2 seconds and then another obj B at 1 second we know since it took a smaller amount of time to hit obj B it was hit first and that obj A was hit after.
-Ray::transform transforms the ray wether that is scaling, translating or rotating.
-## Next we have the Light class. This object represents a light in the scene. It has a position in the world, as well as a color(intensity).'
+Ray::Position returns a point in space after the ray travels x time.\n
+Ray::Cast takes a sphere and cast towards it and determines if there is a hit or not.\n
+Ray::SortIntersection sorts all of the intersections from lowest to highest.\n
+Ray::Hit Returns the first obj to be hit. For example if the the ray hits an obj A after 2 seconds and then another obj B at 1 second we know since it took a smaller amount of time to hit obj B it was hit first and that obj A was hit after.\n
+Ray::transform transforms the ray wether that is scaling, translating or rotating.\n
+## Next we have the Light class. This object represents a light in the scene. It has a position in the world, as well as a color(intensity).
 This object is simple it just holds information about a light source.
 ## Next we have the World Class. 
 This object stores a collection of spheres and a light. 
 We also have a data struct that contains information required to light the material of a sphere in the scene such as the direction towards the camera, direction the point is facing(the normal), the point we are checking, the object we are lighting, how long it took for the ray to hit the point on the object and some more math information
 ### World Functions
-World::CastRay takes a ray and cast it into the world.
-World::PrepareData takes the unmanipulated data and does a few calculations to prepare it to be used in the lighting function
-World::IsShadowed determines if the point we are looking at is behind another object.
-World::ShadeHit takes the now prepared data and returns the color of that point on that object in the 3D scene.
-## Finally, we have the Camera class which looks into the world.
+World::CastRay takes a ray and cast it into the world.\n
+World::PrepareData takes the unmanipulated data and does a few calculations to prepare it to be used in the lighting function\n
+World::IsShadowed determines if the point we are looking at is behind another object.\n
+World::ShadeHit takes the now prepared data and returns the color of that point on that object in the 3D scene.\n
+## Finally, we have the Camera class which looks into the world.\n
 This class stores a few bits of data. Such as the FOV of the camera, where the camera is in the world, its canvas to draw to, how big each pixel within the canvas will be, the width and height of the canvas, as where the middle of the width and height are.
 We also have a special data structure which store the current pixels x and y values and what color it is.
 ### Camera Functions
-On creation the camera calculates how large each pixel using Camera::CalculatePixelSize
-Camera::RayForPixel determines the pixel we are calculating the color for
-Camera::CalculatePixelData determines the color of a pixel and stores it.
-Camera::ProcessPixelData takes a collection PixelData and writes them to the canvas.
-Camera::GenerateCanvas generates the canvas using Aysnc and futures to generate pixel data for multiple colums of pixels all at once and stores it in a collection of Future pixel data. Then it takes that pixel data and write it to the canvas.
+On creation the camera calculates how large each pixel using Camera::CalculatePixelSize.\n
+Camera::RayForPixel determines the pixel we are calculating the color for\n
+Camera::CalculatePixelData determines the color of a pixel and stores it.\n
+Camera::ProcessPixelData takes a collection PixelData and writes them to the canvas.\n
+Camera::GenerateCanvas generates the canvas using Aysnc and futures to generate pixel data for multiple colums of pixels all at once and stores it in a collection of Future pixel data. Then it takes that pixel data and write it to the canvas.\n
 # EXTRAS
 ## I have simulations that generate different images using different functions. 
 ### Bullet Sim
