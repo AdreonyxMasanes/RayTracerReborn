@@ -7,8 +7,11 @@ Originally It would have taken 7 minutes! That is  a crazy improvement! To under
 First, within a few functions I was calling very expensive functions. For example, in the Matrix::Invert function I was calling the Matrix::Deterimanant function twice.
 By removing one call and storing it in a variable I saw an approximate 25% increase in performance. There was another case where I was inverted a matrix twice in one function and I had similar success but only calling it once and store that value to be used later.  
 
-Second, I learned how to use multithreading.
+Second, I learned how to use multithreading. In this project specifically I have to do a lot of math calculations. at 1920 x 1080 thats around two million pixels that I have to calculate individually! At the beginning I really was doing them one by one and boy was that slow. So I watched a video from CPP Con on multithreading and determined I needed to use Futures and Async threads to avoid the race condition and speed up my engine. As of right now I am proccess about 30 cols at a time and that significantly improved how quickly I can generate my image.
 
+Third, I learned how to use visual studios performance profiler. I have never made a project that required as many computations as this one does and to find out where I was leaking performance learning the performance profiler was a gamer changer. This is where I learned about the functions causing performance issues because I was calling the same function twice in one function instead of storing the value.
+
+# The fun stuff
 ## This project, as of now, generates a PPM image file of a 2D scene with Ray Tracing applied to it to make it feel 3D.
 This engine I created is made from scratch. There are a few key components to understand what is happening to generate the image. 
 ## First is the Tuple object. A Tuple is used to represent a pos, direction in space, or a color. 
