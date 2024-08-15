@@ -44,10 +44,9 @@ void Camera::GenerateCanvas(World& world) {
   int thread_count = 30;
   std::vector<PixelData> data;
   std::vector<std::future<PixelData>> asyncs;
-  for (int y = 0; y < m_vsize_pixels - 1; y ++) {
+  for (int y = 0; y < m_vsize_pixels; y ++) {
     std::cout << "ROW: " << y << std::endl;
     for (int x = 0; x < m_hsize_pixels; x += thread_count) {
-      data.clear();
       asyncs.clear();
       // GET PIXEL COLOR VALUES ASYNCRONOUSLY TO PREVENT THE RACE CONDITION ON DATA VECTOR
       if (!(x > m_hsize_pixels - thread_count)) {
@@ -58,7 +57,6 @@ void Camera::GenerateCanvas(World& world) {
         for (auto& future : asyncs) {
           data.push_back(future.get());
         }
-        ProccessPixelData(data);
       } else {
         for (int i = 0; i < m_hsize_pixels - x; i++) {
           asyncs.push_back(std::async(std::launch::async, &Camera::CalculatePixelData, std::ref(*this), x + i, y, std::ref(world), std::ref(data)));
@@ -66,10 +64,10 @@ void Camera::GenerateCanvas(World& world) {
         for (auto& future : asyncs) {
           data.push_back(future.get());
         }
-        ProccessPixelData(data);
       }
     }
   }
+  ProccessPixelData(data);
   std::cout << "CANVAS GENERATED" << std::endl;
 }
 
