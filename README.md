@@ -1,4 +1,5 @@
 # RayTracing Engine in C++ 
+Default Image ![image](https://github.com/user-attachments/assets/a3e3edf1-7f57-4879-86c0-b6f5ba8462f1)
 
 # How to install
 I have a CMake file you can use to generate a build, please build it with release mode. Then once you have the project loaded add an "img" folder into same folder where the project is setup. Once done you should be able to run the program! After the program is finished a PPM file will be generated in the img file.
