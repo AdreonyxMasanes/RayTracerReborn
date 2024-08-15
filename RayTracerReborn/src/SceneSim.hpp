@@ -8,6 +8,6 @@
 
 
 namespace SceneSim {
-  void Run();
+  void Run(std::vector<Sphere>& spheres);
 }
 #endif // !SCENE_SIM_H
