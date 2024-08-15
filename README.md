@@ -1,5 +1,8 @@
 # RayTracing Engine in C++ 
 
+# How to install
+I have a CMake file you can use to generate a build. Then once you have the project loaded add a IMG file into same folder where the project is setup. Once done you should be able to run the program!
+
 # Things I have learned during this process
 ## How to analyze and improve performance
 During the first few iterations of this project I had a lot of performance problems. Right now, I can render at 1920 x 1080 in about 50 seconds on both my laptop and desktop.
