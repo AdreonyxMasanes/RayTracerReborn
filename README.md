@@ -1,8 +1,8 @@
 # RayTracing Engine in C++ 
-Default Image ![image](https://github.com/user-attachments/assets/a3e3edf1-7f57-4879-86c0-b6f5ba8462f1)
+Default Image if you don't modify the scene![image](https://github.com/user-attachments/assets/a3e3edf1-7f57-4879-86c0-b6f5ba8462f1)
 
 # How to install
-I have a CMake file you can use to generate a build, please build it with release mode. Then once you have the project loaded add an "img" folder into same folder where the project is setup. Once done you should be able to run the program! After the program is finished a PPM file will be generated in the img file.
+I have a CMake file you can use to generate a build, please build it with release mode. Then once you have the project loaded add an "img" folder into same folder where the project is setup. Once done you should be able to run the program! After the program is finished a PPM file will be generated in the img file. in the main cpp file there is a create spheres function that lets you modify the spheres a bit where you can change their position or color. The colors are rgb between 0 and 1
 
 # Things I have learned during this process
 ## How to analyze and improve performance
